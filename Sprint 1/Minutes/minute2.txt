@@ -1,0 +1,17 @@
+Minute 2 (Sept. 19):
+
+- Decide on tech stack the team will use: MERN
+    - Frontend: Angular/React
+    - Backend: Node.js
+
+Scrum Master: Botao
+
+Tasks:
+- Implement Student and Instructor login system (with roles).
+ - James
+ - Greg
+ - Botao
+
+- Functionality for instructors to create teams and assign students to specific groups. (For example, importing a course roaster from a CSV file)
+
+- Ensure teams are visible to both students and instructors.

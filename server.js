@@ -2,14 +2,14 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
 
-const express = require('express')
-const app = express()
-const bcrypt = require('bcrypt')
-const passport = require('passport')
-const flash = require('express-flash')
-const session = require('express-session')
-const methodOverride = require('method-override')
-const initializePassport = require('./passport-config')
+const express = require('express');               // Web framework for Node.js
+const app = express();                            // Create an Express application
+const bcrypt = require('bcrypt');                 // Library for hashing passwords
+const passport = require('passport');             // Authentication middleware
+const flash = require('express-flash');           // Middleware for flash messages
+const session = require('express-session');       // Middleware for session management
+const methodOverride = require('method-override'); // Middleware to override HTTP methods
+const initializePassport = require('./passport-config'); // Module for passport configuration
 
 const users = []        // In-memory user array (Note: This will be replaced by the MongoDB database)
 

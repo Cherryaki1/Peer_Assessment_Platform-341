@@ -22,7 +22,7 @@ initializePassport(
 
 // Set up EJS as the templating engine
 app.set('view-engine', 'ejs')
-// Middleware to parse form data (application/x-www-form-urlencoded)
+// Middleware to parse form data
 app.use(express.urlencoded({ extended: false }))
 // Middleware for flash messages (error/success notifications)
 app.use(flash())

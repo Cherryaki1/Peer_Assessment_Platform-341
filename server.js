@@ -88,6 +88,8 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
     console.log(users)                            // Log the new user to the console (for debugging)
 })
 
+// The users array will be reset to an empty array when we restart the server which is why we need MongoDB here to store the users
+
 // Route: Handle logout and redirect to the login page
 app.delete('/logout', (req, res, next) => {
     req.logout((err) => {                       // Passport's logout function

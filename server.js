@@ -6,8 +6,8 @@ const express = require('express');               // Web framework for Node.js
 const app = express();                            // Create an Express application
 const bcrypt = require('bcrypt');                 // Library for hashing passwords
 const passport = require('passport');             // Authentication middleware
-const flash = require('express-flash');           // Middleware for flash messages
-const session = require('express-session');       // Middleware for session management
+const flash = require('express-flash');           // Middleware for flash messages (to display error messages for login failure)
+const session = require('express-session');       // Middleware for session management (to keep track of user across different pages)
 const methodOverride = require('method-override'); // Middleware to override HTTP methods
 const initializePassport = require('./passport-config'); // Module for passport configuration
 

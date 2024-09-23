@@ -11,7 +11,7 @@ const session = require('express-session')
 const methodOverride = require('method-override')
 const initializePassport = require('./passport-config')
 
-const users = []        // In-memory user array (Note: This will be replaced by the DB in real apps)
+const users = []        // In-memory user array (Note: This will be replaced by the MongoDB database)
 
 // Initialize passport with user lookup functions
 initializePassport(

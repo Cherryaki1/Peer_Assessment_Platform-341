@@ -72,7 +72,7 @@ app.post('/register', checkNotAuthenticated, async (req, res) => {
 
         // Push a new user into the users array
         users.push({
-            id: Date.now().toString(),
+            id: Date.now().toString(),           // MongoDB already generates this
             name: req.body.name,
             email: req.body.email,
             password: hashedPassword            // Store hashed password

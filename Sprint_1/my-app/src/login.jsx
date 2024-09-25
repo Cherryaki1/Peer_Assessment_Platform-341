@@ -1,6 +1,10 @@
 import React from 'react'
 
-export default function Login() {
+function Login() {
+  const [formData, setFormData] = useState({
+    
+  })
+
   return (
     <div>
       <h1>Login</h1>
@@ -19,3 +23,5 @@ export default function Login() {
     </div>
   )
 }
+
+export default Login;

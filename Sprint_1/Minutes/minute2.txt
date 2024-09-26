@@ -2,9 +2,24 @@ Minute 2 (Sept. 19):
 
 - Decide on tech stack the team will use: MERN
     - Frontend: Angular/React
-    - Backend: Node.js
+    - Backend: Node.js + Express
+    - Databse: MongoDB
 
-Scrum Master: Botao
+- Decision on roles:
+    Botao Yang - Scrum Master, Fullstack
+    Tameera Shaik - Fullstack
+    James Bautista - Fullstack
+    Gregory Lajoie  - Fullstack
+    Abdulah Ghulam Ali - Fullstack
+    Jeremy Fung - Fullstack
+
+- Permissions: 
+    Botao Yang - Read/Write/Admin
+    Tameera Shaik - Read/Write/Admin
+    James Bautista - Read/Write/Admin
+    Gregory Lajoie  - Read/Write/Admin
+    Abdulah Ghulam Ali - Read/Write/Admin
+    Jeremy Fung - Read/Write/Admin
 
 Tasks:
 - Implement Student and Instructor login system (with roles).

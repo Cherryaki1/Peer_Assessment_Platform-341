@@ -7,6 +7,7 @@ const flash = require('express-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const userLogin = require('./models/userLogin');
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
@@ -22,6 +23,11 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+
+app.use(cors({
+    origin: 'http://localhost:3001', // Replace with your React app's URL
+    credentials: true // Allow credentials (cookies, sessions, etc.)
+}));
 
 app.set('view engine', 'ejs');
 
@@ -72,23 +78,32 @@ app.post('/login', (req, res, next) => {
             return next(err);
         }
         if (!user) {
-            return res.render('login', { messages: { error: 'Invalid email or password' } });
+            return res.status(401).json({ message: 'Invalid email or password' });
         }
         req.logIn(user, (err) => {
             if (err) {
                 return next(err);
             }
-            return res.redirect('/index');
+            return res.json({ message: 'Login successful', user: user });
         });
     })(req, res, next);
 });
 
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {
-        res.send(`Welcome, ${req.user.FirstName}!`);
+        res.json({ message: `Welcome, ${req.user.FirstName}!`, user: req.user });
     } else {
-        res.redirect('/');
+        res.status(401).json({ message: 'Unauthorized' });
     }
+});
+
+app.post('/logout', (req, res) => {
+    req.logout((err) => {
+        if (err) {
+            return res.status(500).json({ message: 'Logout failed' });
+        }
+        res.json({ message: 'Logout successful' });
+    });
 });
 
 app.listen(3000, () => {

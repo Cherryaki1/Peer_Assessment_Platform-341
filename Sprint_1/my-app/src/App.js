@@ -1,4 +1,7 @@
 import Admin from "./Admin"
+import VerticalNavbar from "./component/navbar";
+import Body from "./component/body";
+import Header from "./component/header";
 
 function App() {
   /*return (
@@ -22,11 +25,16 @@ function App() {
         </a>
       </header>
     </div>
-  );*/
+  );
+  */
   return (
-    <Admin>
-    </Admin>
+    <>
+      <Header/>
+      <VerticalNavbar/>
+      <Body/>
+    </>
   )
 }
+
 
 export default App;

@@ -1,0 +1,11 @@
+.welcomePage {
+color: #912338; /*concordia burgundy*/
+text-align:center;
+font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.adminOptions{
+color:black;
+text-align: left;
+font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

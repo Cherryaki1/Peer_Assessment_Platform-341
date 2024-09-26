@@ -1,0 +1,6 @@
+Minute 3 (Sept. 26):
+
+- Demoed progress to TA
+- Reorganized github issues to better distribute the work under "Projects"
+- Assigned issues to members:
+    - 

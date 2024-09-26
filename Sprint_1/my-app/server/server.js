@@ -3,18 +3,28 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const express = require('express');               // Web framework for Node.js
-const app = express();                            // Create an Express application
+const mongoose = require('mongoose');              // MongoDB object modeling tool
+const cors = require('cors');                      // Middleware for enabling CORS
 const bcrypt = require('bcrypt');                 // Library for hashing passwords
+const dotenv = require('dotenv');                 // Module for loading environment variables
 const passport = require('passport');             // Authentication middleware
 const flash = require('express-flash');           // Middleware for flash messages (to display error messages for login failure)
 const session = require('express-session');       // Middleware for session management (to keep track of user across different pages)
 const methodOverride = require('method-override'); // Middleware to override HTTP methods
 const initializePassport = require('./passport-config'); // Module for passport configuration
 
+const app = express();                            // Create an Express application
+app.use(express.json());                          // Middleware to parse JSON bodies
+app.use(cors());                                  // Enable CORS for all requests   
+
+mongoose.connect(process.env.ATLAS_URI)                         // Connect to MongoDB
+    .then(() => console.log("Connected to MongoDB"))
+    .catch(err => console.log(err)); 
+    
 const users = []        // In-memory user array (Note: This will be replaced by the MongoDB database)
 
 // Initialize passport with user lookup functions
-initializePassport(
+initializePassport( 
     passport, 
     email => users.find(user => user.email === email),  // Find user by email
     id => users.find(user => user.id == id)             // Find user by id
@@ -44,7 +54,7 @@ app.use(methodOverride('_method'))
 // Route: Home page (only accessible if authenticated)
 app.get('/', checkAuthenticated, (req, res) => {
     // Render the index.ejs template, passing the user's name
-    res.render('index.ejs', { name: req.user.name })
+    res.render('index.js', { name: req.user.name })
 })
 
 // Route: Login page (only accessible if NOT authenticated)
@@ -118,4 +128,6 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 // Start the server on port 3000
-app.listen(3000)
+app.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}`)
+})

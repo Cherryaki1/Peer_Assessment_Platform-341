@@ -12,5 +12,4 @@ async function main() {
   } finally {
     await client.close();
   }
-
 }

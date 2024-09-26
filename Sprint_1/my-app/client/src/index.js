@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Login from './login';
+import Login from './app/login';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

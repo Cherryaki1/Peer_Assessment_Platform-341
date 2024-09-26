@@ -28,10 +28,9 @@ initializePassport(
     passport, 
     email => users.find(user => user.email === email),  // Find user by email
     id => users.find(user => user.id == id)             // Find user by id
-)
+)   
 
 // Set up EJS as the templating engine
-app.set('view-engine', 'ejs')
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: false }))
 // Middleware for flash messages (error/success notifications)

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { axios } from "axios"
+import axios from 'axios'
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -8,11 +8,11 @@ function Login() {
 
   const handleForm = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:5050/login", {
+    axios.post("http://localhost:3001/login", {
       username, password
     })
-    .then(result=>{
-
+    .then(result => {
+      console.log('Success')
     })
   }
 
@@ -23,7 +23,7 @@ function Login() {
           <div>
               <label htmlFor="username">Username: </label>
               <input 
-                value={username} 
+                value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 name="username"
                 type="text" 

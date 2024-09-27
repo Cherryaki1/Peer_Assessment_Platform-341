@@ -1,0 +1,33 @@
+nav {
+    background-color: #912338;
+    color: white;
+    width: 60%;
+    height: 100vh;
+    max-width: 250px;
+    font-size: 20px;
+}
+    
+    
+.navbar-nav .nav-item {
+    padding: 0 30px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    text-align: left;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+    
+    
+.navbar-nav .nav-item:hover {
+    background-color: white;
+    border-radius: 10px;
+}
+ 
+    
+.navbar-nav .nav-item:hover a {
+    color: #912338;
+}
+    
+    
+.navbar-nav .nav-item a {
+    color: white;
+}

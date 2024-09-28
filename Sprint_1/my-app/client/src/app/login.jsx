@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-    const [email, setEmail] = useState('');
+    const [ID, setID] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const navigate = useNavigate(); // Hook to navigate programmatically
@@ -13,7 +13,7 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:3000/login', {
-                Email: email.trim(),
+                ID: ID.trim(),
                 Password: password.trim()
             }, {
                 withCredentials: true // Allows session cookies to be sent
@@ -35,10 +35,10 @@ const Login = () => {
             <form onSubmit={handleSubmit}>
                 <div>
                     <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        type="text"
+                        placeholder="ID"
+                        value={ID}
+                        onChange={(e) => setID(e.target.value)}
                         required
                     />
                 </div>

@@ -33,11 +33,11 @@ app.set('view engine', 'ejs');
 
 // Passport Local Strategy
 passport.use(new LocalStrategy({
-    usernameField: 'Email', // Using 'Email' with a capital 'E'
+    usernameField: 'ID', // Using 'Email' with a capital 'E'
     passwordField: 'Password' // Ensure this matches with the schema
-}, async (Email, Password, done) => {
+}, async (ID, Password, done) => {
     try {
-        const user = await userLogin.findOne({ Email: Email }); // Look for 'Email' with a capital 'E'
+        const user = await userLogin.findOne({ ID: ID }); // Look for 'Email' with a capital 'E'
         if (!user) {
             return done(null, false, { message: 'No user with that email' });
         }
@@ -78,7 +78,7 @@ app.post('/login', (req, res, next) => {
             return next(err);
         }
         if (!user) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+            return res.status(401).json({ message: 'Invalid ID or password' });
         }
         req.logIn(user, (err) => {
             if (err) {

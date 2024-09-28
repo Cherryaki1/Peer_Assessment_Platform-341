@@ -1,7 +1,7 @@
 Minute 2 (Sept. 19):
 
 - Decide on tech stack the team will use: MERN
-    - Frontend: Angular/React
+    - Frontend: React
     - Backend: Node.js + Express
     - Databse: MongoDB
 

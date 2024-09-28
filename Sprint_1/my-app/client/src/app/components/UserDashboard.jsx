@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const Dashboard = () => {
+const UserDashboard = () => {
     const [user, setUser] = useState(null);
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(true);
@@ -34,7 +34,7 @@ const Dashboard = () => {
             {user ? (
                 <div>
                     <h2>{message}</h2>
-                    <p>Welcome, {user.FirstName}!</p>
+                    <h2>Welcome, {user.FirstName}!</h2>
                 </div>
             ) : (
                 <p>{message}</p>
@@ -43,4 +43,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default UserDashboard;

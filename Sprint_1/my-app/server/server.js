@@ -91,7 +91,7 @@ app.post('/login', (req, res, next) => {
 
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {
-        res.json({ message: `Welcome, ${req.user.FirstName}!`, user: req.user });
+        res.json({ user: req.user, message: '' });
     } else {
         res.status(401).json({ message: 'Unauthorized' });
     }

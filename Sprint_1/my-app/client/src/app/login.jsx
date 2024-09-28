@@ -1,50 +1,61 @@
-import React from 'react'
-import { useState } from 'react'
-import axios from 'axios'
+// src/app/Login.js
+import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [message, setMessage] = useState('');
+    const navigate = useNavigate(); // Hook to navigate programmatically
 
-  const handleForm = (e) => {
-    e.preventDefault();
-    axios.post("http://localhost:3001/login", {
-      username, password
-    })
-    .then(result => {
-      console.log('Success')
-    })
-  }
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:3000/login', {
+                Email: email.trim(),
+                Password: password.trim()
+            }, {
+                withCredentials: true // Allows session cookies to be sent
+            });
 
-  return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit = {handleForm} action="/login" method ="POST">
-          <div>
-              <label htmlFor="username">Username: </label>
-              <input 
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                name="username"
-                type="text" 
-                required 
-              />
-          </div>
-          <div>
-              <label htmlFor="password">Password: </label>
-              <input 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)}
-                name="password"
-                type="password" 
-                required 
-              />
-          </div>
-          <button type="submit">Submit</button>
-      </form>
-      <a href="/register">Register</a>
-    </div>
-  )
-}
+            setMessage(response.data.message);
+            console.log('Logged in user:', response.data.user);
+            
+            // Navigate to the dashboard on successful login
+            navigate('/dashboard');
+        } catch (error) {
+            setMessage(error.response?.data?.message || 'Login failed');
+        }
+    };
+
+    return (
+        <div>
+            <h2>Login</h2>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+            {message && <p>{message}</p>}
+        </div>
+    );
+};
 
 export default Login;

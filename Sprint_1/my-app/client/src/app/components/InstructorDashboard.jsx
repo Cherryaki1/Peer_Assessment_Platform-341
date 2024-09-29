@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const AdminDashboard = () => {
+const InstructorDashboard = () => {
     const [user, setUser] = useState(null);
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(true);

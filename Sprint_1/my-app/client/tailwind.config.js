@@ -1,17 +1,12 @@
 module.exports = {
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
+  mode: 'jit',
+  purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+  darkMode: false,
   theme: {
-    extend: {
-      backgroundImage: theme => ({
-        'hero-pattern': "url('/src/images/hero-pattern.svg')",
-        'footer-texture': "url('/src/images/footer-texture.svg')",
-      })
-    },
+    extend: {},
   },
   variants: {
     extend: {},
   },
   plugins: [],
-}
-
+};

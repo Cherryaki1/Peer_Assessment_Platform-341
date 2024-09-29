@@ -21,9 +21,14 @@
     "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
+  "overrides": {
+    "postcss-flexbugs-fixes": {
+      "postcss": "^7.0.39"
+    }
+  },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
@@ -53,6 +58,10 @@
     "proxy": "http://localhost:3001"
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.13"
+    "@tailwindcss/postcss7-compat": "^2.2.17",
+    "autoprefixer": "^9.8.8",
+    "postcss": "^7.0.39",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17"
   }
 }

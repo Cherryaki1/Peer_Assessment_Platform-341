@@ -23,7 +23,7 @@ const Login = () => {
             console.log('Logged in user:', response.data.user);
             
             // Navigate to the dashboard on successful login
-            (ID.startsWith('1')) ? navigate('/adminDashboard') : navigate('/userDashboard');
+            (ID.startsWith('1')) ? navigate('/instructorDashboard') : navigate('/studentDashboard');
     
         } catch (error) {
             setMessage(error.response?.data?.message || 'Login failed');

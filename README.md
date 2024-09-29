@@ -36,7 +36,7 @@ This system enables anonymous peer assessments, allowing students to rate each o
 |Abdulah Ghulam Ali| Fullstack|
 |Jeremy Fung| Fullstack|
 
-## Technology Used: MERN
+## Technology Used: MERN stack
 * Frontend: React
 * Backend: Node.js and Express
 * Database: MongoDB

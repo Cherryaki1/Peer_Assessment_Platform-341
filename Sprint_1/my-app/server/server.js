@@ -6,7 +6,7 @@ const session = require('express-session');
 const flash = require('express-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const userLogin = require('./models/userLogin');
+const userInformation = require('./models/userInformation');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -33,11 +33,11 @@ app.set('view engine', 'ejs');
 
 // Passport Local Strategy
 passport.use(new LocalStrategy({
-    usernameField: 'ID', // Using 'Email' with a capital 'E'
-    passwordField: 'Password' // Ensure this matches with the schema
+    usernameField: 'ID', 
+    passwordField: 'Password'
 }, async (ID, Password, done) => {
     try {
-        const user = await userLogin.findOne({ ID: ID }); // Look for 'Email' with a capital 'E'
+        const user = await userInformation.findOne({ ID: ID }); // Look for ID
         if (!user) {
             return done(null, false, { message: 'No user with that email' });
         }
@@ -56,7 +56,7 @@ passport.use(new LocalStrategy({
 passport.serializeUser((user, done) => done(null, user.id));
 passport.deserializeUser(async (id, done) => {
     try {
-        const user = await userLogin.findById(id);
+        const user = await userInformation.findById(id);
         done(null, user);
     } catch (err) {
         done(err);

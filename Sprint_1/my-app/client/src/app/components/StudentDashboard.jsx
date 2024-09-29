@@ -34,7 +34,7 @@ const UserDashboard = () => {
             {user ? (
                 <div>
                     <h2>{message}</h2>
-                    <h2>Welcome, {user.FirstName}!</h2>
+                    <h2>Welcome Student!, {user.FirstName}!</h2>
                 </div>
             ) : (
                 <p>{message}</p>
@@ -43,4 +43,4 @@ const UserDashboard = () => {
     );
 };
 
-export default UserDashboard;
+export default StudentDashboard;

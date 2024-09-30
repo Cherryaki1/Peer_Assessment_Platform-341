@@ -205,6 +205,18 @@ app.post('/uploadClass', upload.single('roster'), async (req, res) => {
 
                     await newClass.save();
 
+                    // Update the 'Classes' field in the InstructorModel
+                    await InstructorModel.updateOne(
+                        { ID: instructorID },
+                        { $addToSet: { Classes: classID } } // $addToSet ensures no duplicates
+                    );
+
+                    // Update the 'Classes' field for each student
+                    await StudentModel.updateMany(
+                        { ID: { $in: studentIDs } },
+                        { $addToSet: { Classes: classID } }
+                    );
+
                     // Clean up uploaded CSV file
                     fs.unlinkSync(req.file.path);
 

@@ -17,14 +17,3 @@ Minute 3 (Sept. 26):
         > [US.03 Task 2] - Professors (admins) will have access to creating/managing groups and assigning students to the groups. // Jeremy, Tameera
 
 
-- Review of the Sprint 1 delivery and assured everything will be done for the delivery:
-    - README file with 
-        > Description of the Project 
-        > Team Members and Roles 
-        > The Sprint planning (see Appendix A). 
-    - User stories for Sprint 1 (Use GitHub issues). Identifying them with the prefix US.##
-    - Task Breakdown (derived from user stories, and assigned to at least one team member).  Use GitHub issues, with the prefix Task.##
-    - Detailed log of each team member's contribution including time spent on each activity (document)
-    - Meetings Minutes file (minutes files must be named 
-    - <teamName_Sprint#_meetingnumber_meeting_date>
-    - You need to demo at least one functionality from “User Authentication & Team Management” for example login functionality.

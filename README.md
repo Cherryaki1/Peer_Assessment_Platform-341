@@ -2,7 +2,7 @@
 
 ## About
 
-This project is a web application built with a MERN stack for a peer assessment system. This system enables students and instructors to evaluate their peers based on four dimensions: cooperation, conceptual contribution, practical contribution and work ethic.
+This project is a web application built with a MERN stack for a peer assessment system. This system enables students and instructors to evaluate their peers based on four dimensions.
 
 ## Problem
 

@@ -1,0 +1,7 @@
+Sprint Planning was done in Google Spreadsheet
+
+- There are three ways to view the Sprint Planning:
+  1. Google Spreadsheet (recommended): 
+  https://docs.google.com/spreadsheets/d/1il3MGh4xrbZD89_lUGBDcIIwxTi0hTnePYYPKxVoQWs/edit?gid=0#gid=0
+  2. Excel Document
+  3. Html Page

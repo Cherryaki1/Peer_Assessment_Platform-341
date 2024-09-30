@@ -8,7 +8,7 @@ const Sidebar = () => {
     return (
         <div className="sidebar">
             <ul>
-                <li onClick={() => navigate('/dashboard')}>Dashboard</li>
+                <li onClick={() => navigate('/instructorDashboard')}>Dashboard</li>
                 <li onClick={() => navigate('/instructorManageClasses')}>Manage Classes</li>
                 
             </ul>

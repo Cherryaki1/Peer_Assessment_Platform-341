@@ -35,7 +35,7 @@ const Login = () => {
         <div>
             <h2 className="text-center text-purple-500">Login</h2>
             <form onSubmit={handleSubmit}>
-                <div>
+                <div className = "text-center">
                     <input
                         type="text"
                         placeholder="ID"
@@ -44,7 +44,7 @@ const Login = () => {
                         required
                     />
                 </div>
-                <div>
+                <div className = "text-center">
                     <input
                         type="password"
                         placeholder="Password"
@@ -52,7 +52,7 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <button type="submit">Login</button>
+                    <button className = "bg-blue-800" type="submit">Login</button>
                 </div>
             </form>
             {message && <p>{message}</p>}

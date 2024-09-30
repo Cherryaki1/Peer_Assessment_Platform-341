@@ -1,6 +1,8 @@
+// src/app/Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
     const [ID, setID] = useState('');
@@ -22,7 +24,7 @@ const Login = () => {
             console.log('Logged in user:', response.data.user);
             
             // Navigate to the dashboard on successful login
-            (ID.startsWith('1')) ? navigate('/instructorDashboard') : navigate('/studentDashboard');
+            (ID.startsWith('1')) ? navigate('/adminDashboard') : navigate('/userDashboard');
     
         } catch (error) {
             setMessage(error.response?.data?.message || 'Login failed');

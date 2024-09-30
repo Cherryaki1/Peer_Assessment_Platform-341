@@ -2,6 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './components/styles.css';
+import './components/index.css';
 import Login from './components/Login';
 import StudentDashboard from './components/StudentDashboard';
 import InstructorDashboard from './components/InstructorDashboard';

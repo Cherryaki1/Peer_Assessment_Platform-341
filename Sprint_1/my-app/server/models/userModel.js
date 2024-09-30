@@ -7,10 +7,9 @@ const userSchema = new mongoose.Schema({
   FirstName: { type: String, required: true },
   LastName: { type: String, required: true },
   ID: { type: Number, required: true },
-  Department: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
+  Department: { type: String, required: true }
 });
 
-const userLogin = mongoose.model('User', userSchema, 'userLogin');
+const UserModel = mongoose.model('User', userSchema, 'userLogin');
 
-module.exports = userLogin;
+module.exports = UserModel;

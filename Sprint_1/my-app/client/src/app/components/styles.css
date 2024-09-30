@@ -1,0 +1,35 @@
+/* Basic styling for the sidebar */
+.sidebar {
+    width: 200px;
+    background-color: #f8f9fa;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 10px 0;
+    cursor: pointer;
+    color: #333;
+}
+
+.sidebar li:hover {
+    background-color: #e9ecef;
+}
+
+.dashboard-container {
+    display: flex;
+}
+
+.content {
+    margin-left: 220px; /* Make sure there's space for the sidebar */
+    padding: 20px;
+}

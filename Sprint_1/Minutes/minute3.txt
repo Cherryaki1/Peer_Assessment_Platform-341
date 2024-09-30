@@ -3,4 +3,28 @@ Minute 3 (Sept. 26):
 - Demoed progress to TA
 - Reorganized github issues to better distribute the work under "Projects"
 - Assigned issues to members:
-    - 
+    - US.01: Abdulah, Botao, Gregory, James
+        > [US.01 Task 1] - Upon entering the website URL, the user should be presented with the login page as the first page // Botao, Gregory, James
+        > [US.01 Task 2] - Using the provided login credentials, the user is able to type their user/password and submit the login request // Abdulah, Gregory, James
+        > [US.01 Task 3] - User can login successfully if credentials match a valid credential in the database (MongoDB) // Abdulah
+
+    - US.02: Abdulah, Gregory 
+        > [US.02 Task 1] - After successfully login request, professor accounts will be presented with the admin dashboard. // Abdulah, Botao, Gregory, Jeremy
+        > [US.02 Task 2] - After successfully login request, student accounts will be presented with the user dashboard. // Abdulah, Botao, Gregory
+
+    - US.03: Abdulah, Jeremy, Tameera
+        > [US.03 Task 1] - Professors (admins) should have a function to import a CSV file in order to load his class roaster. // Abdulah
+        > [US.03 Task 2] - Professors (admins) will have access to creating/managing groups and assigning students to the groups. // Jeremy, Tameera
+
+
+- Review of the Sprint 1 delivery and assured everything will be done for the delivery:
+    - README file with 
+        > Description of the Project 
+        > Team Members and Roles 
+        > The Sprint planning (see Appendix A). 
+    - User stories for Sprint 1 (Use GitHub issues). Identifying them with the prefix US.##
+    - Task Breakdown (derived from user stories, and assigned to at least one team member).  Use GitHub issues, with the prefix Task.##
+    - Detailed log of each team member's contribution including time spent on each activity (document)
+    - Meetings Minutes file (minutes files must be named 
+    - <teamName_Sprint#_meetingnumber_meeting_date>
+    - You need to demo at least one functionality from “User Authentication & Team Management” for example login functionality.

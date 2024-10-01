@@ -162,7 +162,7 @@ const InstructorManageClasses = () => {
                     />
                     <br />
                     <input type="file" accept=".csv" onChange={handleFileChange} />
-                    <button onClick={handleUpload}>Upload Roster</button>
+                    <button className="bg-gray-400" onClick={handleUpload}>Upload Roster</button>
                     {message && <p>{message}</p>}
                 </div>
             </div>

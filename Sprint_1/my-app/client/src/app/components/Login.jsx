@@ -30,11 +30,11 @@ const Login = () => {
     };
 
     return (
-        <div>
+        <div className="text-center bg-blue-300">
             <h2 className="text-center text-purple-500">Login</h2>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <input
+                <div className="text-center">
+                    <input className="rounded"
                         type="text"
                         placeholder="ID"
                         value={ID}
@@ -42,16 +42,17 @@ const Login = () => {
                         required
                     />
                 </div>
-                <div>
-                    <input
+                <div className="text-center">
+                    <input className="rounded"
                         type="password"
                         placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <button type="submit">Login</button>
+                    
                 </div>
+                <button className="bg-gray-400 rounded px-2" type="submit">Login</button>
             </form>
             {message && <p>{message}</p>}
         </div>

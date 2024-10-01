@@ -43,7 +43,7 @@ This system enables anonymous peer assessments, allowing students to rate each o
 
 # Running the website
 
-Follow the following commands to launch the website on localhost:3000
+Follow the instructions to launch the website on [http://localhost:3001](http://localhost:3001)
 
 ## server
 

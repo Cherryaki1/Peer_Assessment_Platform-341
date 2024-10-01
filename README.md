@@ -41,6 +41,18 @@ This system enables anonymous peer assessments, allowing students to rate each o
 * Backend: Node.js and Express
 * Database: MongoDB
 
+# Running the website
+
+Follow the following commands to launch the website on localhost:3000
+
+## server
+
+In the server directory, run `npm start` to launch the server including the connection to the database.
+
+## client
+
+In the client directory, run `npm start` to launch the app in development mode.
+Open [http://localhost:3001](http://localhost:3001) in your browser.
 
 # Getting Started with Create React App
 
@@ -53,7 +65,7 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Open [http://localhost:3001](http://localhost:3001) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.

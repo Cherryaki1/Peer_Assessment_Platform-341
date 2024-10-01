@@ -32,7 +32,7 @@ This system enables anonymous peer assessments, allowing students to rate each o
 | Botao Yang | Scrum Master, Fullstack|
 | Tameera Shaik | Fullstack|
 |James Bautista | Fullstack|
-|Greogry Lajoie | Fullstack|
+|Gregory Lajoie | Fullstack|
 |Abdulah Ghulam Ali| Fullstack|
 |Jeremy Fung| Fullstack|
 

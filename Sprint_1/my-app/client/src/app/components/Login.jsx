@@ -30,7 +30,7 @@ const Login = () => {
     };
 
     return (
-        <div className="text-center bg-blue-300">
+        <div className="text-center bg-blue-300 rounded py-6">
             <h2 className="text-center text-purple-500">Login</h2>
             <form onSubmit={handleSubmit}>
                 <div className="text-center">

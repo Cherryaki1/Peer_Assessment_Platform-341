@@ -6,10 +6,10 @@ const Sidebar = () => {
     const navigate = useNavigate();
 
     return (
-        <div className="sidebar">
+        <div className="sidebar bg-red-900">
             <ul>
-                <li onClick={() => navigate('/instructorDashboard')}>Dashboard</li>
-                <li onClick={() => navigate('/instructorManageClasses')}>Manage Classes</li>
+                <li className="text-white" onClick={() => navigate('/instructorDashboard')}>Dashboard</li>
+                <li className="text-white" onClick={() => navigate('/instructorManageClasses')}>Manage Classes</li>
                 
             </ul>
         </div>

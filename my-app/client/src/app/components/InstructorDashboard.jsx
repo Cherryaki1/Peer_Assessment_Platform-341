@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Sidebar from './Sidebar';
+import { Link } from 'react';
 
 const InstructorDashboard = () => {
     const [user, setUser] = useState(null);
@@ -38,6 +39,7 @@ const InstructorDashboard = () => {
                     <div>
                         <h2>{message}</h2>
                         <h2>Welcome Instructor, {user.FirstName}!</h2>
+                        <Link to="groupManagement">Manage Groups</Link>
                     </div>
                 ) : (
                     <p>{message}</p>

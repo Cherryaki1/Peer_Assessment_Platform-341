@@ -15,7 +15,6 @@ const StudentModel = require('./models/studentModel');
 const InstructorModel = require('./models/instructorModel');
 const ClassModel = require('./models/classModel');
 const GroupModel = require('./models/groupModel');
-
 const cors = require('cors');
 require('dotenv').config();
 
@@ -100,6 +99,42 @@ app.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
+// Group Routes 
+// Route to get all groups for a student
+app.get('/student/groups', async (req, res) => {
+    try {
+        // Ensure the user is authenticated and is a student
+        if (!req.isAuthenticated() || !req.user) {
+            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
+        }
+
+        const studentID = req.user.ID;  // The logged-in student's ID
+
+        // Find all classes the student is enrolled in
+        const classes = await ClassModel.find({ Students: studentID });
+
+        if (classes.length === 0) {
+            return res.status(404).json({ message: 'No classes found for this student.' });
+        }
+
+        // Get all class IDs for this student
+        const classIDs = classes.map(classItem => classItem.ID);
+
+        // Find all groups in the classes that the student is enrolled in
+        const groups = await GroupModel.find({ ClassID: { $in: classIDs } });
+
+        if (groups.length === 0) {
+            return res.status(404).json({ message: 'No groups found for this student.' });
+        }
+
+        // Send the list of groups as a response
+        res.status(200).json({ groups });
+    } catch (error) {
+        console.error('Error fetching groups:', error);
+        res.status(500).json({ message: 'An error occurred while fetching groups.' });
+    }
+});
+
 app.get('/instructorManageClasses', async (req, res) => {
     try {
         if (!req.isAuthenticated() || !req.user) {
@@ -153,7 +188,6 @@ app.get('/instructorManageClasses', async (req, res) => {
         return res.status(500).json({ message: 'An unexpected error occurred while fetching classes.', error: error.message || error });
     }
 });
-
 app.post('/uploadClass', upload.single('roster'), async (req, res) => {
     try {
         const { className, subject, section, instructorID, classID } = req.body;
@@ -234,6 +268,46 @@ app.post('/uploadClass', upload.single('roster'), async (req, res) => {
     } catch (error) {
         console.error('Error uploading CSV:', error);
         res.status(500).json({ message: 'Failed to upload class roster' });
+    }
+});
+
+const GroupModel = require('./models/groupModel'); // Import the Group model
+
+// Route to create a new group
+app.post('/createGroup', async (req, res) => {
+    try {
+        if (!req.isAuthenticated() || req.user.Role !== 'Admin') {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        const { groupName, classID, studentIDs } = req.body;
+
+        if (!groupName || !classID || !studentIDs) {
+            return res.status(400).json({ message: 'Missing group details.' });
+        }
+
+        const newGroup = new GroupModel({
+            groupName,
+            classID,
+            students: studentIDs // studentIDs should be an array of student IDs
+        });
+
+        await newGroup.save();
+        res.status(201).json({ message: 'Group created successfully', group: newGroup });
+    } catch (error) {
+        console.error('Error creating group:', error);
+        res.status(500).json({ message: 'Error creating group' });
+    }
+});
+
+// Route to fetch all groups for a class
+app.get('/groups/:classID', async (req, res) => {
+    try {
+        const groups = await GroupModel.find({ classID: req.params.classID });
+        res.status(200).json({ groups });
+    } catch (error) {
+        console.error('Error fetching groups:', error);
+        res.status(500).json({ message: 'Error fetching groups' });
     }
 });
 

@@ -312,6 +312,48 @@ app.get('/groups/:classID', async (req, res) => {
 });
 
 
+app.get('/instructorManageGroups', async(req,res) => {
+    try {
+        if (!req.isAuthenticated() || !req.user) {
+            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
+        }
+
+        const instructorID = req.user.ID;
+        
+        if (!Number.isInteger(instructorID)) {
+            return res.status(400).json({ message: 'Invalid instructor ID' });
+        }
+
+       const groups = await GroupModel.aggregate([
+            { $match: {Student: studentID }}, //match group by studentID
+            {
+                $lookup: {
+                    from: 'students', //collection
+                    localField: 'Students', //Students field in the groups collection 
+                    foreignField: 'studentID', //ID field of the students collection
+                    as: 'GroupDetails' //name of array that includes the link between groups and students by their IDs
+                }
+            }
+        ]);
+
+        if (!groups || groups.length === 0) {
+            return res.status(200).json({ groups: [], message: 'No groups found for this class.' });
+        }
+
+        const formattedGroups = groups.map(groupItem => ({
+            id: groupItem.ID,
+            name: groupItem.Name,
+            groupMembers: classItem.GroupDetails.length,
+        }));
+
+        return res.status(200).json({ groups: formattedGroups });
+    } catch(error){
+        console.error('Error fetching groups:', error.stack || error);
+        return res.status(500).json({ message: 'An unexpected error occurred while fetching groups.', error: error.message || error });
+    }
+})
+
+
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {
         res.json({ user: req.user, message: '' });

@@ -1,6 +1,7 @@
 // src/app/components/GroupManagement.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Sidebar from './Sidebar';
 
 const GroupManagement = () => {
     const [groups, setGroups] = useState([]);
@@ -69,7 +70,7 @@ const GroupManagement = () => {
             <h3>Existing Groups</h3>
             <ul>
                 {groups.map(group => (
-                    <li key={group._id}>{group.groupName} - Students: {group.students.join(', ')}</li>
+                    <li key={group._ID}>{group.Name} - Students: {/*group.students.join(', ')*/}</li>
                 ))}
             </ul>
         </div>
@@ -77,4 +78,3 @@ const GroupManagement = () => {
 };
 
 export default GroupManagement;
-

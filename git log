@@ -1,0 +1,448 @@
+[33mcommit 2a42044a55a02ef17414d62d735dd2f85e332f80[m[33m ([m[1;36mHEAD -> [m[1;32mview-groups-page[m[33m, [m[1;31morigin/view-groups-page[m[33m)[m
+Author: fuji2828 <fungjeremy10@gmail.com>
+Date:   Fri Oct 18 12:25:22 2024 -0400
+
+    it's not working yet, just pushing so tameera can try
+
+[33mcommit 1dd806519042dd918baf139d89af91e42ef6d3b7[m[33m ([m[1;32mmain[m[33m)[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Wed Oct 16 17:33:09 2024 -0400
+
+    Rename Minutes to Minute 5
+
+[33mcommit e6c63d8f25bf66f30e5599be2276199001ce2f04[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Wed Oct 16 17:32:47 2024 -0400
+
+    Create Minute 6
+
+[33mcommit 856421226c4de6e3bece537c97da84b1e1a8da6a[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Thu Oct 3 17:32:12 2024 -0400
+
+    Update Minutes
+
+[33mcommit 7fac0ae549f774c1930fa325fc448c4424914222[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Thu Oct 3 16:34:49 2024 -0400
+
+    Create Minutes
+
+[33mcommit 0844922b878717e45ad7963810c4570fb87633f3[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Thu Oct 3 16:34:21 2024 -0400
+
+    Delete Sprint_2
+
+[33mcommit 348cb3541414f12ee0fd889046081ca84141727d[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Thu Oct 3 16:33:16 2024 -0400
+
+    Create Sprint_2
+
+[33mcommit adf8531880e40be22cce1e5e0a9922256c1be947[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Mon Sep 30 21:03:37 2024 -0400
+
+    Delete Sprint_1/Sprint1_log.pdf
+    
+    PDF was not working
+
+[33mcommit 8604e819f9f4792827556694de1312d6dd5f898e[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Mon Sep 30 21:03:02 2024 -0400
+
+    Add files via upload
+
+[33mcommit 99afaa8a57199160e14bf1f773e4d4111eab7387[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Mon Sep 30 21:02:17 2024 -0400
+
+    Add files via upload
+
+[33mcommit cb4c26af56c59d95a7ebeaf0e6d46626010e2c3c[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Mon Sep 30 21:00:36 2024 -0400
+
+    Delete Sprint_1/Logfiles.pdf
+
+[33mcommit 53bc8283ffd832b68d2d6c96281fc7e945bb6823[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Mon Sep 30 20:54:57 2024 -0400
+
+    Add files via upload
+
+[33mcommit ea1a675fe094bdc2f04afdf960e5496ed3b53a05[m
+Author: notxplosion <151760522+notxplosion@users.noreply.github.com>
+Date:   Mon Sep 30 20:30:40 2024 -0400
+
+    MY NAME WAS NOT WRITTEN CORRECTLY
+
+[33mcommit 2db2ecbc42e10b6e464c1d4ae41db3b52b59898f[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Mon Sep 30 20:16:25 2024 -0400
+
+    Fix README
+
+[33mcommit 7ec521d013e25cfc93ba8a62b290109857d5faab[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Mon Sep 30 20:15:18 2024 -0400
+
+    Update README.md
+
+[33mcommit 87fbac346845a5f5b44114ddfae93d1abbad06b3[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Mon Sep 30 19:59:24 2024 -0400
+
+    Sprint Planning
+
+[33mcommit 199ab586fe0f1c8d5eacc3b8c1243cfc28e8f894[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Mon Sep 30 19:44:46 2024 -0400
+
+    Reorganizing
+
+[33mcommit 58d2598afe4d74e96aff0b5755899b3b46359cd9[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Mon Sep 30 19:37:47 2024 -0400
+
+    Minutes Update for Sprint 1
+
+[33mcommit 88bfb6c22c2e6a25cf889220995c588bc504aad1[m
+Author: notxplosion <151760522+notxplosion@users.noreply.github.com>
+Date:   Mon Sep 30 19:31:48 2024 -0400
+
+    Update minute3.txt
+
+[33mcommit 49210e822339c875730729ebcf43ea68360aff17[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Mon Sep 30 19:15:26 2024 -0400
+
+    Delete extra README
+
+[33mcommit 85c43061f9838082f1cbe57593a9aaa6d1461f49[m
+Merge: 71a15a20 11333c92
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Mon Sep 30 13:10:53 2024 -0400
+
+    Merge pull request #32 from Cherryaki1/admin-add-roster
+    
+    changes in the nav bar
+
+[33mcommit 11333c923c0366581564a85e1c3f1ac6750a21ae[m[33m ([m[1;31morigin/admin-add-roster[m[33m)[m
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Mon Sep 30 13:09:58 2024 -0400
+
+    changes in the nav bar
+
+[33mcommit 71a15a204592a34283e7f338e62deac5be950287[m
+Merge: 5ed5cd75 3b897356
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Mon Sep 30 13:01:16 2024 -0400
+
+    Merge pull request #31 from Cherryaki1/admin-add-roster
+    
+    Fully operational import csv and create class with database update
+
+[33mcommit 3b89735655e6ac1fdaf75c139ad5018857eed852[m
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Mon Sep 30 13:00:29 2024 -0400
+
+    Fully operational import csv and create class with database update
+
+[33mcommit 5ed5cd753cd08569c64f6c476d7864b04f9028d9[m
+Merge: 4d89604f 56dd831a
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Mon Sep 30 03:20:10 2024 -0400
+
+    Merge pull request #30 from Cherryaki1/admin-add-roster
+    
+    Instructors can add rosters
+
+[33mcommit 56dd831ab44b2ac7d1a00077e7432a667d653aac[m
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Mon Sep 30 03:11:59 2024 -0400
+
+    Instructors can add rosters
+
+[33mcommit 4d89604f66abfb09282121c411d3a45f56fd2b4b[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Sun Sep 29 22:22:08 2024 -0400
+
+    Update README.md
+
+[33mcommit 500fba7335d0586ccca22a173a83e26924b84e6e[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Sun Sep 29 18:46:37 2024 -0400
+
+    Update README.md
+
+[33mcommit f082df629e1db76ec61a9353ad1fe75edb6da74a[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Sun Sep 29 18:45:47 2024 -0400
+
+    Create README.md
+
+[33mcommit 9490bc41d3ff5d950d00004d2783e639634dbcd3[m
+Merge: d1b23fbb 7f2ec397
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Sun Sep 29 17:43:12 2024 -0400
+
+    Merge pull request #29 from Cherryaki1/admin-add-roster
+    
+    Yet another renaming (first 2 were some mistakes
+
+[33mcommit 7f2ec397b9660209fa43ef112c16406bbc59f667[m
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Sun Sep 29 17:42:19 2024 -0400
+
+    Yet another renaming (first 2 were some mistakes
+
+[33mcommit d1b23fbba266128e623f6e4008d4475db9b8437e[m
+Merge: d545923b 930f19ff
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Sun Sep 29 17:31:37 2024 -0400
+
+    Merge pull request #28 from Cherryaki1/admin-add-roster
+    
+    Renaming again
+
+[33mcommit 930f19ff8243da86e7a5b603f1971b2f052212d2[m
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Sun Sep 29 17:30:16 2024 -0400
+
+    Renaming again
+
+[33mcommit d545923b00778e5d50ab4e0cd2fb52c5f9aa9194[m
+Merge: 4ae0a74b 4e2d3121
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Sun Sep 29 17:21:15 2024 -0400
+
+    Merge pull request #27 from Cherryaki1/admin-add-roster
+    
+    Name changes
+
+[33mcommit 4e2d31219879a5ae526a44b718c977d300c4649c[m
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Sun Sep 29 17:19:44 2024 -0400
+
+    Name changes
+
+[33mcommit 4ae0a74bc6d3f8984699c566adc1a6bc61a44718[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Sun Sep 29 17:00:17 2024 -0400
+
+    Delete Sprint_1/student-functions
+
+[33mcommit f429a72596dd3028b61e7a985292869dcef5cf6e[m
+Author: tzs07 <123267637+tzs07@users.noreply.github.com>
+Date:   Sun Sep 29 16:58:52 2024 -0400
+
+    Create student-functions
+
+[33mcommit 75352f06ff9a35c12082b476d47b51c7a77916b4[m
+Author: notxplosion <151760522+notxplosion@users.noreply.github.com>
+Date:   Fri Sep 27 22:04:17 2024 -0400
+
+    Update minute2.txt
+
+[33mcommit 56ffcc0a11a5aaa9a0248923803393d45644dc91[m
+Merge: 23a2bc60 9cf0d2ab
+Author: notxplosion <151760522+notxplosion@users.noreply.github.com>
+Date:   Fri Sep 27 21:58:46 2024 -0400
+
+    Merge pull request #25 from Cherryaki1/login-database
+    
+    Login System with redirection
+
+[33mcommit 9cf0d2abc4222f7a0e72620d1164b1be3eca1703[m[33m ([m[1;31morigin/login-database[m[33m)[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Fri Sep 27 21:57:41 2024 -0400
+
+    Redirect for User and Instructor
+    
+    Redirects to a user page or an instructor page depending on login.
+
+[33mcommit 9d0317a645a5092b0c11ae4849e234a8c1ae5b99[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Fri Sep 27 21:42:47 2024 -0400
+
+    Changed email to id
+    
+    quick fix
+
+[33mcommit e7a71eea31cbd75f85ee1b45ac03615f5dd1d60b[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Fri Sep 27 21:22:06 2024 -0400
+
+    Full Login System
+    
+    React + Express.js + Node.js + MongoDB
+
+[33mcommit 5b866a4ca41b379d51ca7a58c6bb65b09f0820b6[m
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Thu Sep 26 19:21:29 2024 -0400
+
+    React Integration
+
+[33mcommit 976c473f8d25f2a9d291d43bd24389e1c128c269[m
+Author: Abdulah Ghulam Ali <abdulah.ghulamali@gmail.com>
+Date:   Thu Sep 26 18:13:25 2024 -0400
+
+    login from database
+
+[33mcommit 23a2bc60842ba898c9432842d6e072fbc59fcad9[m
+Author: Cherryaki <Botao5339@gmail.com>
+Date:   Thu Sep 26 17:59:40 2024 -0400
+
+    Created minutes 3
+
+[33mcommit c09f0cf743b0d697675ebc99601132a183ad0667[m[33m ([m[1;32mlogin-page[m[33m)[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Thu Sep 26 17:45:50 2024 -0400
+
+    React part nice
+
+[33mcommit fc7cebe37a12b030d6cbce62860a110d7132d3ab[m
+Author: Cherryaki <Botao5339@gmail.com>
+Date:   Thu Sep 26 17:05:55 2024 -0400
+
+    Minutes 2 Update
+
+[33mcommit 4113c7accd9f730d750e3f07638a97d537813ad6[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Wed Sep 25 21:06:07 2024 -0400
+
+    React to Express (WIP)
+    
+    Work in progress
+
+[33mcommit 639df40bb2f3184052674e4ccfdd65f96a5de0fe[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Wed Sep 25 13:15:59 2024 -0400
+
+    Quick Changes for login page
+
+[33mcommit 2056616fe6707da3b3ffd313085f29836de2c6fe[m
+Author: Cherryaki1 <Botao5339@gmail.com>
+Date:   Tue Sep 24 22:17:04 2024 -0400
+
+    Created jsx
+
+[33mcommit 05211851c21859df72d99cf3468838f78dcb1375[m
+Merge: 3e032c3a 18683d9c
+Author: notxplosion <151760522+notxplosion@users.noreply.github.com>
+Date:   Tue Sep 24 22:01:06 2024 -0400
+
+    Merge pull request #10 from Cherryaki1/mongoDB
+    
+    Merge temporary MongoDB branch
+
+[33mcommit 3e032c3aae468b5bce26485967a0152c0f46c52d[m
+Merge: 6f3a65e5 6bed59fd
+Author: James Bautista <156005207+5hE1D0nK@users.noreply.github.com>
+Date:   Tue Sep 24 22:00:09 2024 -0400
+
+    Merge pull request #9 from Cherryaki1/Login-functions
+    
+    Login functions
+
+[33mcommit 18683d9ce6745348a70bb84e0e9727a127cc6dc4[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Tue Sep 24 20:40:45 2024 -0400
+
+    small changes for mongodb implementation
+    
+    Need the Login Page React to continue and test.
+
+[33mcommit 6bed59fd8b756f7cabb92b50d7d61e31b0867aa6[m[33m ([m[1;31morigin/Login-functions[m[33m, [m[1;32mLogin-functions[m[33m)[m
+Author: James Bautista <156005207+5hE1D0nK@users.noreply.github.com>
+Date:   Mon Sep 23 14:15:30 2024 -0400
+
+    Update .env
+
+[33mcommit cb6272d363b37a3f7fe6713e2d84d117549471e2[m
+Author: James Bautista <156005207+5hE1D0nK@users.noreply.github.com>
+Date:   Mon Sep 23 14:15:04 2024 -0400
+
+    Add files via upload
+
+[33mcommit 4b2ef1ee22c7af19c5a4539861b5b2653345e2f2[m
+Author: James Bautista <156005207+5hE1D0nK@users.noreply.github.com>
+Date:   Mon Sep 23 13:19:50 2024 -0400
+
+    Update server.js
+
+[33mcommit df8d49567cda591f86eaa35ba9267fadff27d6a2[m
+Author: James Bautista <156005207+5hE1D0nK@users.noreply.github.com>
+Date:   Mon Sep 23 13:13:14 2024 -0400
+
+    Update server.js
+
+[33mcommit d746ba05894f07d95ffa2e69c99bed250f110f37[m
+Author: James Bautista <156005207+5hE1D0nK@users.noreply.github.com>
+Date:   Mon Sep 23 13:09:01 2024 -0400
+
+    Update server.js
+
+[33mcommit 19ffd1d6a7c17c9434841cb467bfa3a9fb63166f[m
+Author: James Bautista <156005207+5hE1D0nK@users.noreply.github.com>
+Date:   Mon Sep 23 13:00:54 2024 -0400
+
+    Update server.js
+
+[33mcommit ed844975441b4a4c2d01c35205bdde4377687114[m
+Author: James Bautista <156005207+5hE1D0nK@users.noreply.github.com>
+Date:   Mon Sep 23 12:48:20 2024 -0400
+
+    Add files via upload
+
+[33mcommit b32064a2702b241e80337729f285b5fbeb580eda[m
+Author: James Bautista <156005207+5hE1D0nK@users.noreply.github.com>
+Date:   Mon Sep 23 12:38:13 2024 -0400
+
+    Update server.js
+
+[33mcommit a0e4605e1c8490f8a5c81efef670b44abf7f1ce9[m
+Author: James Bautista <156005207+5hE1D0nK@users.noreply.github.com>
+Date:   Mon Sep 23 12:37:41 2024 -0400
+
+    Update server.js
+
+[33mcommit 5a6d21f5eaa7dd93d8be81a99143908c50a68a5c[m
+Author: James Bautista <156005207+5hE1D0nK@users.noreply.github.com>
+Date:   Mon Sep 23 12:36:31 2024 -0400
+
+    Add files via upload
+
+[33mcommit 6f3a65e562c1b940286b248315ef23d8880f8d6e[m
+Author: Cherryaki1 <Botao5339@gmail.com>
+Date:   Mon Sep 23 12:25:04 2024 -0400
+
+    Reorganized file structure
+
+[33mcommit 2013f82f1dd9a98fd6643e72c6ae7f57c37e99cb[m
+Author: Cherryaki1 <Botao5339@gmail.com>
+Date:   Mon Sep 23 12:16:56 2024 -0400
+
+    Removed default imported files
+
+[33mcommit 92d753cb2326b23111d3fd5008d31ba2db38c9bb[m
+Author: notxplosion <greglajoie55@gmail.com>
+Date:   Fri Sep 20 12:34:30 2024 -0400
+
+    React Default App Creation
+    
+    npx create-react-app
+
+[33mcommit be15d7e1cd9dc6dc82c15d7a22a14da05dde8f87[m
+Author: Cherryaki1 <157229478+Cherryaki1@users.noreply.github.com>
+Date:   Thu Sep 19 17:44:22 2024 -0400
+
+    Minutes + README
+
+[33mcommit 5d640c2944e745ea6c42397375a4ec3a1a7ad7bf[m
+Author: Cherryaki <Botao5339@gmail.com>
+Date:   Thu Sep 12 16:48:27 2024 -0400
+
+    Initial commit

@@ -271,8 +271,6 @@ app.post('/uploadClass', upload.single('roster'), async (req, res) => {
     }
 });
 
-const GroupModel = require('./models/groupModel'); // Import the Group model
-
 // Route to create a new group
 app.post('/createGroup', async (req, res) => {
     try {
@@ -325,13 +323,13 @@ app.get('/instructorManageGroups', async(req,res) => {
         }
 
        const groups = await GroupModel.aggregate([
-            { $match: {Student: studentID }}, //match group by studentID
+            { $match: {Class : classID }}, //match group by classID
             {
                 $lookup: {
-                    from: 'students', //collection
-                    localField: 'Students', //Students field in the groups collection 
-                    foreignField: 'studentID', //ID field of the students collection
-                    as: 'GroupDetails' //name of array that includes the link between groups and students by their IDs
+                    from: 'students', //initial collection
+                    localField: 'Students', //Class field in the groups collection 
+                    foreignField: 'ID', //ID field of the classes collection
+                    as: 'StudentDetails' //name of array that includes the link between groups and students by their IDs
                 }
             }
         ]);
@@ -342,16 +340,20 @@ app.get('/instructorManageGroups', async(req,res) => {
 
         const formattedGroups = groups.map(groupItem => ({
             id: groupItem.ID,
-            name: groupItem.Name,
-            groupMembers: classItem.GroupDetails.length,
+            name: groupItem.Name, 
+            /*groupMembers: groupItem.StudentDetails.map(student => ({
+                id: student.ID, 
+                name: ${student.FirstName} ${student.LastName} 
+            }))*/
         }));
-
+        
         return res.status(200).json({ groups: formattedGroups });
-    } catch(error){
+
+    }catch(error){
         console.error('Error fetching groups:', error.stack || error);
         return res.status(500).json({ message: 'An unexpected error occurred while fetching groups.', error: error.message || error });
     }
-})
+});
 
 
 app.get('/index', (req, res) => {

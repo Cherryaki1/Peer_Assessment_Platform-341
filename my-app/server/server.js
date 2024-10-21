@@ -276,23 +276,45 @@ app.post('/uploadClass', upload.single('roster'), async (req, res) => {
 // Route to create a new group
 app.post('/createGroup', async (req, res) => {
     try {
-        if (!req.isAuthenticated() || req.user.Role !== 'Admin') {
+        if (!req.isAuthenticated() || !req.user) {
             return res.status(401).json({ message: 'Unauthorized' });
         }
 
-        const { groupName, classID, studentIDs } = req.body;
+        const { newGroupName, classID, instructorID, newStudentIDs, newGroupID } = req.body;
 
-        if (!groupName || !classID || !studentIDs) {
+        if (!newGroupName || !classID || !instructorID || !newStudentIDs || !newGroupID) {
             return res.status(400).json({ message: 'Missing group details.' });
         }
 
         const newGroup = new GroupModel({
-            groupName,
-            classID,
-            students: studentIDs // studentIDs should be an array of student IDs
+            GroupName: newGroupName,
+            Class: classID,
+            Instructor: instructorID,
+            Students: newStudentIDs,
+            groupID: newGroupID
         });
 
         await newGroup.save();
+
+        await ClassModel.updateOne(
+            { ID: classID },
+            { $addToSet: { Groups: newGroupID } } // $addToSet ensures no duplicates
+        );
+
+        console.log('Updating ClassModel for classID:', classID, 'with newGroupID:', newGroupID);
+        console.log('Updating InstructorModel for instructorID:', instructorID, 'with newGroupID:', newGroupID);
+
+        await InstructorModel.updateOne(
+            { ID: instructorID },
+            { $addToSet: { Groups: newGroupID } } // $addToSet ensures no duplicates
+        );
+
+        // Update the 'Groups' field for each student
+        await StudentModel.updateMany(
+            { ID: { $in: newStudentIDs } },
+            { $addToSet: { Groups: newGroupID } }
+        );
+
         res.status(201).json({ message: 'Group created successfully', group: newGroup });
     } catch (error) {
         console.error('Error creating group:', error);
@@ -379,8 +401,6 @@ app.get('/instructorManageGroups/:classID', async (req, res) => {
         return res.status(500).json({ message: 'An unexpected error occurred while fetching groups.', error: error.message || error });
     }
 });
-
-
 
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {

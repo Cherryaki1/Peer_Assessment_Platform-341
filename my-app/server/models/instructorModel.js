@@ -7,7 +7,8 @@ const instructorSchema = new mongoose.Schema({
     Email: { type: String, unique: true, required: true },
     Username: { type: String, required: true },
     Department: { type: String, required: true },
-    Classes: [{ type: Number, ref: 'Class' }] // Referencing the custom class ID
+    Classes: [{ type: Number, ref: 'Class' }], // Referencing the custom class ID
+    Groups: [{ type: Number, ref: 'Groups' }]
 });
 
 const InstructorModel = mongoose.model('Instructor', instructorSchema,'instructors');

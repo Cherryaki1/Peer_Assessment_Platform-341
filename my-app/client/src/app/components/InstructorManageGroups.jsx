@@ -6,6 +6,7 @@ import Sidebar from './Sidebar'; // Assuming Sidebar is used here as well
 const InstructorManageGroups = () => {
     const { classID } = useParams();  // Get the classID from the URL
     const [groups, setGroups] = useState([]); // To store the fetched groups
+    const [ungroupedStudents, setUngroupedStudents] = useState([]);  // To store ungrouped students
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(true); // Loading state
 
@@ -18,7 +19,8 @@ const InstructorManageGroups = () => {
                     withCredentials: true,  
                 });
                 
-                setGroups(response.data.groups);  // Assuming groups are returned
+                setGroups(response.data.groups);  // Set groups
+                setUngroupedStudents(response.data.ungroupedStudents);  // Set ungrouped students
                 if (response.data.groups.length === 0) {
                     setMessage('No groups available for this class.');
                 } else {
@@ -64,6 +66,20 @@ const InstructorManageGroups = () => {
                 ) : (
                     <p>{message}</p>  // Display message if no groups are available
                 )}
+
+                <h2>Students Not in a Group</h2>
+                <ul>
+                    {ungroupedStudents.length > 0 ? (
+                        ungroupedStudents.map(student => (
+                            <li key={student.id}>
+                                {student.name} (ID: {student.id})
+                            </li>
+                        ))
+                    ) : (
+                        <p>All students have been assigned to groups.</p>
+                    )}
+                </ul>
+                
             </div>
         </div>
     );

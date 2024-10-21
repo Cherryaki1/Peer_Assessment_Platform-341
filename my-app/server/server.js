@@ -141,6 +141,8 @@ app.get('/instructorManageClasses', async (req, res) => {
             return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
         }
 
+        console.log("Inside Manage Classes");
+
         const instructorID = req.user.ID;
         
         if (!Number.isInteger(instructorID)) {
@@ -310,20 +312,28 @@ app.get('/groups/:classID', async (req, res) => {
 });
 
 
-app.get('/instructorManageGroups', async(req,res) => {
+app.get('/instructorManageGroups/:classID', async(req,res) => {
+
+    console.log("Route Hit");  // Log if the route is hit
+
     try {
+        /*
         if (!req.isAuthenticated() || !req.user) {
             return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
         }
+        */
 
         const instructorID = req.user.ID;
+        const { classID } = req.params; 
+        console.log('Class ID:', classID);
+
         
         if (!Number.isInteger(instructorID)) {
             return res.status(400).json({ message: 'Invalid instructor ID' });
         }
 
        const groups = await GroupModel.aggregate([
-            { $match: {Class : classID }}, //match group by classID
+            { $match: { Class : parseInt(classID) }}, //match group by classID
             {
                 $lookup: {
                     from: 'students', //initial collection
@@ -339,12 +349,12 @@ app.get('/instructorManageGroups', async(req,res) => {
         }
 
         const formattedGroups = groups.map(groupItem => ({
-            id: groupItem.ID,
-            name: groupItem.Name, 
-            /*groupMembers: groupItem.StudentDetails.map(student => ({
+            id: groupItem.groupID,
+            name: groupItem.GroupName, 
+            groupMembers: groupItem.StudentDetails.map(student => ({
                 id: student.ID, 
-                name: ${student.FirstName} ${student.LastName} 
-            }))*/
+                name: `${student.FirstName} ${student.LastName}` 
+            }))
         }));
         
         return res.status(200).json({ groups: formattedGroups });

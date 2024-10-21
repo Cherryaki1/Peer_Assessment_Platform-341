@@ -10,8 +10,6 @@ const Sidebar = () => {
             <ul>
                 <li onClick={() => navigate('/instructorDashboard')}>Dashboard</li>
                 <li onClick={() => navigate('/instructorManageClasses')}>Manage Classes</li>
-                <li onClick={() => navigate('/instructorManageGroups')}>Manage Groups</li>
-                
             </ul>
         </div>
     );

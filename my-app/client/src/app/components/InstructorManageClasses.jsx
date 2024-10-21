@@ -1,6 +1,6 @@
-// InstructorManageClasses.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 const InstructorManageClasses = () => {
@@ -11,7 +11,8 @@ const InstructorManageClasses = () => {
     const [newClassSection, setNewClassSection] = useState('');
     const [newClassID, setNewClassID] = useState('');
     const [message, setMessage] = useState('');
-    const [instructorID, setInstructorID] = useState(null); // New state to store instructor's ID
+    const [instructorID, setInstructorID] = useState(null); // Store instructor's ID
+    const navigate = useNavigate();  // React Router hook for navigation
 
     // Fetch current classes and instructor details when the component mounts
     useEffect(() => {
@@ -109,6 +110,16 @@ const InstructorManageClasses = () => {
         }
     };
 
+    // Function to handle clicking on a class
+    const handleClassClick = (classID) => {
+        console.log('Navigating to classID:', classID);  // Debug to see if classID exists
+        if (classID) {
+            navigate(`/instructorManageGroups/${classID}`);
+        } else {
+            console.error('No classID found!');
+        }
+    };
+
     return (
         <div className="manage-classes-container" style={{ display: 'flex' }}>
             <Sidebar /> {/* Include Sidebar component */}
@@ -121,7 +132,9 @@ const InstructorManageClasses = () => {
                         <ul>
                             {classes.map((classItem, index) => (
                                 <li key={index}>
-                                    <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - {classItem.studentCount} Students, {classItem.groupCount} Groups
+                                    <button onClick={() => handleClassClick(classItem.id)} style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer' }}>
+                                        <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - {classItem.studentCount} Students, {classItem.groupCount} Groups
+                                    </button>
                                 </li>
                             ))}
                         </ul>

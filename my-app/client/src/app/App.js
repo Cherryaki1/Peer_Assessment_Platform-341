@@ -6,7 +6,7 @@ import Login from './components/Login';
 import StudentDashboard from './components/StudentDashboard';
 import InstructorDashboard from './components/InstructorDashboard';
 import InstructorManageClasses from './components/InstructorManageClasses'; //can take off?
-import GroupManagement from './components/groupManagement'; 
+//import GroupManagement from './components/groupManagement'; 
 import InstructorManageGroups from './components/InstructorManageGroups';
 
 
@@ -18,9 +18,7 @@ const App = () => {
                 <Route path="/studentDashboard" element={<StudentDashboard />} />
                 <Route path="/instructorDashboard" element={<InstructorDashboard />} />
                 <Route path="/instructorManageClasses" element={<InstructorManageClasses />} /> 
-                <Route path="/instructorManageGroups" element={<InstructorManageGroups />} />
-                {{//<Route path="/groupManagement" element={<GroupManagement />} /> 
-                }}
+                <Route path="/instructorManageGroups/:classID" element={<InstructorManageGroups />} />
             </Routes>
         </Router>
     );

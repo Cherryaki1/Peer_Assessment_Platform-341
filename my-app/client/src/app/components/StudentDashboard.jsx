@@ -31,13 +31,13 @@ const StudentDashboard = () => {
     }
 
     return (
-        <div className="manage-groups-container" style={{ display: 'flex' }}>
-            <StudentSidebar />
-            <div>
+        <div className="dashboard-container" style={{ display: 'flex' }}>
+            <StudentSidebar /> {/* Include Sidebar component */}
+            <div className="content" style={{ padding: '20px', flex: 1 }}>
                 {user ? (
                     <div>
                         <h2>{message}</h2>
-                        <h2>Welcome Student!, {user.FirstName}!</h2>
+                        <h2>Welcome {user.FirstName} {user.LastName}!</h2>
                     </div>
                 ) : (
                     <p>{message}</p>

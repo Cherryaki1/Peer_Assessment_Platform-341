@@ -5,7 +5,6 @@ import StudentSidebar from './StudentSidebar';
 import Sidebar from './Sidebar';
 
 const StudentManageClasses = () =>{
-    const navigate = useNavigate();  // React Router hook for navigation
     const [classes, setClasses] = useState([]);
     const [message, setMessage] = useState('');
     const [studentID, setStudentID] = useState(null); // Store student's ID
@@ -13,15 +12,15 @@ const StudentManageClasses = () =>{
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                // Fetch the logged-in user data (instructor)
+                // Fetch the logged-in user data 
                 const response = await axios.get('http://localhost:3000/index', {
                     withCredentials: true,
                 });
                 
                 if (response.data.user && response.data.user.ID) {
-                    setStudentID(response.data.user.ID); // Store the instructor's ID
+                    setStudentID(response.data.user.ID); // Store the students's ID
                 } else {
-                    setMessage('Failed to retrieve instructor data.');
+                    setMessage('Failed to retrieve student data.');
                 }
             } catch (error) {
                 console.error('Error fetching user data:', error);
@@ -30,7 +29,7 @@ const StudentManageClasses = () =>{
         };
         const fetchClasses = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/instructorManageClasses', {
+                const response = await axios.get('http://localhost:3000/studentManageClasses', {
                     withCredentials: true,
                 });
                 setClasses(response.data.classes);
@@ -58,10 +57,24 @@ const StudentManageClasses = () =>{
 
     return(
         <div className="manage-classes-container" style={{ display: 'flex' }}>
-            <Sidebar /> {/* Include Student's Sidebar component */}
+            <StudentSidebar /> {/* Include Student's Sidebar component */}
             <div className="content" style={{ padding: '20px', flex: 1 }}>
                 <h2>My Classes</h2>
+                <div>
+                    <h3>Current Classes</h3>
+                    {classes.length > 0 ? (
+                        <ul>
+                            {classes.map((classItem, index) => (
+                                <li key={index}>
+                                        <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - {classItem.studentCount} Students, {classItem.groupCount} Groups
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>{message}</p> // Display the message if there are no classes
+                    )}
                 </div>
+            </div>
         </div>
     );
 

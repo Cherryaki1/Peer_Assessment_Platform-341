@@ -1,6 +1,7 @@
 // client/src/app/Dashboard.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import StudentSidebar from './StudentSidebar';
 
 const StudentDashboard = () => {
     const [user, setUser] = useState(null);
@@ -30,15 +31,18 @@ const StudentDashboard = () => {
     }
 
     return (
-        <div>
-            {user ? (
-                <div>
-                    <h2>{message}</h2>
-                    <h2>Welcome Student!, {user.FirstName}!</h2>
-                </div>
-            ) : (
-                <p>{message}</p>
-            )}
+        <div className="manage-groups-container" style={{ display: 'flex' }}>
+            <StudentSidebar />
+            <div>
+                {user ? (
+                    <div>
+                        <h2>{message}</h2>
+                        <h2>Welcome Student!, {user.FirstName}!</h2>
+                    </div>
+                ) : (
+                    <p>{message}</p>
+                )}
+            </div>
         </div>
     );
 };

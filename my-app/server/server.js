@@ -402,6 +402,54 @@ app.get('/instructorManageGroups/:classID', async (req, res) => {
     }
 });
 
+
+app.get('/studentManageClasses', async (req, res) => {
+    try {
+        if (!req.isAuthenticated() || !req.user) {
+            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
+        }
+
+        console.log("Inside Manage Classes");
+
+        const studentID = req.user.ID;
+        
+        if (!Number.isInteger(studentID)) {
+            return res.status(400).json({ message: 'Invalid student ID' });
+        }
+
+        // Use aggregation instead of populate
+        const classes = await ClassModel.aggregate([
+            { $match: { Students: studentID } }, // Match classes by student and class ids
+            {
+                $lookup: {
+                    from: 'students', // Collection name where students are stored (collection we wish to "link to")
+                    localField: 'Students', // Field in the 'classes' collection (classes have their students' IDs, so in this case Students here are IDs)
+                    foreignField: 'ID', // Field in the 'students' collection (ID field of the foreign collection, students)
+                    as: 'StudentDetails' // Name of the array to output the joined data
+                }
+            }
+        ]);
+
+        if (!classes || classes.length === 0) {
+            return res.status(200).json({ classes: [], message: 'No classes found for this student.' });
+        }
+
+        // Format the response to include studentCount and groupCount
+        const formattedClasses = classes.map(classItem => ({
+            id: classItem.ID,
+            name: classItem.Name,
+            subject: classItem.Subject,
+            section: classItem.Section,
+            studentCount: classItem.StudentDetails.length,
+        }));
+
+        return res.status(200).json({ classes: formattedClasses });
+    } catch (error) {
+        console.error('Error fetching classes:', error.stack || error);
+        return res.status(500).json({ message: 'An unexpected error occurred while fetching classes.', error: error.message || error });
+    }
+});
+
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {
         res.json({ user: req.user, message: '' });

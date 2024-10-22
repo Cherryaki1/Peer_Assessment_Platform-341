@@ -1,6 +1,7 @@
 // client/src/app/Dashboard.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import StudentSidebar from './StudentSidebar';
 
 const StudentDashboard = () => {
     const [user, setUser] = useState(null);
@@ -30,15 +31,18 @@ const StudentDashboard = () => {
     }
 
     return (
-        <div>
-            {user ? (
-                <div>
-                    <h2>{message}</h2>
-                    <h2>Welcome Student!, {user.FirstName}!</h2>
-                </div>
-            ) : (
-                <p>{message}</p>
-            )}
+        <div className="dashboard-container" style={{ display: 'flex' }}>
+            <StudentSidebar /> {/* Include Sidebar component */}
+            <div className="content" style={{ padding: '20px', flex: 1 }}>
+                {user ? (
+                    <div>
+                        <h2>{message}</h2>
+                        <h2>Welcome {user.FirstName} {user.LastName}!</h2>
+                    </div>
+                ) : (
+                    <p>{message}</p>
+                )}
+            </div>
         </div>
     );
 };

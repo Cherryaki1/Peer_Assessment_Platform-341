@@ -3,11 +3,13 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom'; // To get classID from the URL
 import StudentSidebar from './StudentSidebar'; 
 import Sidebar from './Sidebar';
+import { useNavigate } from 'react-router-dom';
 
 const StudentManageClasses = () =>{
     const [classes, setClasses] = useState([]);
     const [message, setMessage] = useState('');
     const [studentID, setStudentID] = useState(null); // Store student's ID
+    const navigate = useNavigate();  // React Router hook for navigation
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -55,6 +57,15 @@ const StudentManageClasses = () =>{
         fetchClasses();  // Fetch the list of classes
     }, []);
 
+    const handleClassClick = (classID) => {
+        console.log('Navigating to classID:', classID);  // Debug to see if classID exists
+        if (classID) {
+            navigate(`/studentManageGroups/${classID}`);
+        } else {
+            console.error('No classID found!');
+        }
+    };
+
     return(
         <div className="manage-classes-container" style={{ display: 'flex' }}>
             <StudentSidebar /> {/* Include Student's Sidebar component */}
@@ -66,7 +77,9 @@ const StudentManageClasses = () =>{
                         <ul>
                             {classes.map((classItem, index) => (
                                 <li key={index}>
+                                     <button onClick={() => handleClassClick(classItem.id)} style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer' }}>
                                         <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - {classItem.studentCount} Students, {classItem.groupCount} Groups
+                                    </button>
                                 </li>
                             ))}
                         </ul>

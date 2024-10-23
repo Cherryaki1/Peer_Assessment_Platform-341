@@ -9,7 +9,7 @@ import InstructorManageClasses from './components/InstructorManageClasses'; //ca
 //import GroupManagement from './components/groupManagement'; 
 import InstructorManageGroups from './components/InstructorManageGroups';
 import StudentManageClasses from './components/StudentManageClasses';
-
+import StudentManageGroups from './components/StudentManageGroups';
 
 const App = () => {
     return (
@@ -21,6 +21,7 @@ const App = () => {
                 <Route path="/instructorManageClasses" element={<InstructorManageClasses />} /> 
                 <Route path="/instructorManageGroups/:classID" element={<InstructorManageGroups />} />
                 <Route path="/studentManageClasses" element={<StudentManageClasses />} />
+                <Route path="/studentManageGroups/:classID" element={<StudentManageGroups />}/>
             </Routes>
         </Router>
     );

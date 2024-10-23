@@ -66,7 +66,7 @@ const StudentManageGroups = () => {
         <div className="manage-groups-container" style={{ display: 'flex' }}>
             <StudentSidebar />
             <div className="content" style={{ padding: '20px', flex: 1 }}>
-                <h2>Manage Groups for Class {classID}</h2>
+                <h2>My Group for Class: {classID}</h2>
                 {groups.length > 0 ? (
                     <ul>
                         {groups.map((group) => (

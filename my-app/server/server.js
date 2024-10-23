@@ -450,6 +450,75 @@ app.get('/studentManageClasses', async (req, res) => {
     }
 });
 
+app.get('/studentManageGroups/:classID', async (req, res) => {
+    try {
+        if (!req.isAuthenticated() || !req.user) {
+            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
+        }
+        
+        const studentID = req.user.ID;
+        const { classID } = req.params; 
+        console.log('Class ID:', classID);
+
+        if (!Number.isInteger(studentID)) {
+            return res.status(400).json({ message: 'Invalid student ID' });
+        }
+
+        // 1. Fetch all groups for this class
+        const groups = await GroupModel.aggregate([
+            { $match: { Class : parseInt(classID) }}, // match group by classID
+            {
+                $lookup: {
+                    from: 'students',  // collection with students
+                    localField: 'Students',  // field in the groups collection
+                    foreignField: 'ID',  // ID field in the students collection
+                    as: 'StudentDetails'  // name of array that includes the joined student data
+                }
+            }
+        ]);
+
+        // 2. Get all student IDs from the groups
+        const studentIDsInGroups = groups.flatMap(group => group.Students);
+
+        // 3. Fetch all students in the class
+        const classInfo = await ClassModel.findOne({ ID: parseInt(classID) });
+        if (!classInfo) {
+            return res.status(404).json({ message: 'Class not found' });
+        }
+
+        const allStudentIDs = classInfo.Students;  // List of all students in the class
+
+        // 4. Find students who are not in any group
+        const ungroupedStudents = await StudentModel.find({
+            ID: { $in: allStudentIDs, $nin: studentIDsInGroups }  // students in class but not in groups
+        });
+
+        // 5. Format groups to include group members
+        const formattedGroups = groups.map(groupItem => ({
+            id: groupItem.groupID,
+            name: groupItem.GroupName, 
+            groupMembers: groupItem.StudentDetails.map(student => ({
+                id: student.ID, 
+                name: `${student.FirstName} ${student.LastName}`
+            }))
+        }));
+        
+        // 6. Return both the groups and ungrouped students
+        return res.status(200).json({
+            groups: formattedGroups,
+            ungroupedStudents: ungroupedStudents.map(student => ({
+                id: student.ID,
+                name: `${student.FirstName} ${student.LastName}`
+            }))
+        });
+
+    } catch (error) {
+        console.error('Error fetching groups and ungrouped students:', error.stack || error);
+        return res.status(500).json({ message: 'An unexpected error occurred while fetching groups.', error: error.message || error });
+    }
+});
+
+
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {
         res.json({ user: req.user, message: '' });

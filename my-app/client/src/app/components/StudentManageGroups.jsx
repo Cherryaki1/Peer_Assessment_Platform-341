@@ -9,6 +9,7 @@ const StudentManageGroups = () => {
     const [groups, setGroups] = useState([]); // To store the fetched groups
     const [ungroupedStudents, setUngroupedStudents] = useState([]);  // To store ungrouped students
     const [studentID, setStudentID] = useState(null); //store student ID
+    const [groupID, setGroupID] = useState(null);
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate(); // Initialize useNavigate
@@ -24,6 +25,7 @@ const StudentManageGroups = () => {
                 
                 if (response.data.user && response.data.user.ID) {
                     setStudentID(response.data.user.ID); // Store the student's ID
+                    //setGroupID(response.data.user.groupID) //Store the student's group ID
                 } else {
                     setMessage('Failed to retrieve students data.');
                 }
@@ -85,11 +87,11 @@ const StudentManageGroups = () => {
                                         <li key={student.id}>
                                             {student.name} (ID: {student.id})
                                             {/* Show Rate button for each student in the group, except the logged-in student */}
-                                            {student.id !== studentID && (
-                                                <button onClick={() => handleRateClick(student.id)} style={{ marginLeft: '10px' }}>
-                                                    Rate
-                                                </button>
-                                            )}
+                                                {(student.id !== studentID) && (
+                                                    <button onClick={() => handleRateClick(student.id)} style={{ marginLeft: '10px' }}>
+                                                        Rate
+                                                    </button>
+                                                )}
                                         </li>
                                     ))}
                                 </ul>

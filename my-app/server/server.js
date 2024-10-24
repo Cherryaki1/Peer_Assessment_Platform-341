@@ -518,7 +518,6 @@ app.get('/studentManageGroups/:classID', async (req, res) => {
     }
 });
 
-
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {
         res.json({ user: req.user, message: '' });
@@ -535,6 +534,8 @@ app.post('/logout', (req, res) => {
         res.json({ message: 'Logout successful' });
     });
 });
+
+
 
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');

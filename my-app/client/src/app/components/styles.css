@@ -33,3 +33,11 @@
     margin-left: 220px; /* Make sure there's space for the sidebar */
     padding: 20px;
 }
+
+input[type=radio]{
+    display:none;
+}
+
+.star{
+    cursor: pointer;
+}

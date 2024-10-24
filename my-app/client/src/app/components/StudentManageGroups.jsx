@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom'; //get class ID from URL
-import StudentSidebar from './StudentSidebar'; 
+import StudentSidebar from './StudentSidebar';
+import { FaStar } from 'react-icons/fa'; 
 
 const StudentManageGroups = () => {
 
@@ -11,6 +12,10 @@ const StudentManageGroups = () => {
     const [studentID, setStudentID] = useState(null); //store student ID
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(true);
+
+    // Store ratings and hover states per student
+    const [studentRatings, setStudentRatings] = useState({});  // For student ratings
+    const [hoverRatings, setHoverRatings] = useState({});  // For student hover ratings
 
     // Fetch the groups and students for the given class
     useEffect(() => {
@@ -62,6 +67,22 @@ const StudentManageGroups = () => {
         return <div>Loading groups...</div>;  // Show loading state while fetching data
     }
 
+    // Handle rating change for a specific student
+    const handleRating = (studentId, rating) => {
+        setStudentRatings(prevRatings => ({
+            ...prevRatings,
+            [studentId]: rating,  // Set rating for the specific student
+        }));
+    };
+
+    // Handle hover change for a specific student
+    const handleHover = (studentId, hoverValue) => {
+        setHoverRatings(prevHovers => ({
+            ...prevHovers,
+            [studentId]: hoverValue,  // Set hover state for the specific student
+        }));
+    };
+
     return (
         <div className="manage-groups-container" style={{ display: 'flex' }}>
             <StudentSidebar />
@@ -78,6 +99,26 @@ const StudentManageGroups = () => {
                                     {group.groupMembers.map((student) => (
                                         <li key={student.id}>
                                             {student.name} (ID: {student.id})
+                                            {[...Array(5)].map((star, index) => {
+                                                const currentRating = index + 1;
+                                                return (
+                                                    <label key={`${student.id}-star-${index}`}>
+                                                        <input 
+                                                            type="radio" 
+                                                            name={`rating-${student.id}`}  // Unique name for each student
+                                                            value={currentRating}
+                                                            onClick={() => handleRating(student.id, currentRating)}
+                                                        />
+                                                        <FaStar 
+                                                            className='star'
+                                                            size={25} 
+                                                            color={currentRating <= (hoverRatings[student.id] || studentRatings[student.id]) ? "#ffc107" : "#e4e5e9"}
+                                                            onMouseEnter={() => handleHover(student.id, currentRating)}
+                                                            onMouseLeave={() => handleHover(student.id, null)}
+                                                        />
+                                                    </label>
+                                                );
+                                            })}
                                         </li>
                                     ))}
                                 </ul>

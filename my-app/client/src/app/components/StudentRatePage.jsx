@@ -22,7 +22,7 @@ const Rate = ({ ratings }) => {
     };
 
     return (
-        <div>
+        <form>
             {ratings.map((rating) => (
                 <div key={rating.id}>
                     <h4>{rating.title}</h4>
@@ -49,7 +49,9 @@ const Rate = ({ ratings }) => {
                     })}
                 </div>
             ))}
-        </div>
+            <p></p>
+            <button type="submit">Submit rating</button>
+        </form>
     );
 };
 

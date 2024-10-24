@@ -65,7 +65,7 @@ const StudentManageGroups = () => {
 
     // Function to handle navigation to the rate page
     const handleRateClick = (studentId) => {
-        navigate(`/rate?studentId=${studentId}`); // Navigate to the rate page with studentId as a query parameter
+        navigate(`/studentRatePage?studentId=${studentId}`); // Navigate to the rate page with studentId as a query parameter
     };
 
     return (
@@ -84,10 +84,12 @@ const StudentManageGroups = () => {
                                     {group.groupMembers.map((student) => (
                                         <li key={student.id}>
                                             {student.name} (ID: {student.id})
-                                            {/* Button to rate each student */}
-                                            <button onClick={() => handleRateClick(student.id)} style={{ marginLeft: '10px' }}>
-                                                Rate
-                                            </button>
+                                            {/* Show Rate button for each student in the group, except the logged-in student */}
+                                            {student.id !== studentID && (
+                                                <button onClick={() => handleRateClick(student.id)} style={{ marginLeft: '10px' }}>
+                                                    Rate
+                                                </button>
+                                            )}
                                         </li>
                                     ))}
                                 </ul>

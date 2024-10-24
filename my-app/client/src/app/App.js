@@ -14,9 +14,9 @@ import Rate from './components/StudentRatePage';
 
 const ratingList = [
     { id: 1, title: 'Cooperation' },
-    // { id: 2, title: 'Communication' },
-    // { id: 3, title: 'Problem Solving' },
-    // { id: 4, title: 'Punctuality' },
+    { id: 2, title: 'Communication' },
+    { id: 3, title: 'Problem Solving' },
+    { id: 4, title: 'Punctuality' },
     // { id: 5, title: 'Quality of Work' },
 ];
 

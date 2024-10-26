@@ -450,24 +450,29 @@ app.get('/studentManageClasses', async (req, res) => {
     }
 });
 
-app.get('/studentFromUser/:userID', async (req, res) => {
-    const { userID } = req.params;  // Assuming the user ID is available in the session (req.user)
-    
+app.get('/studentFromUser', async (req, res) => {
+    console.log("User data in session:", req.user);
+
+    const userID = Number(req.user?.ID);  // Ensure userID is a Number
+    if (isNaN(userID)) {
+        return res.status(400).json({ message: 'User ID is invalid or missing.' });
+    }
+
     try {
-        // Fetch student details using the userID from the students collection
-        const student = await StudentModel.findOne({ userID: userID });
+        const student = await StudentModel.findOne({ ID: userID });
+        console.log("Searching for student with userID:", userID);
 
         if (!student) {
             return res.status(404).json({ message: 'Student not found.' });
         }
 
-        // Return the student details
         res.json({ student });
     } catch (error) {
         console.error('Error fetching student data:', error);
         res.status(500).json({ message: 'Error fetching student data.' });
     }
 });
+
 
 app.get('/studentManageGroups/:classID', async (req, res) => {
     try {

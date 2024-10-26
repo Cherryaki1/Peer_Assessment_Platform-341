@@ -9,7 +9,7 @@ const StudentManageGroups = () => {
     const [groups, setGroups] = useState([]); // To store the fetched groups
     const [ungroupedStudents, setUngroupedStudents] = useState([]);  // To store ungrouped students
     const [studentID, setStudentID] = useState(null); //store student ID
-    const [groupID, setGroupID] = useState(null);
+    const [groupID, setGroupID] = useState([]);//store the groups of the logged-in student
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate(); // Initialize useNavigate
@@ -26,7 +26,7 @@ const StudentManageGroups = () => {
                 if (response.data.user && response.data.user.ID) {
                     const userID = response.data.user.ID;
                     setStudentID(userID); // Store the student's ID
-                    await fetchStudentGroup(userID);
+                    await fetchStudentFromUser(userID);
                 } else {
                     setMessage('Failed to retrieve students data.');
                 }
@@ -36,23 +36,24 @@ const StudentManageGroups = () => {
             }
         };
 
-        const fetchStudentGroup = async (userID) => {
+        const fetchStudentFromUser = async (userID) => {
             try {
-                // Fetch the logged-in user data (student)
-                const response = await axios.get('http://localhost:3000/studentFromUser/${userID}', {
+                const response = await axios.get('http://localhost:3000/studentFromUser', {
                     withCredentials: true,
                 });
-                
-                if (response.data.student) {
-                    setGroupID(response.data.student.Group) //Store the student's group ID
+    
+                if (response.data.student && response.data.student.Groups) {
+                    //setStudentData(response.data.student); // Store the student's data, including groupID
+                    console.log("Setting groupID:", response.data.student.Groups);
+                    setGroupID(response.data.student.Groups); // Set the student's group ID
                 } else {
-                    setMessage('Failed to retrieve students data.');
+                    setMessage('Student not found or no group data available.');
                 }
             } catch (error) {
-                console.error('Error fetching user data:', error);
-                setMessage('Error fetching user data.');
+                console.error('Error fetching student from user:', error);
+                setMessage('Error fetching student data.');
             }
-        }
+        };
 
         const fetchGroups = async () => {
             console.log(`Fetching groups for classID: ${classID}`); 
@@ -76,23 +77,6 @@ const StudentManageGroups = () => {
             }
         };
 
-       /*const checkSameGroup = async (otherStudentID) => {
-            try {
-                const response = await axios.get(`http://localhost:3000/sameGroup/${otherStudentID}`, {
-                    withCredentials: true,
-                });
-        
-                if (response.data.inSameGroup) {
-                    setMessage('This student is in the same group.');
-                } else {
-                    setMessage('This student is in a different group.');
-                }
-            } catch (error) {
-                console.error('Error checking group membership:', error);
-                setMessage('Error checking group membership.');
-            }
-        };*/
-
         fetchUserData();
         fetchGroups();  // Fetch groups when component mounts
     }, [classID]);  // Re-fetch if classID changes
@@ -113,26 +97,32 @@ const StudentManageGroups = () => {
                 <h2>My Group for Class: {classID}</h2>
                 {groups.length > 0 ? (
                     <ul>
-                        {groups.map((group) => (
+                    {groups.map((group) => {
+                        console.log("Current group:", group);
+                        console.log("Logged-in user's groupID:", groupID);
+                
+                        return (
                             <li key={group.id}>
-                                <h3>{group.name}</h3>  {/* Display group name */}
+                                <h3>{group.name}</h3>
                                 <p>Group ID: {group.id}</p>
                                 <h4>Members:</h4>
                                 <ul>
                                     {group.groupMembers.map((student) => (
                                         <li key={student.id}>
                                             {student.name} (ID: {student.id})
-                                                {(student.id !== studentID && group.id !== groupID) && (
-                                                    <button onClick={() => handleRateClick(student.id)} style={{ marginLeft: '10px' }}>
-                                                        Rate
-                                                    </button>
-                                                )}
+                                            {Array.isArray(groupID) && student.id !== studentID && groupID.includes(Number(group.id)) && (
+                                                <button onClick={() => handleRateClick(student.id)} style={{ marginLeft: '10px' }}>
+                                                    Rate
+                                                </button>
+                                            )}
                                         </li>
                                     ))}
                                 </ul>
                             </li>
-                        ))}
-                    </ul>
+                        );
+                    })}
+                </ul>
+                
                 ) : (
                     <p>{message}</p>  // Display message if no groups are available
                 )}

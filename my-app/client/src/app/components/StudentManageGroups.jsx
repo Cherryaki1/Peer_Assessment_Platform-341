@@ -24,8 +24,9 @@ const StudentManageGroups = () => {
                 });
                 
                 if (response.data.user && response.data.user.ID) {
-                    setStudentID(response.data.user.ID); // Store the student's ID
-                    //setGroupID(response.data.user.groupID) //Store the student's group ID
+                    const userID = response.data.user.ID;
+                    setStudentID(userID); // Store the student's ID
+                    await fetchStudentGroup(userID);
                 } else {
                     setMessage('Failed to retrieve students data.');
                 }
@@ -34,6 +35,24 @@ const StudentManageGroups = () => {
                 setMessage('Error fetching user data.');
             }
         };
+
+        const fetchStudentGroup = async (userID) => {
+            try {
+                // Fetch the logged-in user data (student)
+                const response = await axios.get('http://localhost:3000/studentFromUser/${userID}', {
+                    withCredentials: true,
+                });
+                
+                if (response.data.student) {
+                    setGroupID(response.data.student.Group) //Store the student's group ID
+                } else {
+                    setMessage('Failed to retrieve students data.');
+                }
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+                setMessage('Error fetching user data.');
+            }
+        }
 
         const fetchGroups = async () => {
             console.log(`Fetching groups for classID: ${classID}`); 
@@ -56,6 +75,23 @@ const StudentManageGroups = () => {
                 setLoading(false);  // Always stop loading after the request
             }
         };
+
+       /*const checkSameGroup = async (otherStudentID) => {
+            try {
+                const response = await axios.get(`http://localhost:3000/sameGroup/${otherStudentID}`, {
+                    withCredentials: true,
+                });
+        
+                if (response.data.inSameGroup) {
+                    setMessage('This student is in the same group.');
+                } else {
+                    setMessage('This student is in a different group.');
+                }
+            } catch (error) {
+                console.error('Error checking group membership:', error);
+                setMessage('Error checking group membership.');
+            }
+        };*/
 
         fetchUserData();
         fetchGroups();  // Fetch groups when component mounts
@@ -86,8 +122,7 @@ const StudentManageGroups = () => {
                                     {group.groupMembers.map((student) => (
                                         <li key={student.id}>
                                             {student.name} (ID: {student.id})
-                                            {/* Show Rate button for each student in the group, except the logged-in student */}
-                                                {(student.id !== studentID) && (
+                                                {(student.id !== studentID && group.id !== groupID) && (
                                                     <button onClick={() => handleRateClick(student.id)} style={{ marginLeft: '10px' }}>
                                                         Rate
                                                     </button>

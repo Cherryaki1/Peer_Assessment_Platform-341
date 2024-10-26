@@ -550,12 +550,14 @@ app.get('/index', (req, res) => {
     }
 });
 
-app.post('/logout', (req, res) => {
-    req.logout((err) => {
+app.get('/logout', (req, res) => {
+    req.logout(err => {
         if (err) {
-            return res.status(500).json({ message: 'Logout failed' });
+            return res.status(500).json({ message: 'Error logging out' });
         }
+        // Send a success message and redirect to login page
         res.json({ message: 'Logout successful' });
+        res.redirect('/login');
     });
 });
 
@@ -564,3 +566,5 @@ app.post('/logout', (req, res) => {
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
+
+module.exports = app;

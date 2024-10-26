@@ -80,6 +80,47 @@ const InstructorManageGroups = () => {
             console.error('Error creating group:', error);
         }
     };
+    
+    const handleAddStudentsToGroup = async (groupID) => {
+        const studentIDsToAdd = prompt("Enter Student IDs to add (comma-separated):");
+        if (studentIDsToAdd) {
+            const ids = studentIDsToAdd.split(',').map(id => id.trim());
+            try {
+                const response = await axios.post('http://localhost:3000/addStudentsToGroup', {
+                    groupID,
+                    studentIDs: ids,
+                    instructorID
+                }, { withCredentials: true });
+
+                alert(response.data.message);
+                // Refresh the groups after adding students
+                fetchGroups();
+            } catch (error) {
+                console.error('Error adding students to group:', error);
+            }
+        }
+    };
+
+    // handle removing students grom a group
+    const handleRemoveStudentFromGroup = async (groupID, studentID) => {
+        const confirmation = window.confirm(`Are you sure you want to remove this student (ID: ${studentID}) from the group?`);
+        if (confirmation) {
+            try {
+                const response = await axios.post('http://localhost:3000/removeStudentFromGroup', {
+                    groupID,
+                    studentID,
+                    instructorID
+                }, { withCredentials: true });
+
+                alert(response.data.message);
+                // Refresh the groups after removing a student
+                fetchGroups();
+            } catch (error) {
+                console.error('Error removing student from group:', error);
+            }
+        }
+    };
+
 
     return (
         <div className="manage-groups-container" style={{ display: 'flex' }}>

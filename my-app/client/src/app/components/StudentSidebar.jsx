@@ -7,7 +7,7 @@ const StudentSidebar = () => {
     // Logout handler
     const handleLogout = async () => {
         try {
-            const response = await fetch('/logout', {
+            const response = await fetch('http://localhost:3000/logout', {
                 method: 'GET', // Or 'POST' depending on your implementation
                 credentials: 'include', // Important to include cookies
             });
@@ -15,8 +15,7 @@ const StudentSidebar = () => {
             if (response.ok) {
                 // Logout successful
                 console.log('Logout successful');
-                // Redirect to login or home page
-                navigate('/'); // Adjust the route as necessary
+                navigate('/');
             } else {
                 console.error('Logout failed');
             }

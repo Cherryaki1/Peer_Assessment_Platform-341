@@ -557,7 +557,6 @@ app.get('/logout', (req, res) => {
         }
         // Send a success message and redirect to login page
         res.json({ message: 'Logout successful' });
-        res.redirect('/login');
     });
 });
 

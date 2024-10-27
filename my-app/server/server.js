@@ -402,6 +402,69 @@ app.get('/instructorManageGroups/:classID', async (req, res) => {
     }
 });
 
+// Route to add students to an existing group
+app.post('/addStudentsToGroup', async (req, res) => {
+    try {
+        if (!req.isAuthenticated() || !req.user) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        const { groupID, studentIDs } = req.body;
+
+        if (!groupID || !studentIDs || studentIDs.length === 0) {
+            return res.status(400).json({ message: 'Missing group ID or student IDs.' });
+        }
+
+        // Update the group to add the new student IDs
+        await GroupModel.updateOne(
+            { groupID: groupID },
+            { $addToSet: { Students: { $each: studentIDs } } } // Add student IDs without duplicates
+        );
+
+        // update the students records to include this group
+        await StudentModel.updateMany(
+            { ID: { $in: studentIDs } },
+            { $addToSet: { Groups: groupID } }
+        );
+
+        res.status(200).json({ message: 'Students added to group successfully.' });
+    } catch (error) {
+        console.error('Error adding students to group:', error);
+        res.status(500).json({ message: 'Error adding students to group.' });
+    }
+});
+
+// Route to remove students from an existing group
+app.post('/removeStudentsFromGroup', async (req, res) => {
+    try {
+        if (!req.isAuthenticated() || !req.user) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+
+        const { groupID, studentIDs } = req.body;
+
+        if (!groupID || !studentIDs || studentIDs.length === 0) {
+            return res.status(400).json({ message: 'Missing group ID or student IDs.' });
+        }
+
+        // Update the group to remove the specified student IDs
+        await GroupModel.updateOne(
+            { groupID: groupID },
+            { $pull: { Students: { $in: studentIDs } } } // Remove student IDs
+        );
+
+        // update the students records to remove this group
+        await StudentModel.updateMany(
+            { ID: { $in: studentIDs } },
+            { $pull: { Groups: groupID } }
+        );
+
+        res.status(200).json({ message: 'Students removed from group successfully.' });
+    } catch (error) {
+        console.error('Error removing students from group:', error);
+        res.status(500).json({ message: 'Error removing students from group.' });
+    }
+});
 
 app.get('/studentManageClasses', async (req, res) => {
     try {

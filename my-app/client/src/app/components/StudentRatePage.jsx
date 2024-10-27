@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const StudentRatePage = ({ ratings }) => {
     const [ratingValues, setRatingValues] = useState({});
+    const [hoverRatings, setHoverRatings] = useState({});  // Store hover states for each rating item
     const [comments, setComments] = useState({});
     
     const navigate = useNavigate();
@@ -15,6 +16,14 @@ const StudentRatePage = ({ ratings }) => {
         setRatingValues(prevRatings => ({
             ...prevRatings,
             [ratingId]: rating,
+        }));
+    };
+
+    // Handle hover change for a specific rating item
+    const handleHover = (ratingId, hoverValue) => {
+        setHoverRatings(prevHovers => ({
+            ...prevHovers,
+            [ratingId]: hoverValue,  // Set hover state for the specific rating item
         }));
     };
 
@@ -42,7 +51,6 @@ const StudentRatePage = ({ ratings }) => {
                         {[...Array(5)].map((_, i) => {
                             const ratingValue = i + 1;
                             const isSelected = ratingValue <= (ratingValues[rating.id] || 0);
-                            const starColor = isSelected ? '#ffc107' : '#e4e5e9';
 
                             return (
                                 <label key={ratingValue}>
@@ -51,15 +59,18 @@ const StudentRatePage = ({ ratings }) => {
                                         name={rating.title}
                                         value={ratingValue}
                                         onClick={() => handleRating(rating.id, ratingValue)}
+                                        style={{ display: 'none' }} 
                                     />
                                     <FaStar
                                         size={30}
-                                        color={starColor}
+                                        color={ratingValue <= (hoverRatings[rating.id] || ratingValues[rating.id]) ? "#ffc107" : "#e4e5e9"}
+                                        onMouseEnter={() => handleHover(rating.id, ratingValue)}
+                                        onMouseLeave={() => handleHover(rating.id, null)}
                                     />
                                 </label>
                             );
                         })}
-                        <textarea
+                        <textarea 
                             placeholder={`Add a comment for ${rating.title}`}
                             value={comments[rating.id] || ''}
                             onChange={(e) => handleComment(rating.id, e.target.value)}

@@ -41,27 +41,29 @@ const ConfirmRatingPage = () => {
     return (
         <div>
             <h2>Confirm Your Ratings for {student.name} (ID: {student.id})</h2>
-            {ratingValues ? (
-                <ul>
-                    {Object.entries(ratingValues).map(([key, value]) => (
-                        <li key={key}>
-                            <strong>{key}</strong>: {renderStars(value)}
-                            <p>Comment: {comments[key] || 'No comment provided'}</p>
-                        </li>
-                    ))}
-                </ul>
-            ) : (
-                <p>No ratings submitted.</p>
-            )}
-            <label>
-                <input
-                    type="checkbox"
-                    checked={confirmed}
-                    onChange={handleCheckboxChange}
-                />
-                I confirm that my ratings are correct and cannot be modified.
-            </label>
-            <button disabled={!confirmed}>Submit</button>
+            <form>
+                {ratingValues ? (
+                    <ul>
+                        {Object.entries(ratingValues).map(([key, value]) => (
+                            <li key={key}>
+                                <strong>{key}</strong>: {renderStars(value)}
+                                <p>Comment: {comments[key] || 'No comment provided'}</p>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No ratings submitted.</p>
+                )}
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={confirmed}
+                        onChange={handleCheckboxChange}
+                    />
+                    I confirm that my ratings are correct and cannot be modified.
+                </label>
+                <button disabled={!confirmed}>Submit</button>
+            </form>
         </div>
     );
 };

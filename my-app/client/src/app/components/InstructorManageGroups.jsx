@@ -15,47 +15,47 @@ const InstructorManageGroups = () => {
     const [loading, setLoading] = useState(true); // Loading state
 
     // Fetch the groups and students for the given class
-    useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                // Fetch the logged-in user data (instructor)
-                const response = await axios.get('http://localhost:3000/index', {
-                    withCredentials: true,
-                });
-                
-                if (response.data.user && response.data.user.ID) {
-                    setInstructorID(response.data.user.ID); // Store the instructor's ID
-                } else {
-                    setMessage('Failed to retrieve instructor data.');
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-                setMessage('Error fetching user data.');
+    const fetchUserData = async () => {
+        try {
+            // Fetch the logged-in user data (instructor)
+            const response = await axios.get('http://localhost:3000/index', {
+                withCredentials: true,
+            });
+            
+            if (response.data.user && response.data.user.ID) {
+                setInstructorID(response.data.user.ID); // Store the instructor's ID
+            } else {
+                setMessage('Failed to retrieve instructor data.');
             }
-        };
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            setMessage('Error fetching user data.');
+        }
+    };
 
-        const fetchGroups = async () => {
-            console.log(`Fetching groups for classID: ${classID}`); 
-            try {
-                const response = await axios.get(`http://localhost:3000/instructorManageGroups/${classID}`, {
-                    withCredentials: true,  
-                });
-                
-                setGroups(response.data.groups);  // Set groups
-                setUngroupedStudents(response.data.ungroupedStudents);  // Set ungrouped students
-                if (response.data.groups.length === 0) {
-                    setMessage('No groups available for this class.');
-                } else {
-                    setMessage('');
-                }
-            } catch (error) {
-                console.error('Error fetching groups:', error);
-                setMessage('Failed to fetch groups.');
-            } finally {
-                setLoading(false);  // Always stop loading after the request
+    const fetchGroups = async () => {
+        console.log(`Fetching groups for classID: ${classID}`); 
+        try {
+            const response = await axios.get(`http://localhost:3000/instructorManageGroups/${classID}`, {
+                withCredentials: true,  
+            });
+            
+            setGroups(response.data.groups);  // Set groups
+            setUngroupedStudents(response.data.ungroupedStudents);  // Set ungrouped students
+            if (response.data.groups.length === 0) {
+                setMessage('No groups available for this class.');
+            } else {
+                setMessage('');
             }
-        };
-
+        } catch (error) {
+            console.error('Error fetching groups:', error);
+            setMessage('Failed to fetch groups.');
+        } finally {
+            setLoading(false);  // Always stop loading after the request
+        }
+    };
+    
+    useEffect(() =>{
         fetchUserData();
         fetchGroups();  // Fetch groups when component mounts
     }, [classID]);  // Re-fetch if classID changes

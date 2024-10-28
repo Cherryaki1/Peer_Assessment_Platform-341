@@ -605,6 +605,76 @@ app.get('/studentManageGroups/:classID', async (req, res) => {
     }
 });
 
+app.post('/ratingsSubmit', async (req, res) => {
+    try {
+        const { studentID, classID, dimensions } = req.body;
+
+        const rating = {
+            classID,
+            dimensions: dimensions.map(dimension => ({
+                dimentionName: dimension.dimensionName,
+                groupRatings: dimension.groupRatings.map(groupRating => ({
+                    raterID: groupRating.raterID,
+                    ratingValue: groupRating.ratingValue,
+                    comments: groupRating.comments
+                }))
+            }))
+        };
+
+        const student = await StudentModel.findOneAndUpdate(
+            { ID: studentID },
+            { $push: { Ratings: rating } },
+            { new: true } // Return the updated document
+        );
+
+        if (student) {
+            res.status(200).send('Rating saved successfully');
+        } else {
+            res.status(404).send('Student not found');
+        }
+    } catch (error) {
+        res.status(500).send('Error saving rating: ' + error.message);
+    }
+});
+
+app.get('/hasRated', async (req, res) => {
+    const { raterID } = req.query;
+    
+    if (!raterID) {
+        return res.status(400).json({ message: 'Rater ID is required.' });
+    }
+
+    try {
+        // Fetch all ratings where the raterID matches the provided user ID
+        const student = await StudentModel.findOne(
+            { 'Ratings.dimensions.groupRatings.raterID': raterID },
+        );
+
+        if (!student) {
+            return res.json([]);
+        }
+
+        console.log("Student:", student); // Debugging line to check data
+        // Extract rated student IDs from the matching rating records
+        const ratedStudentIds = (student.Ratings.length > 0) 
+        ?  
+            student.Ratings[0].dimensions
+            .filter(dimension => dimension.dimensionName === "Cooperation") // Filter for the specific dimension
+            .flatMap(dimension => 
+                dimension.groupRatings
+                    .filter(groupRating => groupRating.raterID === raterID)
+                    .map(groupRating => groupRating.studentID)
+            )
+        : [];
+
+        console.log("Rated Student IDs:", ratedStudentIds); // Debugging line to check data
+        res.json(ratedStudentIds);
+    } catch (error) {
+        console.error('Error fetching ratings:', error);
+        res.status(500).json({ message: 'Error fetching ratings.' });
+    }
+});
+
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {
         res.json({ user: req.user, message: '' });
@@ -622,7 +692,6 @@ app.get('/logout', (req, res) => {
         res.json({ message: 'Logout successful' });
     });
 });
-
 
 
 app.listen(3000, () => {

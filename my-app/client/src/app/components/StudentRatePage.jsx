@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const StudentRatePage = ({ ratings }) => {
     const [ratingValues, setRatingValues] = useState({});
@@ -9,6 +10,7 @@ const StudentRatePage = ({ ratings }) => {
     
     const navigate = useNavigate();
     const location = useLocation();
+    const classID = location.state?.classID || '';
     const student = location.state?.student || { name: 'Unknown', id: 'Unknown' }; // Fallback in case student data is missing
 
     // Handle rating input for each criterion
@@ -38,7 +40,7 @@ const StudentRatePage = ({ ratings }) => {
     // Navigate to confirmation page with data
     const handleSubmit = (e) => {
         e.preventDefault();
-        navigate('/confirm-rating', { state: { ratingValues, comments, student } });
+        navigate('/confirm-rating', { state: { ratings, ratingValues, comments, student, classID } });
     };
 
     return (
@@ -77,7 +79,7 @@ const StudentRatePage = ({ ratings }) => {
                         />
                     </div>
                 ))}
-                <button type="submit">Submit Rating</button>
+                <button type="submit">Next</button>
             </form>
         </div>
     );

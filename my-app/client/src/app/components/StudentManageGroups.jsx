@@ -9,6 +9,7 @@ const StudentManageGroups = () => {
     const [groups, setGroups] = useState([]); // To store the fetched groups
     const [ungroupedStudents, setUngroupedStudents] = useState([]);  // To store ungrouped students
     const [studentID, setStudentID] = useState(null); //store student ID
+    const [ratedStudents, setRatedStudents] = useState([]); //store the students that the logged-in student has rated
     const [groupID, setGroupID] = useState([]);//store the groups of the logged-in student
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(true);
@@ -27,6 +28,7 @@ const StudentManageGroups = () => {
                     const userID = response.data.user.ID;
                     setStudentID(userID); // Store the student's ID
                     await fetchStudentFromUser(userID);
+                    await fetchRatedStudents(userID);
                 } else {
                     setMessage('Failed to retrieve students data.');
                 }
@@ -77,6 +79,16 @@ const StudentManageGroups = () => {
             }
         };
 
+        const fetchRatedStudents = async (userID) => {
+            try {
+                const response = await axios.get(`http://localhost:3000/hasRated`, { params: { raterID: userID } });
+                const ratedStudentIds = response.data
+                setRatedStudents(ratedStudentIds);
+            } catch (error) {
+                console.error("Error fetching rated students:", error);
+            }
+        };
+
         fetchUserData();
         fetchGroups();  // Fetch groups when component mounts
     }, [classID]);  // Re-fetch if classID changes
@@ -86,8 +98,11 @@ const StudentManageGroups = () => {
     }
 
     // Function to handle navigation to the rate page
-    const handleRateClick = (studentId) => {
-        navigate(`/studentRatePage?studentId=${studentId}`); // Navigate to the rate page with studentId as a query parameter
+    const handleRateClick = (student) => {
+        navigate(`/studentRatePage?studentId=${student.id}`, { state: { student, classID } }); // Navigate to the rate page with studentId as a query parameter
+    };
+
+    const handleReviewClick = (student) => {
     };
 
     return (
@@ -97,31 +112,43 @@ const StudentManageGroups = () => {
                 <h2>My Group for Class: {classID}</h2>
                 {groups.length > 0 ? (
                     <ul>
-                    {groups.map((group) => {
-                        console.log("Current group:", group);
-                        console.log("Logged-in user's groupID:", groupID);
-                
-                        return (
+                    {groups.map((group) => (
                             <li key={group.id}>
                                 <h3>{group.name}</h3>
                                 <p>Group ID: {group.id}</p>
                                 <h4>Members:</h4>
                                 <ul>
-                                    {group.groupMembers.map((student) => (
-                                        <li key={student.id}>
-                                            {student.name} (ID: {student.id})
-                                            {Array.isArray(groupID) && student.id !== studentID && groupID.includes(Number(group.id)) && (
-                                                <button onClick={() => handleRateClick(student.id)} style={{ marginLeft: '10px' }}>
-                                                    Rate
-                                                </button>
-                                            )}
-                                        </li>
-                                    ))}
+                                    {group.groupMembers.map((student) => {
+                                        const hasRated = ratedStudents.includes(student.id);
+                                        return (
+                                            <li key={student.id}>
+                                                {student.name} (ID: {student.id})
+                                                {Array.isArray(groupID) &&
+                                                    student.id !== studentID &&
+                                                    groupID.includes(Number(group.id)) && (
+                                                        <>
+                                                            {hasRated ? (
+                                                                <button
+                                                                    onClick={() => handleReviewClick(student)}
+                                                                    style={{ marginLeft: '10px' }}>
+                                                                    Review Rating
+                                                                </button>
+                                                            ) : (
+                                                                <button
+                                                                    onClick={() => handleRateClick(student)}
+                                                                    style={{ marginLeft: '10px' }}>
+                                                                    Rate
+                                                                </button>
+                                                            )}
+                                                        </>
+                                                )}
+                                            </li>
+                                        );
+                                    })}
                                 </ul>
                             </li>
-                        );
-                    })}
-                </ul>
+                        ))}
+                    </ul>
                 
                 ) : (
                     <p>{message}</p>  // Display message if no groups are available

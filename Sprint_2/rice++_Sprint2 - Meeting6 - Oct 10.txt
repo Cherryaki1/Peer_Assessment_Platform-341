@@ -1,4 +1,6 @@
-Minute 7 
+Minute 6 (Oct. 10)
+(Online)
+
 - Demoed our progress for our project to the TA.
 - Re-worked some issues that we were having with our code for certain tasks. 
 - Discussed new deadlines for remaining tasks. 

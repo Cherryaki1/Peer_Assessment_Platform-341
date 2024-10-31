@@ -15,9 +15,9 @@ import ConfirmRatingPage from './components/ConfirmRatingPage';
 
 const ratingList = [
     { id: 'Cooperation', title: 'Cooperation' },
-    { id: 'Communication', title: 'Communication' },
-    { id: 'ProblemSolving', title: 'Problem Solving' },
-    { id: 'Punctuality', title: 'Punctuality' },
+    { id: 'Communication', title: 'Conceptual Contribution' },
+    { id: 'ProblemSolving', title: 'Pratical Contribution' },
+    { id: 'Punctuality', title: 'Work Ethic' },
 ];
 
 const App = () => {

@@ -1,7 +1,7 @@
 // client/src/app/Dashboard.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import StudentSidebar from './StudentSidebar';
+import StudentSidebar from '../_StudentSidebar';
 
 const StudentDashboard = () => {
     const [user, setUser] = useState(null);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 //import { useParams } from 'react-router-dom'; // To get classID from the URL
-import StudentSidebar from './StudentSidebar'; 
+import StudentSidebar from '../_StudentSidebar'; 
 import { useNavigate } from 'react-router-dom';
 
 const StudentManageClasses = () =>{

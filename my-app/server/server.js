@@ -638,40 +638,29 @@ app.post('/ratingsSubmit', async (req, res) => {
 });
 
 app.get('/hasRated', async (req, res) => {
-    const { raterID } = req.query;
-    
-    if (!raterID) {
-        return res.status(400).json({ message: 'Rater ID is required.' });
+    const { userID, classID } = req.query; // Get userID and classID from query parameters
+
+    if (!userID || !classID) {
+        return res.status(400).json({ message: 'User ID and Class ID are required.' });
     }
 
     try {
-        // Fetch all ratings where the raterID matches the provided user ID
-        const student = await StudentModel.findOne(
-            { 'Ratings.dimensions.groupRatings.raterID': raterID },
-        );
+        // Find students whose ratings include a group rating by this raterID
+        const students = await StudentModel.find({
+            'Ratings.classID': classID,
+            'Ratings.dimensions.groupRatings.raterID': userID
+        });
 
-        if (!student) {
-            return res.json([]);
-        }
+        // Extract the unique IDs of students rated by this rater
+        const ratedStudentIDs = students
+        .map(student => student.ID)
+        .filter((value, index, self) => self.indexOf(value) === index);  // Ensure uniqueness
 
-        console.log("Student:", student); // Debugging line to check data
-        // Extract rated student IDs from the matching rating records
-        const ratedStudentIds = (student.Ratings.length > 0) 
-        ?  
-            student.Ratings[0].dimensions
-            .filter(dimension => dimension.dimensionName === "Cooperation") // Filter for the specific dimension
-            .flatMap(dimension => 
-                dimension.groupRatings
-                    .filter(groupRating => groupRating.raterID === raterID)
-                    .map(groupRating => groupRating.studentID)
-            )
-        : [];
-
-        console.log("Rated Student IDs:", ratedStudentIds); // Debugging line to check data
-        res.json(ratedStudentIds);
+        console.log("Rated Student IDs for class:", classID, ratedStudentIDs); // Debugging line
+        res.json({ [classID]: ratedStudentIDs }); // Return the result with classID as key
     } catch (error) {
-        console.error('Error fetching ratings:', error);
-        res.status(500).json({ message: 'Error fetching ratings.' });
+        console.error('Error fetching rated students:', error);
+        res.status(500).json({ message: 'Error fetching rated students.' });
     }
 });
 

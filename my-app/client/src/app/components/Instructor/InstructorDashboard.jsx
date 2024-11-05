@@ -1,7 +1,7 @@
 // client/src/app/Dashboard.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Sidebar from './Sidebar';
+import Sidebar from '../_InstructorSidebar';
 
 const InstructorDashboard = () => {
     const [user, setUser] = useState(null);

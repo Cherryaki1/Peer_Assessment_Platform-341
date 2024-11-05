@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom'; // To get classID from the URL
-import Sidebar from './Sidebar'; // Assuming Sidebar is used here as well
+import Sidebar from '../_InstructorSidebar'; // Assuming Sidebar is used here as well
 
 const InstructorManageGroups = () => {
     const { classID } = useParams();  // Get the classID from the URL

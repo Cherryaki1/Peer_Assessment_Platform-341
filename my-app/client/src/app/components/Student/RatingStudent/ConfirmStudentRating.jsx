@@ -52,7 +52,8 @@ const ConfirmRatingPage = () => {
         fetchUserData();
 
         try {
-            const response = await axios.post(`http://localhost:3000/ratingsSubmit`, {
+            const response = await axios.post(`http://localhost:3000/
+                `, {
                 studentID: student.id,  // Assuming student.ID is the student’s unique identifier
                 classID: classID,  // Replace 101 with the appropriate class ID
                 dimensions: Object.keys(ratingValues).map(dimensionName => ({
@@ -96,7 +97,7 @@ const ConfirmRatingPage = () => {
 
     return (
         <div>
-            <h2>Confirm Your Ratings for {student.name} (ID: {student.id})</h2>
+            <h2>Confirm Your Ratings for {student.name}</h2>
             <form onSubmit={handleSubmit}>
                 {ratingValues ? (
                     <ul>

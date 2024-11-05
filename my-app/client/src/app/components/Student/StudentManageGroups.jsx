@@ -17,85 +17,85 @@ const StudentManageGroups = () => {
 
     // Fetch the groups and students for the given class
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                // Fetch the logged-in user data (student)
-                const response = await axios.get('http://localhost:3000/index', {
-                    withCredentials: true,
-                });
-                
-                if (response.data.user && response.data.user.ID) {
-                    const userID = response.data.user.ID;
-                    setUserID(userID); // Store the student's ID
-                    await fetchStudentFromUser(userID,);
-                    await fetchRatedStudents(userID, classID);
-                } else {
-                    setMessage('Failed to retrieve students data.');
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-                setMessage('Error fetching user data.');
-            }
-        };
-
-        const fetchStudentFromUser = async (userID) => {
-            try {
-                const response = await axios.get('http://localhost:3000/studentFromUser', {
-                    withCredentials: true,
-                });
-    
-                if (response.data.student && response.data.student.Groups) {
-                    //setStudentData(response.data.student); // Store the student's data, including groupID
-                    console.log("Setting groupID:", response.data.student.Groups);
-                    setGroupID(response.data.student.Groups); // Set the student's group ID
-                } else {
-                    setMessage('Student not found or no group data available.');
-                }
-            } catch (error) {
-                console.error('Error fetching student from user:', error);
-                setMessage('Error fetching student data.');
-            }
-        };
-
-        const fetchGroups = async () => {
-            console.log(`Fetching groups for classID: ${classID}`); 
-            try {
-                const response = await axios.get(`http://localhost:3000/studentManageGroups/${classID}`, {
-                    withCredentials: true,  
-                });
-                
-                setGroups(response.data.groups);  // Set groups
-                setUngroupedStudents(response.data.ungroupedStudents);  // Set ungrouped students
-                if (response.data.groups.length === 0) {
-                    setMessage('No groups available for this class.');
-                } else {
-                    setMessage('');
-                }
-            } catch (error) {
-                console.error('Error fetching groups:', error);
-                setMessage('Failed to fetch groups.');
-            } finally {
-                setLoading(false);  // Always stop loading after the request
-            }
-        };
-
-        const fetchRatedStudents = async (userID, classID) => {
-            try {
-                const response = await axios.get(`http://localhost:3000/hasRated`, { params: { userID, classID } });
-                const ratedStudentsIds = response.data[classID] || [];
-
-                setRatedStudents(prevRatedStudents => ({
-                    ...prevRatedStudents,
-                    [classID]: ratedStudentsIds  // Update the map with classID as key
-                }));
-            } catch (error) {
-                console.error("Error fetching rated students:", error);
-            }
-        };
-
         fetchUserData();
         fetchGroups();  // Fetch groups when component mounts
     }, [classID]);  // Re-fetch if classID changes
+
+    const fetchUserData = async () => {
+        try {
+            // Fetch the logged-in user data (student)
+            const response = await axios.get('http://localhost:3000/index', {
+                withCredentials: true,
+            });
+            
+            if (response.data.user && response.data.user.ID) {
+                const userID = response.data.user.ID;
+                setUserID(userID); // Store the student's ID
+                await fetchStudentFromUser(userID,);
+                await fetchRatedStudents(userID, classID);
+            } else {
+                setMessage('Failed to retrieve students data.');
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            setMessage('Error fetching user data.');
+        }
+    };
+
+    const fetchStudentFromUser = async (userID) => {
+        try {
+            const response = await axios.get('http://localhost:3000/studentFromUser', {
+                withCredentials: true,
+            });
+
+            if (response.data.student && response.data.student.Groups) {
+                //setStudentData(response.data.student); // Store the student's data, including groupID
+                console.log("Setting groupID:", response.data.student.Groups);
+                setGroupID(response.data.student.Groups); // Set the student's group ID
+            } else {
+                setMessage('Student not found or no group data available.');
+            }
+        } catch (error) {
+            console.error('Error fetching student from user:', error);
+            setMessage('Error fetching student data.');
+        }
+    };
+
+    const fetchGroups = async () => {
+        console.log(`Fetching groups for classID: ${classID}`); 
+        try {
+            const response = await axios.get(`http://localhost:3000/studentManageGroups/${classID}`, {
+                withCredentials: true,  
+            });
+            
+            setGroups(response.data.groups);  // Set groups
+            setUngroupedStudents(response.data.ungroupedStudents);  // Set ungrouped students
+            if (response.data.groups.length === 0) {
+                setMessage('No groups available for this class.');
+            } else {
+                setMessage('');
+            }
+        } catch (error) {
+            console.error('Error fetching groups:', error);
+            setMessage('Failed to fetch groups.');
+        } finally {
+            setLoading(false);  // Always stop loading after the request
+        }
+    };
+
+    const fetchRatedStudents = async (userID, classID) => {
+        try {
+            const response = await axios.get(`http://localhost:3000/hasRated`, { params: { userID, classID } });
+            const ratedStudentsIds = response.data[classID] || [];
+
+            setRatedStudents(prevRatedStudents => ({
+                ...prevRatedStudents,
+                [classID]: ratedStudentsIds  // Update the map with classID as key
+            }));
+        } catch (error) {
+            console.error("Error fetching rated students:", error);
+        }
+    };
 
     if (loading) {
         return <div>Loading groups...</div>;  // Show loading state while fetching data
@@ -134,10 +134,10 @@ const StudentManageGroups = () => {
                                                     groupID.includes(Number(group.id)) && (
                                                         <>
                                                             {hasRated ? (
-                                                                <text
-                                                                    style={{ marginLeft: '10px' }}>
+                                                                <span
+                                                                    style={{ marginLeft: '10px', color: 'green' }}>
                                                                     Rated ✔
-                                                                </text>
+                                                                </span>
                                                             ) : (
                                                                 <button
                                                                     onClick={() => handleRateClick(student)}

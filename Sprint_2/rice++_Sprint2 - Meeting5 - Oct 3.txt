@@ -1,4 +1,4 @@
-Minute 5
+Minute 5 (Oct. 3)
 
 - We demo'ed our sprint 1 which was the login function to our TA. 
 - We spoke about optimizing our databases.

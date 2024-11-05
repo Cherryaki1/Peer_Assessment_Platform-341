@@ -3,21 +3,21 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/Login';
 import './components/styles.css';
-import InstructorDashboard from './components/InstructorDashboard';
-import InstructorManageClasses from './components/InstructorManageClasses'; //can take off?
+import InstructorDashboard from './components/Instructor/InstructorDashboard';
+import InstructorManageClasses from './components/Instructor/InstructorManageClasses'; //can take off?
 //import GroupManagement from './components/groupManagement'; 
-import InstructorManageGroups from './components/InstructorManageGroups';
-import StudentDashboard from './components/StudentDashboard';
-import StudentManageClasses from './components/StudentManageClasses';
-import StudentManageGroups from './components/StudentManageGroups';
-import StudentRatePage from './components/StudentRatePage';
-import ConfirmRatingPage from './components/ConfirmRatingPage';
+import InstructorManageGroups from './components/Instructor/InstructorManageGroups';
+import StudentDashboard from './components/Student/StudentDashboard';
+import StudentManageClasses from './components/Student/StudentManageClasses';
+import StudentManageGroups from './components/Student/StudentManageGroups';
+import StudentRatePage from './components/Student/Rating/StudentRatePage';
+import ConfirmRatingPage from './components/Student/Rating/ConfirmRatingPage';
 
 const ratingList = [
     { id: 'Cooperation', title: 'Cooperation' },
-    { id: 'Communication', title: 'Communication' },
-    { id: 'ProblemSolving', title: 'Problem Solving' },
-    { id: 'Punctuality', title: 'Punctuality' },
+    { id: 'Conceptual Contribution', title: 'Conceptual Contribution' },
+    { id: 'Practical Contribution', title: 'Practical Contribution' },
+    { id: 'Work Ethic', title: 'Work Ethic' },
 ];
 
 const App = () => {

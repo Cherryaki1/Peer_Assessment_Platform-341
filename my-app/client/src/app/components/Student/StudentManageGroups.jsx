@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom'; //get class ID from URL
-import StudentSidebar from './StudentSidebar';
+import StudentSidebar from '../_StudentSidebar';
 
 const StudentManageGroups = () => {
 
     const { classID } = useParams();  // Get the classID from the URL
     const [groups, setGroups] = useState([]); // To store the fetched groups
     const [ungroupedStudents, setUngroupedStudents] = useState([]);  // To store ungrouped students
-    const [studentID, setStudentID] = useState(null); //store student ID
+    const [userID, setUserID] = useState(null); //store student ID
     const [ratedStudents, setRatedStudents] = useState([]); //store the students that the logged-in student has rated
     const [groupID, setGroupID] = useState([]);//store the groups of the logged-in student
     const [message, setMessage] = useState('');
@@ -26,9 +26,9 @@ const StudentManageGroups = () => {
                 
                 if (response.data.user && response.data.user.ID) {
                     const userID = response.data.user.ID;
-                    setStudentID(userID); // Store the student's ID
-                    await fetchStudentFromUser(userID);
-                    await fetchRatedStudents(userID);
+                    setUserID(userID); // Store the student's ID
+                    await fetchStudentFromUser(userID,);
+                    await fetchRatedStudents(userID, classID);
                 } else {
                     setMessage('Failed to retrieve students data.');
                 }
@@ -79,11 +79,15 @@ const StudentManageGroups = () => {
             }
         };
 
-        const fetchRatedStudents = async (userID) => {
+        const fetchRatedStudents = async (userID, classID) => {
             try {
-                const response = await axios.get(`http://localhost:3000/hasRated`, { params: { raterID: userID } });
-                const ratedStudentIds = response.data
-                setRatedStudents(ratedStudentIds);
+                const response = await axios.get(`http://localhost:3000/hasRated`, { params: { userID, classID } });
+                const ratedStudentsIds = response.data[classID] || [];
+
+                setRatedStudents(prevRatedStudents => ({
+                    ...prevRatedStudents,
+                    [classID]: ratedStudentsIds  // Update the map with classID as key
+                }));
             } catch (error) {
                 console.error("Error fetching rated students:", error);
             }
@@ -119,20 +123,21 @@ const StudentManageGroups = () => {
                                 <h4>Members:</h4>
                                 <ul>
                                     {group.groupMembers.map((student) => {
-                                        const hasRated = ratedStudents.includes(student.id);
+                                        const hasRated = ratedStudents[classID]?.includes(student.id);
+                                        console.log("ratedStudents:", ratedStudents);
+                                        console.log("hasRated:", hasRated);
                                         return (
                                             <li key={student.id}>
                                                 {student.name} (ID: {student.id})
                                                 {Array.isArray(groupID) &&
-                                                    student.id !== studentID &&
+                                                    student.id !== userID &&
                                                     groupID.includes(Number(group.id)) && (
                                                         <>
                                                             {hasRated ? (
-                                                                <button
-                                                                    onClick={() => handleReviewClick(student)}
+                                                                <text
                                                                     style={{ marginLeft: '10px' }}>
-                                                                    Review Rating
-                                                                </button>
+                                                                    Rated ✔
+                                                                </text>
                                                             ) : (
                                                                 <button
                                                                     onClick={() => handleRateClick(student)}

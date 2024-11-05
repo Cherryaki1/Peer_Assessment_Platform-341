@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
-import { StudentManageGroups } from './StudentManageGroups';
+import { StudentManageGroups } from '../StudentManageGroups';
+import { useEffect } from 'react';
 
 const ConfirmRatingPage = () => {
 
@@ -11,10 +12,14 @@ const ConfirmRatingPage = () => {
     const navigate = useNavigate();
     const classID = location.state?.classID || '';
     const student = location.state?.student || { name: 'Unknown', id: 'Unknown' };
+    const ratingList = location.state?.ratings || [];
     const ratingValues = location.state?.ratingValues || {};
-    const ratings = location.state?.ratings || [];
     const comments = location.state?.comments || {};
-    const [userID, setuser] = useState(); // Store student's ID
+    const [userID, setUser] = useState(); // Store student's ID
+
+    useEffect(() => {
+        fetchUserData();   
+    }, []);
 
     const fetchUserData = async () => {
         try {
@@ -25,7 +30,7 @@ const ConfirmRatingPage = () => {
             
             if (response.data.user) {
                 const userID = response.data.user.ID;
-                setuser(userID); // Store the student's ID
+                setUser(userID); // Store the student's ID
             } else {
                 console.error('Failed to retrieve students data.');
             }
@@ -51,7 +56,7 @@ const ConfirmRatingPage = () => {
                 studentID: student.id,  // Assuming student.ID is the student’s unique identifier
                 classID: classID,  // Replace 101 with the appropriate class ID
                 dimensions: Object.keys(ratingValues).map(dimensionName => ({
-                    dimensionName: ratings.find(rating => rating.id === dimensionName).title,
+                    dimensionName: (ratingList.find(rating => rating.id === dimensionName)).title,
                     groupRatings: [
                         {
                             raterID: userID,  // The ID of the student who is giving the rating

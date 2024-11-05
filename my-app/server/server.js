@@ -608,11 +608,11 @@ app.get('/studentManageGroups/:classID', async (req, res) => {
 app.post('/ratingsSubmit', async (req, res) => {
     try {
         const { studentID, classID, dimensions } = req.body;
-
+        
         const rating = {
             classID,
             dimensions: dimensions.map(dimension => ({
-                dimentionName: dimension.dimensionName,
+                dimensionName: dimension.dimensionName,
                 groupRatings: dimension.groupRatings.map(groupRating => ({
                     raterID: groupRating.raterID,
                     ratingValue: groupRating.ratingValue,

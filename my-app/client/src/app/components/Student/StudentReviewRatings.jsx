@@ -73,7 +73,7 @@ const StudentGrades = () => {
     return (
         <div className="content">
             <StudentSideBar />
-            <h2>Your Group Grades</h2>
+            <h2>Your Grades</h2>
             {Object.keys(gradesByClass).length > 0 ? (
                 Object.keys(gradesByClass).map(classID => (
                     <div key={classID} className="class-section" style={{ marginBottom: '20px' }}>

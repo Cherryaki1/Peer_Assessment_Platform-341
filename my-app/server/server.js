@@ -472,39 +472,71 @@ app.get('/studentManageClasses', async (req, res) => {
             return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
         }
 
-        console.log("Inside Manage Classes");
-
         const studentID = req.user.ID;
-        
+
         if (!Number.isInteger(studentID)) {
             return res.status(400).json({ message: 'Invalid student ID' });
         }
 
-        // Use aggregation instead of populate
         const classes = await ClassModel.aggregate([
-            { $match: { Students: studentID } }, // Match classes by student and class ids
+            { 
+                $match: { Students: studentID } // Match classes where the student is enrolled 
+            },
             {
-                $lookup: {
-                    from: 'students', // Collection name where students are stored (collection we wish to "link to")
-                    localField: 'Students', // Field in the 'classes' collection (classes have their students' IDs, so in this case Students here are IDs)
-                    foreignField: 'ID', // Field in the 'students' collection (ID field of the foreign collection, students)
-                    as: 'StudentDetails' // Name of the array to output the joined data
+                $lookup: { // First lookup: join students to each class
+                    from: 'students',
+                    localField: 'Students', // Array of student IDs in ClassModel
+                    foreignField: 'ID', // Match on student IDs in students collection
+                    as: 'StudentDetails' // Output student details array
+                }
+            },
+            {
+                $lookup: { // Second lookup: join instructors to each class using instructor ID
+                    from: 'instructors',
+                    localField: 'Instructor', // Field in ClassModel that holds the instructor ID
+                    foreignField: 'ID', // Instructor ID field in instructors collection
+                    as: 'InstructorDetails' // Output instructor details array
+                }
+            },
+            {
+                $unwind: { 
+                    path: '$InstructorDetails', 
+                    preserveNullAndEmptyArrays: true // Ensure no errors if no instructor found
+                }
+            },
+            {
+                $project: { // Project fields needed for the response
+                    ID: 1,
+                    Name: 1,
+                    Subject: 1,
+                    Section: 1,
+                    StudentDetails: 1,
+                    Instructor: 1,
+                    instructorName: { // Concatenate FirstName and LastName for full name
+                        $concat: ["$InstructorDetails.FirstName", " ", "$InstructorDetails.LastName"]
+                    }
                 }
             }
         ]);
+
+        console.log('Classes after aggregation:', classes); // Log to check data structure
 
         if (!classes || classes.length === 0) {
             return res.status(200).json({ classes: [], message: 'No classes found for this student.' });
         }
 
-        // Format the response to include studentCount and groupCount
+        // Format the response to include student count and instructor details
         const formattedClasses = classes.map(classItem => ({
             id: classItem.ID,
             name: classItem.Name,
             subject: classItem.Subject,
             section: classItem.Section,
             studentCount: classItem.StudentDetails.length,
+            instructorID: classItem.Instructor,
+            instructorName: classItem.instructorName ? classItem.instructorName : 'N/A'
         }));
+
+        console.log('Formatted classes:', formattedClasses);
 
         return res.status(200).json({ classes: formattedClasses });
     } catch (error) {
@@ -512,6 +544,7 @@ app.get('/studentManageClasses', async (req, res) => {
         return res.status(500).json({ message: 'An unexpected error occurred while fetching classes.', error: error.message || error });
     }
 });
+
 
 app.get('/studentFromUser', async (req, res) => {
     console.log("User data in session:", req.user);
@@ -605,7 +638,7 @@ app.get('/studentManageGroups/:classID', async (req, res) => {
     }
 });
 
-app.post('/ratingsSubmit', async (req, res) => {
+app.post('/studentRatingsSubmit', async (req, res) => {
     try {
         const { studentID, classID, dimensions } = req.body;
 
@@ -748,6 +781,95 @@ app.get('/getUserGrades', async (req, res) => {
     } catch (error) {
         console.error('Error fetching user grades:', error);
         res.status(500).json({ message: 'Error fetching user grades.' });
+
+app.get('/studentRateMyInstructor/:instructorID', async (req, res) => {
+    try {
+        if (!req.isAuthenticated() || !req.user) {
+            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
+        }
+
+        const { instructorID } = req.params; 
+        console.log('Instructor ID:', instructorID);
+
+        // Fetch instructor details from the database
+        const instructor = await InstructorModel.findOne({ ID: parseInt(instructorID) });
+        if (!instructor) {
+            return res.status(404).json({ message: 'Instructor not found' });
+        }
+
+        // Example: Define rating criteria
+        const ratings = [
+            { id: 1, title: 'Knowledge' },
+            { id: 2, title: 'Clarity' },
+            { id: 3, title: 'Engagement' },
+            { id: 4, title: 'Helpfulness' },
+        ];
+
+        return res.status(200).json({
+            instructor: { name: `${instructor.FirstName} ${instructor.LastName}`, id: instructorID },
+            ratings,
+        });
+    } catch (error) {
+        console.error('Error fetching instructor details:', error);
+        return res.status(500).json({ message: 'An error occurred while fetching instructor details.' });
+    }
+});
+
+
+app.post('/instructorRatingsSubmit', async (req, res) => {
+    try {
+        const { studentID, classID, dimensions, instructorID  } = req.body;
+
+        const rating = {
+            classID,
+            dimensions: dimensions.map(dimension => ({
+                dimensionName: dimension.dimensionName,
+                classRatings: dimension.classRatings.map(classRating => ({
+                    raterID: classRating.raterID,
+                    ratingValue: classRating.ratingValue,
+                    comments: classRating.comments
+                }))
+            }))
+        };
+
+        // Update the instructor's Ratings array with the new rating
+        const instructor = await InstructorModel.findOneAndUpdate(
+            { ID: instructorID  },  // Replace with actual instructor ID field
+            { $push: { Ratings: rating } },
+            { new: true } // Return the updated document
+        );
+
+        if (instructor) {
+            res.status(200).send('Rating saved successfully');
+        } else {
+            res.status(404).send('Instructor not found');
+        }
+    } catch (error) {
+        res.status(500).send('Error saving rating: ' + error.message);
+    }
+});
+
+app.get('/hasRatedInstructor', async (req, res) => {
+    const { studentID, instructorID, classID } = req.query; // Get studentID, instructorID, and classID from query parameters
+
+    if (!studentID || !instructorID || !classID) {
+        return res.status(400).json({ message: 'Student ID, Instructor ID, and Class ID are required.' });
+    }
+
+    try {
+        // Find if there's an existing rating by the student for this instructor and class
+        const instructor = await InstructorModel.findOne({
+            ID: instructorID,
+            'Ratings.classID': parseInt(classID),
+            'Ratings.dimensions.classRatings.raterID': parseInt(studentID)
+        });
+
+        // If instructor is found with a matching rating, return true
+        const hasRated = !!instructor; // Convert to boolean (true if found, false if not)
+        res.json({ hasRated });
+    } catch (error) {
+        console.error('Error checking if instructor has been rated:', error);
+        res.status(500).json({ message: 'Error checking if instructor has been rated.' });
     }
 });
 

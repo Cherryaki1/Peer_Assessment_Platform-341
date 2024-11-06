@@ -12,6 +12,7 @@ import StudentManageClasses from './components/Student/StudentManageClasses';
 import StudentManageGroups from './components/Student/StudentManageGroups';
 import StudentRatePage from './components/Student/Rating/StudentRatePage';
 import ConfirmRatingPage from './components/Student/Rating/ConfirmRatingPage';
+import StudentGrades from './components/Student/StudentReviewRatings';
 
 const ratingList = [
     { id: 'Cooperation', title: 'Cooperation' },
@@ -33,6 +34,7 @@ const App = () => {
                 <Route path="/studentManageGroups/:classID" element={<StudentManageGroups />} />
                 <Route path="/studentRatePage" element={<StudentRatePage ratings={ratingList} />} />
                 <Route path="/confirm-rating" element={<ConfirmRatingPage />} />
+                <Route path="/studentReviewRatings" element={<StudentGrades />} />
             </Routes>
         </Router>
     );

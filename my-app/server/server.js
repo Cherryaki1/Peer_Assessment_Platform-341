@@ -608,7 +608,7 @@ app.get('/studentManageGroups/:classID', async (req, res) => {
 app.post('/ratingsSubmit', async (req, res) => {
     try {
         const { studentID, classID, dimensions } = req.body;
-        
+
         const rating = {
             classID,
             dimensions: dimensions.map(dimension => ({
@@ -661,6 +661,93 @@ app.get('/hasRated', async (req, res) => {
     } catch (error) {
         console.error('Error fetching rated students:', error);
         res.status(500).json({ message: 'Error fetching rated students.' });
+    }
+});
+
+app.get('/getUserGrades', async (req, res) => {
+    const { userID } = req.query;
+
+    if (!userID) {
+        return res.status(400).json({ message: 'User ID is required.' });
+    }
+    try {
+        // Find the user to get their groups and classes
+        const user = await StudentModel.findOne({ ID: userID });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        // Get groups the user belongs to
+        const userGroupID = user.Groups;
+        
+        const userGroups = await GroupModel.find({ groupID: { $in: userGroupID } });
+        // Initialize response structure
+        const gradesByClass = {};
+        const ratingStudents = [];
+
+        for (const group of userGroups) {
+            const classID = group.Class;
+            const groupID = group.groupID;
+            const groupName = group.GroupName;
+            console.log('In loop');
+            // Fetch all students in the group along wiIth their ratings
+            const studentIDs = group.Students;
+            const groupMembers = await StudentModel.find({
+                ID: { $in: studentIDs }  // Query to find all students with the given studentIDs
+            });
+
+            if (!gradesByClass[classID]) {
+                gradesByClass[classID] = [];
+            }
+
+            // Loop through the user's ratings
+            user.Ratings.forEach(rating => {
+                // Check if the rating corresponds to the relevant class
+                if (rating.classID === classID) {
+                    // Loop through each dimension in the rating
+                    rating.dimensions.forEach(dimension => {
+                        // For each group rating, extract the raterID
+                        dimension.groupRatings.forEach(groupRating => {
+                            const raterID = groupRating.raterID;
+                            // Check if the raterID exists in the groupMembers
+                            const raterInGroup = groupMembers.find(member => member.ID === raterID);
+
+                            // If the raterID exists in the group, we need to add or update the `raterStudents`
+                            if (raterInGroup) {
+                                // Find or create the `group` entry in `gradesByClass`
+                                let groupEntry = gradesByClass[classID].find(g => g.groupID === groupID);
+
+                                if (!groupEntry) {
+                                    // Create new entry if groupID does not exist yet in `gradesByClass[classID]`
+                                    groupEntry = {
+                                        groupID,
+                                        groupName: groupName || "Unnamed Group",
+                                        raterStudents: []
+                                    };
+                                    gradesByClass[classID].push(groupEntry);
+                                }
+
+                                // Check if this raterStudent is already in `raterStudents`
+                                const alreadyRated = groupEntry.raterStudents.some(student => student.ID === raterID);
+
+                                // Add the raterStudent if they haven't been added yet
+                                if (!alreadyRated) {
+                                    ratingStudents.push(raterInGroup);  // Add the full `raterInGroup` object or just necessary fields
+                                    groupEntry.raterStudents.push(raterInGroup);
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+        }
+        console.log('Grades for group:', ratingStudents);
+        console.log('Grades by class:', gradesByClass);
+        res.json(gradesByClass);
+    } catch (error) {
+        console.error('Error fetching user grades:', error);
+        res.status(500).json({ message: 'Error fetching user grades.' });
     }
 });
 

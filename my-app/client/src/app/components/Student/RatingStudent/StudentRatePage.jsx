@@ -40,12 +40,12 @@ const StudentRatePage = ({ ratings }) => {
     // Navigate to confirmation page with data
     const handleSubmit = (e) => {
         e.preventDefault();
-        navigate('/confirm-rating', { state: { ratings, ratingValues, comments, student, classID } });
+        navigate('/confirmStudentRating', { state: { ratings, ratingValues, comments, student, classID } });
     };
 
     return (
         <div>
-            <h2>Rate {student.name} (ID: {student.id})</h2>
+            <h2> Rate {student.name} as a teammate</h2>
             <form onSubmit={handleSubmit}>
                 {ratings.map((rating) => (
                     <div key={rating.id}>

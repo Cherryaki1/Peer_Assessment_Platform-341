@@ -475,39 +475,71 @@ app.get('/studentManageClasses', async (req, res) => {
             return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
         }
 
-        console.log("Inside Manage Classes");
-
         const studentID = req.user.ID;
-        
+
         if (!Number.isInteger(studentID)) {
             return res.status(400).json({ message: 'Invalid student ID' });
         }
 
-        // Use aggregation instead of populate
         const classes = await ClassModel.aggregate([
-            { $match: { Students: studentID } }, // Match classes by student and class ids
+            { 
+                $match: { Students: studentID } // Match classes where the student is enrolled 
+            },
             {
-                $lookup: {
-                    from: 'students', // Collection name where students are stored (collection we wish to "link to")
-                    localField: 'Students', // Field in the 'classes' collection (classes have their students' IDs, so in this case Students here are IDs)
-                    foreignField: 'ID', // Field in the 'students' collection (ID field of the foreign collection, students)
-                    as: 'StudentDetails' // Name of the array to output the joined data
+                $lookup: { // First lookup: join students to each class
+                    from: 'students',
+                    localField: 'Students', // Array of student IDs in ClassModel
+                    foreignField: 'ID', // Match on student IDs in students collection
+                    as: 'StudentDetails' // Output student details array
+                }
+            },
+            {
+                $lookup: { // Second lookup: join instructors to each class using instructor ID
+                    from: 'instructors',
+                    localField: 'Instructor', // Field in ClassModel that holds the instructor ID
+                    foreignField: 'ID', // Instructor ID field in instructors collection
+                    as: 'InstructorDetails' // Output instructor details array
+                }
+            },
+            {
+                $unwind: { 
+                    path: '$InstructorDetails', 
+                    preserveNullAndEmptyArrays: true // Ensure no errors if no instructor found
+                }
+            },
+            {
+                $project: { // Project fields needed for the response
+                    ID: 1,
+                    Name: 1,
+                    Subject: 1,
+                    Section: 1,
+                    StudentDetails: 1,
+                    Instructor: 1,
+                    instructorName: { // Concatenate FirstName and LastName for full name
+                        $concat: ["$InstructorDetails.FirstName", " ", "$InstructorDetails.LastName"]
+                    }
                 }
             }
         ]);
+
+        console.log('Classes after aggregation:', classes); // Log to check data structure
 
         if (!classes || classes.length === 0) {
             return res.status(200).json({ classes: [], message: 'No classes found for this student.' });
         }
 
-        // Format the response to include studentCount and groupCount
+        // Format the response to include student count and instructor details
         const formattedClasses = classes.map(classItem => ({
             id: classItem.ID,
             name: classItem.Name,
             subject: classItem.Subject,
             section: classItem.Section,
             studentCount: classItem.StudentDetails.length,
+            instructorID: classItem.Instructor,
+            instructorName: classItem.instructorName ? classItem.instructorName : 'N/A'
         }));
+
+        console.log('Formatted classes:', formattedClasses);
 
         return res.status(200).json({ classes: formattedClasses });
     } catch (error) {
@@ -515,6 +547,7 @@ app.get('/studentManageClasses', async (req, res) => {
         return res.status(500).json({ message: 'An unexpected error occurred while fetching classes.', error: error.message || error });
     }
 });
+
 
 app.get('/studentFromUser', async (req, res) => {
     console.log("User data in session:", req.user);
@@ -608,10 +641,10 @@ app.get('/studentManageGroups/:classID', async (req, res) => {
     }
 });
 
-app.post('/ratingsSubmit', async (req, res) => {
+app.post('/studentRatingsSubmit', async (req, res) => {
     try {
         const { studentID, classID, dimensions } = req.body;
-        
+
         const rating = {
             classID,
             dimensions: dimensions.map(dimension => ({
@@ -666,155 +699,6 @@ app.get('/hasRated', async (req, res) => {
         res.status(500).json({ message: 'Error fetching rated students.' });
     }
 });
-
-// Route to fetch student summaries for a class
-router.get('/studentsSummary/:classID', async (req, res) => {
-    try {
-        // 1. Authentication Check
-        if (!req.isAuthenticated() || !req.user) {
-            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
-        }
-
-        const instructorID = req.user.ID;
-        const { classID } = req.params;
-
-        // 2. Validate classID
-        if (!classID) {
-            return res.status(400).json({ message: 'Class ID is required.' });
-        }
-
-        // Optionally validate instructorID if needed
-        // For example, check if the instructor is associated with the class
-        const classInfo = await ClassModel.findOne({ ID: parseInt(classID) });
-
-        if (!classInfo) {
-            return res.status(404).json({ message: 'Class not found.' });
-        }
-
-        // Optional: Verify instructor's association with the class
-        // Assuming ClassModel has an 'InstructorID' field
-        if (classInfo.InstructorID !== parseInt(instructorID)) {
-            return res.status(403).json({ message: 'Forbidden: You are not the instructor for this class.' });
-        }
-
-        // 3. Fetch all groups for the class with student details
-        const groups = await GroupModel.aggregate([
-            { $match: { ClassID: parseInt(classID) } }, // Match groups by classID
-            {
-                $lookup: {
-                    from: 'students', // Collection name in MongoDB is usually lowercase and plural
-                    localField: 'Students', // Array of student IDs in GroupModel
-                    foreignField: 'ID', // Field in StudentModel to match
-                    as: 'StudentDetails'
-                }
-            }
-        ]);
-
-        // 4. Extract student IDs from groups
-        const studentIDsInGroups = groups.flatMap(group => group.Students.map(id => parseInt(id)));
-
-        // 5. Fetch all students in the class
-        const allStudentIDs = classInfo.Students.map(id => parseInt(id)); // Assuming 'Students' is an array of student IDs
-
-        // 6. Find students who are not in any group
-        const ungroupedStudents = await StudentModel.find({
-            ID: { $in: allStudentIDs, $nin: studentIDsInGroups }
-        });
-
-        // 7. Fetch ratings for all students in the class
-        const ratings = await RatingModel.find({
-            StudentID: { $in: allStudentIDs }
-        });
-
-        // 8. Organize ratings by StudentID
-        const ratingsByStudent = ratings.reduce((acc, rating) => {
-            if (!acc[rating.StudentID]) {
-                acc[rating.StudentID] = [];
-            }
-            acc[rating.StudentID].push(rating);
-            return acc;
-        }, {});
-
-        // 9. Format groups to include group members and their ratings
-        const formattedGroups = groups.map(groupItem => ({
-            id: groupItem.ID, // Assuming GroupModel has 'ID' field
-            name: groupItem.GroupName, // Assuming GroupModel has 'GroupName' field
-            groupMembers: groupItem.StudentDetails.map(student => ({
-                id: student.ID,
-                name: `${student.FirstName} ${student.LastName}`,
-                ratings: ratingsByStudent[student.ID] || []
-            }))
-        }));
-
-        // 10. Format ungrouped students with their ratings
-        const formattedUngroupedStudents = ungroupedStudents.map(student => ({
-            id: student.ID,
-            name: `${student.FirstName} ${student.LastName}`,
-            ratings: ratingsByStudent[student.ID] || []
-        }));
-
-        // 11. Combine groups and ungrouped students into the summary
-        const studentSummary = [];
-
-        // Add grouped students to the summary
-        formattedGroups.forEach(group => {
-            group.groupMembers.forEach(member => {
-                studentSummary.push({
-                    StudentID: member.id,
-                    FirstName: member.name.split(' ')[0],
-                    LastName: member.name.split(' ')[1],
-                    Team: group.name,
-                    // Assuming ratings have 'dimensionName' and 'groupRatings' fields
-                    ...extractRatings(member.ratings),
-                    PeersWhoResponded: member.ratings.length
-                });
-            });
-        });
-
-        // Add ungrouped students to the summary
-        formattedUngroupedStudents.forEach(student => {
-            studentSummary.push({
-                StudentID: student.id,
-                FirstName: student.name.split(' ')[0],
-                LastName: student.name.split(' ')[1],
-                Team: 'No team assigned',
-                ...extractRatings(student.ratings),
-                PeersWhoResponded: student.ratings.length
-            });
-        });
-
-        // 12. Return the student summary
-        return res.status(200).json({ studentSummary });
-
-    } catch (error) {
-        console.error('Error fetching student summary:', error.stack || error);
-        return res.status(500).json({ message: 'An unexpected error occurred while fetching student summary.', error: error.message || error });
-    }
-});
-
-// Helper function to extract ratings by dimension
-const extractRatings = (ratings) => {
-    const ratingMap = {
-        Cooperation: 'N/A',
-        'Conceptual Contribution': 'N/A',
-        'Practical Contribution': 'N/A',
-        'Work Ethic': 'N/A'
-    };
-
-    ratings.forEach(rating => {
-        if (rating.dimensionName in ratingMap) {
-            ratingMap[rating.dimensionName] = rating.groupRatings;
-        }
-    });
-
-    return {
-        Cooperation: ratingMap.Cooperation,
-        ConceptualContribution: ratingMap['Conceptual Contribution'],
-        PracticalContribution: ratingMap['Practical Contribution'],
-        WorkEthic: ratingMap['Work Ethic']
-    };
-};
-
 
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {

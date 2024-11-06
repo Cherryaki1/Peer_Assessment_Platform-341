@@ -29,6 +29,11 @@ const StudentSidebar = () => {
             <ul>
                 <li onClick={() => navigate('/studentDashboard')}>Dashboard</li>
                 <li onClick={() => navigate('/studentManageClasses')}>My Classes</li>
+
+                <li onClick={() => navigate('/studentReviewRatings')}>Your Grades</li>
+
+                <li onClick={() => navigate('/studentRateMyInstructor')}>Rate My Instructor</li>
+
                 <li onClick={handleLogout}>Logout</li>
             </ul>
         </div>

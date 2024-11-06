@@ -9,8 +9,8 @@ import InstructorManageGroups from './components/Instructor/InstructorManageGrou
 import StudentDashboard from './components/Student/StudentDashboard';
 import StudentManageClasses from './components/Student/StudentManageClasses';
 import StudentManageGroups from './components/Student/StudentManageGroups';
-import StudentRatePage from './components/Student/Rating/StudentRatePage';
-import ConfirmRatingPage from './components/Student/Rating/ConfirmRatingPage';
+import StudentRatePage from './components/Student/RatingStudent/StudentRatePage';
+import ConfirmRatingPage from './components/Student/RatingStudent/ConfirmStudentRating';
 
 const ratingList = [
     { id: 'Cooperation', title: 'Cooperation' },

@@ -52,7 +52,7 @@ const ConfirmRatingPage = () => {
         fetchUserData();
 
         try {
-            const response = await axios.post(`http://localhost:3000/
+            const response = await axios.post(`http://localhost:3000/studentRatingsSubmit
                 `, {
                 studentID: student.id,  // Assuming student.ID is the student’s unique identifier
                 classID: classID,  // Replace 101 with the appropriate class ID

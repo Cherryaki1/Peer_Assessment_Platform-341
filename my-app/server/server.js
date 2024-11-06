@@ -781,6 +781,8 @@ app.get('/getUserGrades', async (req, res) => {
     } catch (error) {
         console.error('Error fetching user grades:', error);
         res.status(500).json({ message: 'Error fetching user grades.' });
+    }
+});
 
 app.get('/studentRateMyInstructor/:instructorID', async (req, res) => {
     try {

@@ -48,7 +48,8 @@ const InstructorDashboard = () => {
 
     const handleSummaryClick = (classID) => {
         console.log('Navigating to classID:', classID);
-        if (classID) {
+        if (parseInt(classID)) {
+            console.log("Navigating");
             navigate(`/studentsSummary/${classID}`);
         } else {
             console.error('No classID found!');
@@ -73,14 +74,8 @@ const InstructorDashboard = () => {
                                 <ul>
                                     {classes.map((classItem, index) => (
                                         <li key={index}>
-                                            <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - {classItem.studentCount} Students, {classItem.groupCount} Groups
-                                            <br/>
-                                            <button 
-                                                onClick={() => handleSummaryClick(classItem.id)} 
-                                                aria-label={`View summary for ${classItem.name}`}
-                                                className="summary-button" // Use a CSS class instead of inline styles
-                                            >
-                                                Summary View
+                                            <button onClick={() => handleSummaryClick(classItem.id)} style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer' }}>
+                                                <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - {classItem.studentCount} Students, {classItem.groupCount} Groups
                                             </button>
                                         </li>
                                     ))}

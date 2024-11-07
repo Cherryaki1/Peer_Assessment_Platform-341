@@ -700,6 +700,186 @@ app.get('/hasRated', async (req, res) => {
     }
 });
 
+app.get('/getUserGrades', async (req, res) => {
+    const { userID } = req.query;
+
+    if (!userID) {
+        return res.status(400).json({ message: 'User ID is required.' });
+    }
+    try {
+        // Find the user to get their groups and classes
+        const user = await StudentModel.findOne({ ID: userID });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        // Get groups the user belongs to
+        const userGroupID = user.Groups;
+        
+        const userGroups = await GroupModel.find({ groupID: { $in: userGroupID } });
+        // Initialize response structure
+        const gradesByClass = {};
+        const ratingStudents = [];
+
+        for (const group of userGroups) {
+            const classID = group.Class;
+            const groupID = group.groupID;
+            const groupName = group.GroupName;
+            console.log('In loop');
+            // Fetch all students in the group along wiIth their ratings
+            const studentIDs = group.Students;
+            const groupMembers = await StudentModel.find({
+                ID: { $in: studentIDs }  // Query to find all students with the given studentIDs
+            });
+
+            if (!gradesByClass[classID]) {
+                gradesByClass[classID] = [];
+            }
+
+            // Loop through the user's ratings
+            user.Ratings.forEach(rating => {
+                // Check if the rating corresponds to the relevant class
+                if (rating.classID === classID) {
+                    // Loop through each dimension in the rating
+                    rating.dimensions.forEach(dimension => {
+                        // For each group rating, extract the raterID
+                        dimension.groupRatings.forEach(groupRating => {
+                            const raterID = groupRating.raterID;
+                            // Check if the raterID exists in the groupMembers
+                            const raterInGroup = groupMembers.find(member => member.ID === raterID);
+
+                            // If the raterID exists in the group, we need to add or update the `raterStudents`
+                            if (raterInGroup) {
+                                // Find or create the `group` entry in `gradesByClass`
+                                let groupEntry = gradesByClass[classID].find(g => g.groupID === groupID);
+
+                                if (!groupEntry) {
+                                    // Create new entry if groupID does not exist yet in `gradesByClass[classID]`
+                                    groupEntry = {
+                                        groupID,
+                                        groupName: groupName || "Unnamed Group",
+                                        raterStudents: []
+                                    };
+                                    gradesByClass[classID].push(groupEntry);
+                                }
+
+                                // Check if this raterStudent is already in `raterStudents`
+                                const alreadyRated = groupEntry.raterStudents.some(student => student.ID === raterID);
+
+                                // Add the raterStudent if they haven't been added yet
+                                if (!alreadyRated) {
+                                    ratingStudents.push(raterInGroup);  // Add the full `raterInGroup` object or just necessary fields
+                                    groupEntry.raterStudents.push(raterInGroup);
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+        }
+        console.log('Grades for group:', ratingStudents);
+        console.log('Grades by class:', gradesByClass);
+        res.json(gradesByClass);
+    } catch (error) {
+        console.error('Error fetching user grades:', error);
+        res.status(500).json({ message: 'Error fetching user grades.' });
+    }
+});
+
+app.get('/studentRateMyInstructor/:instructorID', async (req, res) => {
+    try {
+        if (!req.isAuthenticated() || !req.user) {
+            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
+        }
+
+        const { instructorID } = req.params; 
+        console.log('Instructor ID:', instructorID);
+
+        // Fetch instructor details from the database
+        const instructor = await InstructorModel.findOne({ ID: parseInt(instructorID) });
+        if (!instructor) {
+            return res.status(404).json({ message: 'Instructor not found' });
+        }
+
+        // Example: Define rating criteria
+        const ratings = [
+            { id: 1, title: 'Knowledge' },
+            { id: 2, title: 'Clarity' },
+            { id: 3, title: 'Engagement' },
+            { id: 4, title: 'Helpfulness' },
+        ];
+
+        return res.status(200).json({
+            instructor: { name: `${instructor.FirstName} ${instructor.LastName}`, id: instructorID },
+            ratings,
+        });
+    } catch (error) {
+        console.error('Error fetching instructor details:', error);
+        return res.status(500).json({ message: 'An error occurred while fetching instructor details.' });
+    }
+});
+
+
+app.post('/instructorRatingsSubmit', async (req, res) => {
+    try {
+        const { studentID, classID, dimensions, instructorID  } = req.body;
+
+        const rating = {
+            classID,
+            dimensions: dimensions.map(dimension => ({
+                dimensionName: dimension.dimensionName,
+                classRatings: dimension.classRatings.map(classRating => ({
+                    raterID: classRating.raterID,
+                    ratingValue: classRating.ratingValue,
+                    comments: classRating.comments
+                }))
+            }))
+        };
+
+        // Update the instructor's Ratings array with the new rating
+        const instructor = await InstructorModel.findOneAndUpdate(
+            { ID: instructorID  },  // Replace with actual instructor ID field
+            { $push: { Ratings: rating } },
+            { new: true } // Return the updated document
+        );
+
+        if (instructor) {
+            res.status(200).send('Rating saved successfully');
+        } else {
+            res.status(404).send('Instructor not found');
+        }
+    } catch (error) {
+        res.status(500).send('Error saving rating: ' + error.message);
+    }
+});
+
+app.get('/hasRatedInstructor', async (req, res) => {
+    const { studentID, instructorID, classID } = req.query; // Get studentID, instructorID, and classID from query parameters
+
+    if (!studentID || !instructorID || !classID) {
+        return res.status(400).json({ message: 'Student ID, Instructor ID, and Class ID are required.' });
+    }
+
+    try {
+        // Find if there's an existing rating by the student for this instructor and class
+        const instructor = await InstructorModel.findOne({
+            ID: instructorID,
+            'Ratings.classID': parseInt(classID),
+            'Ratings.dimensions.classRatings.raterID': parseInt(studentID)
+        });
+
+        // If instructor is found with a matching rating, return true
+        const hasRated = !!instructor; // Convert to boolean (true if found, false if not)
+        res.json({ hasRated });
+    } catch (error) {
+        console.error('Error checking if instructor has been rated:', error);
+        res.status(500).json({ message: 'Error checking if instructor has been rated.' });
+    }
+});
+
+
+
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {
         res.json({ user: req.user, message: '' });

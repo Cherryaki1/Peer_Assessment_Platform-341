@@ -869,9 +869,10 @@ app.get('/hasRatedInstructor', async (req, res) => {
             'Ratings.dimensions.classRatings.raterID': parseInt(studentID)
         });
 
+        const ratedInstructorID = instructor?.ID;
+        console.log('Rated instructor ID:', ratedInstructorID);
         // If instructor is found with a matching rating, return true
-        const hasRated = !!instructor; // Convert to boolean (true if found, false if not)
-        res.json({ hasRated });
+        res.json({ [classID]: ratedInstructorID });
     } catch (error) {
         console.error('Error checking if instructor has been rated:', error);
         res.status(500).json({ message: 'Error checking if instructor has been rated.' });

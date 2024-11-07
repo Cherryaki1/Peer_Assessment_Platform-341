@@ -53,7 +53,7 @@ const StudentRateMyInstructor = () => {
     };
 
     const checkRatedInstructors = async (classList) => {
-        const ratedStatus = {};
+        const ratedInstructorID = {};
 
         await Promise.all(
             classList.map(async (classItem) => {
@@ -66,7 +66,7 @@ const StudentRateMyInstructor = () => {
                         },
                         withCredentials: true,
                     });
-                    ratedStatus[classItem.id] = response.data.hasRated;
+                    ratedInstructorID[classItem.id] = response.data[classItem.id] || [];
                 } catch (error) {
                     console.error('Error checking instructor rating status:', error);
                 }
@@ -74,7 +74,7 @@ const StudentRateMyInstructor = () => {
         );
 
         // Update state once all rated statuses are fetched
-        setRatedInstructors(ratedStatus);
+        setRatedInstructors(ratedInstructorID);
     };
 
     const handleRateInstructor = (instructorID, classItem) => {
@@ -99,7 +99,7 @@ const StudentRateMyInstructor = () => {
                                     <div style={{ flex: 1 }}>
                                         <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - Instructor: {classItem.instructorName}
                                     </div>
-                                    {ratedInstructors[classItem.id] ? (
+                                    {ratedInstructors[classItem.id] === classItem.instructorID ? (
                                         <span style={{ marginLeft: '10px', color: 'green' }}>Rated ✔</span>
                                     ) : (
                                         <button 

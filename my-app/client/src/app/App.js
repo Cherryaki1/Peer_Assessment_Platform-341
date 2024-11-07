@@ -44,7 +44,7 @@ const App = () => {
                 <Route path="/studentManageGroups/:classID" element={<StudentManageGroups />} />
                 <Route path="/studentRatePage" element={<StudentRatePage ratings={ratingList} />} />
                 <Route path="/confirmStudentRating" element={<ConfirmStudentRating />} />
-                <Route path="/studentReviewRating" element={<StudentGrades ratings={ratingList} />} />
+                <Route path="/studentReviewRatings" element={<StudentGrades ratings={ratingList} />} />
 
 
                 

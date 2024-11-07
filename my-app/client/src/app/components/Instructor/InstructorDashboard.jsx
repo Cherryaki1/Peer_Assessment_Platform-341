@@ -49,8 +49,8 @@ const InstructorDashboard = () => {
     const handleSummaryClick = (classID) => {
         console.log('Navigating to classID:', classID);
         if (parseInt(classID)) {
-            console.log("Navigating");
-            navigate(`/studentsSummary/${classID}`);
+            console.log("Navigating",classID);
+            navigate(`/studentsSummaryPage/${classID}`);
         } else {
             console.error('No classID found!');
         }

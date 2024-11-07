@@ -17,6 +17,8 @@ const ClassModel = require('./models/classModel');
 const GroupModel = require('./models/groupModel');
 const cors = require('cors');
 require('dotenv').config();
+const router = express.Router();
+
 
 const app = express();
 
@@ -190,6 +192,7 @@ app.get('/instructorManageClasses', async (req, res) => {
         return res.status(500).json({ message: 'An unexpected error occurred while fetching classes.', error: error.message || error });
     }
 });
+
 app.post('/uploadClass', upload.single('roster'), async (req, res) => {
     try {
         const { className, subject, section, instructorID, classID } = req.body;
@@ -874,6 +877,7 @@ app.get('/hasRatedInstructor', async (req, res) => {
         res.status(500).json({ message: 'Error checking if instructor has been rated.' });
     }
 });
+
 
 
 app.get('/index', (req, res) => {

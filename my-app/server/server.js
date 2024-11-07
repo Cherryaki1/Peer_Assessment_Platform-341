@@ -875,6 +875,7 @@ app.get('/hasRatedInstructor', async (req, res) => {
     }
 });
 
+
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {
         res.json({ user: req.user, message: '' });

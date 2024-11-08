@@ -83,7 +83,7 @@ const StudentGrades = () => {
                             const ratingsForGroup = userStudent.Ratings.reduce((acc, rating) => {
                                 
                                 // Filter ratings to only include those for the specified classID
-                                if (rating.classID == classID) {
+                                if (rating.classID === classID) {
                                     rating.dimensions.forEach(dimension => {
                                         
                                         dimension.groupRatings.forEach(groupRating => {

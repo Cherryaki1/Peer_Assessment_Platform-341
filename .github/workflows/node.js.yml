@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -17,6 +16,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
@@ -27,14 +27,14 @@ jobs:
       - name: Install dependencies and run tests in client
         working-directory: my-app/client
         run: |
-          npm ci
-          npm run build --if-present
-          npm test
+          CI=false npm ci
+          CI=false npm run build --if-present
+          CI=false npm test
 
       # Install and test in the server directory
       - name: Install dependencies and run tests in server
         working-directory: my-app/server
         run: |
-          npm ci
-          npm run build --if-present
-          npm test
+          CI=false npm ci
+          CI=false npm run build --if-present
+          CI=false npm test

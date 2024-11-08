@@ -74,8 +74,10 @@ const InstructorDashboard = () => {
                                 <ul>
                                     {classes.map((classItem, index) => (
                                         <li key={index}>
-                                            <button onClick={() => handleSummaryClick(classItem.id)} style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer' }}>
-                                                <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - {classItem.studentCount} Students, {classItem.groupCount} Groups
+                                            <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - {classItem.studentCount} Students, {classItem.groupCount} Groups
+                                            <br/>
+                                            <button onClick={() => handleSummaryClick(classItem.id)}>
+                                                Summary View
                                             </button>
                                         </li>
                                     ))}

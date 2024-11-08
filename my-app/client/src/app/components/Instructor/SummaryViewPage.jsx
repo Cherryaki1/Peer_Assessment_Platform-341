@@ -7,7 +7,6 @@ const SummaryViewPage = () => {
     const [students, setStudents] = useState([]);
     const [groupDetails, setGroupDetails] = useState([])
     const [loading, setLoading] = useState(true);
-
     const [error, setError] = useState('');
 
     // Function to fetch data from the backend
@@ -53,71 +52,121 @@ const SummaryViewPage = () => {
             <table style={{ borderCollapse: 'collapse', width: '100%' }}>
                 <thead>
                     <tr>
-                        <th scope="col" style={{ border: '1px solid black', padding: '8px' }}>Student ID</th>
-                        <th scope="col" style={{ border: '1px solid black', padding: '8px' }}>Last Name</th>
-                        <th scope="col" style={{ border: '1px solid black', padding: '8px' }}>First Name</th>
-                        <th scope="col" style={{ border: '1px solid black', padding: '8px' }}>Team</th>
-                        <th scope="col" style={{ border: '1px solid black', padding: '8px' }}>Cooperation</th>
-                        <th scope="col" style={{ border: '1px solid black', padding: '8px' }}>Conceptual Contribution</th>
-                        <th scope="col" style={{ border: '1px solid black', padding: '8px' }}>Practical Contribution</th>
-                        <th scope="col" style={{ border: '1px solid black', padding: '8px' }}>Work Ethic</th>
-                        <th scope="col" style={{ border: '1px solid black', padding: '8px' }}>Average</th>
-                        <th scope="col" style={{ border: '1px solid black', padding: '8px' }}>Peers Who Responded</th>
+                        <th style={{ border: '1px solid black', padding: '8px' }}>Student ID</th>
+                        <th style={{ border: '1px solid black', padding: '8px' }}>Last Name</th>
+                        <th style={{ border: '1px solid black', padding: '8px' }}>First Name</th>
+                        <th style={{ border: '1px solid black', padding: '8px' }}>Team</th>
+                        <th style={{ border: '1px solid black', padding: '8px' }}>Cooperation</th>
+                        <th style={{ border: '1px solid black', padding: '8px' }}>Conceptual Contribution</th>
+                        <th style={{ border: '1px solid black', padding: '8px' }}>Practical Contribution</th>
+                        <th style={{ border: '1px solid black', padding: '8px' }}>Work Ethic</th>
+                        <th style={{ border: '1px solid black', padding: '8px' }}>Average</th>
+                        <th style={{ border: '1px solid black', padding: '8px' }}>Peers Who Responded</th>
                     </tr>
                 </thead>
                 <tbody>
-
-                    {students.map((student) => (
-                        <tr key={student.ID}>
-                            <td style={{ border: '1px solid black', padding: '8px' }}>{student.ID}</td>
-                            <td style={{ border: '1px solid black', padding: '8px' }}>{student.LastName}</td>
-                            <td style={{ border: '1px solid black', padding: '8px' }}>{student.FirstName}</td>
-                            <td style={{ border: '1px solid black', padding: '8px' }}>
-                                {student.Groups.map(groupID => groupDetails[groupID])}
-                            </td>
-                            <td style={{ border: '1px solid black', padding: '8px' }}>{getDimensionRating(student, 'Cooperation')}</td>
-                            <td style={{ border: '1px solid black', padding: '8px' }}>{getDimensionRating(student, 'Conceptual Contribution')}</td>
-                            <td style={{ border: '1px solid black', padding: '8px' }}>{getDimensionRating(student, 'Practical Contribution')}</td>
-                            <td style={{ border: '1px solid black', padding: '8px' }}>{getDimensionRating(student, 'Work Ethic')}</td>
-                            <td style={{ border: '1px solid black', padding: '8px' }}>{calculateAverage(student)}</td>
-                            <td style={{ border: '1px solid black', padding: '8px' }}>{getPeersWhoResponded(student) || 0}</td>
-                        </tr>
-                    ))}
+                    {students.map((student) => {
+                        // Store each cell's content in a separate variable
+                        const studentID = student.ID;
+                        const lastName = student.LastName;
+                        const firstName = student.FirstName;
+                        const team = student.Groups.length > 0 ? student.Groups.map(groupID => groupDetails[groupID]) : 'No Team';
+                        const cooperation = getDimensionRating(student, 'Cooperation', classID);
+                        const conceptualContribution = getDimensionRating(student, 'Conceptual Contribution', classID);
+                        const practicalContribution = getDimensionRating(student, 'Practical Contribution', classID);
+                        const workEthic = getDimensionRating(student, 'Work Ethic', classID);
+                        const average = calculateStudentAverage(cooperation,conceptualContribution,practicalContribution,workEthic);
+                        const peersWhoResponded = getPeersWhoResponded(student, classID);
+    
+                        return (
+                            <tr key={student.ID}>
+                                <td style={{ border: '1px solid black', padding: '8px' }}>{studentID}</td>
+                                <td style={{ border: '1px solid black', padding: '8px' }}>{lastName}</td>
+                                <td style={{ border: '1px solid black', padding: '8px' }}>{firstName}</td>
+                                <td style={{ border: '1px solid black', padding: '8px' }}>{team}</td>
+                                <td style={{ border: '1px solid black', padding: '8px' }}>{cooperation}</td>
+                                <td style={{ border: '1px solid black', padding: '8px' }}>{conceptualContribution}</td>
+                                <td style={{ border: '1px solid black', padding: '8px' }}>{practicalContribution}</td>
+                                <td style={{ border: '1px solid black', padding: '8px' }}>{workEthic}</td>
+                                <td style={{ border: '1px solid black', padding: '8px' }}>{average}</td>
+                                <td style={{ border: '1px solid black', padding: '8px' }}>{peersWhoResponded}</td>
+                            </tr>
+                        );
+                    })}
                 </tbody>
             </table>
         </div>
-    );
+    );    
 };
 
-// Function to get the rating value for a specific dimension
-const getDimensionRating = (student, dimensionName) => {
-    const dimension = student.Ratings?.[0]?.dimensions?.find(d => d.dimensionName === dimensionName);
-    if (dimension) {
-        const ratings = dimension.groupRatings;
-        const sum = ratings.reduce((acc, rating) => acc + (rating.ratingValue || 0), 0);
-        const total = ratings.filter(rating => rating.ratingValue != null).length;
-        return total > 0 ? (sum / total).toFixed(1) : 'N/A';
+// Helper function to calculate the average rating for a given dimension, ensuring the rater is in the same class
+const getDimensionRating = (student, dimensionName, classID) => {
+    const ratings = [];
+
+    // Ensure student.Ratings exists
+    if (student.Ratings.length !== 0) {
+        student.Ratings.forEach(rating => {
+            // Check if the rater is in the same class as the student
+            if (classID == rating.classID) {
+                // Check if the rating has dimensions
+                if (rating.dimensions.length !== 0) {
+                    rating.dimensions.forEach(dimension => {
+                        // Check if the dimension name matches
+                        if (dimension.dimensionName === dimensionName && dimension.groupRatingslength !== 0) {
+                            dimension.groupRatings.forEach(groupRating => {
+                                // Ensure raterID and ratingValue exist
+                                if (groupRating.ratingValue) {
+                                        // If they are in the same class, add the rating to the ratings array
+                                        ratings.push(parseInt(groupRating.ratingValue));
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
     }
-    return 'N/A';
+
+    // If there are ratings, return the average, otherwise return 'N/A'
+    if (ratings.length !== 0){
+        console.log("student:",student.ID, "ratings:",ratings, "dimensionName:",dimensionName )
+    }
+    return ratings.length !== 0 ? calculateAverage(ratings) : 'No Rating';
 };
+
 
 // Function to calculate the number of unique peers who have responded
-const getPeersWhoResponded = (student) => {
-    const allRaters = student.Ratings?.[0]?.dimensions
-        .flatMap(dimension => dimension.groupRatings.map(rating => rating.raterID));
-    
-    const uniqueRaters = new Set(allRaters);
+const getPeersWhoResponded = (student, classID) => {
+    let uniqueRaters = 0;
+    // Ensure student.Ratings exists
+    if (student.Ratings.length !== 0) {
+        student.Ratings.forEach(rating => {
+            // Check if the rater is in the same class as the student
+            if (classID == rating.classID) {
+                uniqueRaters = uniqueRaters + 1;
+            }
+        });
+    }
 
-    return uniqueRaters.size;
+    return uniqueRaters;
 };
 
-// Function to calculate average based on dimensions
-const calculateAverage = (student) => {
-    const dimensions = ['Cooperation', 'ConceptualContribution', 'PracticalContribution', 'WorkEthic'];
-    const ratings = dimensions.map(dim => getDimensionRating(student, dim));
-    const sum = ratings.reduce((acc, val) => acc + (val !== 'N/A' ? parseFloat(val) : 0), 0);
-    const total = ratings.filter(val => val !== 'N/A').length;
-    return total > 0 ? (sum / total).toFixed(1) : 'N/A';
+
+// Calculate the overall average rating for a student across all dimensions
+const calculateStudentAverage = (cooperation,conceptualContribution,practicalContribution,workEthic) => {
+    const sumAllRatings = 
+        parseFloat(cooperation) + 
+        parseFloat(conceptualContribution) + 
+        parseFloat(practicalContribution) + 
+        parseFloat(workEthic);
+    console.log(sumAllRatings)
+    return sumAllRatings !== 0 ? parseFloat(sumAllRatings/4).toFixed(1) : 'N/A';
+};
+
+// Helper function to calculate the average of an array
+const calculateAverage = (arr) => {
+    const sum = arr.reduce((acc, num) => acc + num, 0);
+    return parseFloat(sum / arr.length).toFixed(1);
 };
 
 export default SummaryViewPage;

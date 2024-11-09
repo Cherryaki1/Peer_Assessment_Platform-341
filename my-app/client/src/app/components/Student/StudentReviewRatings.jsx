@@ -12,60 +12,62 @@ const StudentGrades = () => {
     const [message, setMessage] = useState('');
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                // Fetch the logged-in user data (student)
-                const response = await axios.get('http://localhost:3000/index', {
-                    withCredentials: true,
-                });
-                
-                if (response.data.user && response.data.user.ID) {
-                    const userID = response.data.user.ID;
-                    setUserID(userID); // Store the student's ID
-                    fetchStudentFromUser();
-                    fetchGrades(userID);
-                } else {
-                    setMessage('Failed to retrieve students data.');
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-                setMessage('Error fetching user data.');
-            }
-        };    
-
-        const fetchStudentFromUser = async () => {
-            try {
-                const response = await axios.get('http://localhost:3000/studentFromUser', {
-                    withCredentials: true,
-                });
-    
-                if (response.data.student && response.data.student.Groups) {
-                    setUserStudent(response.data.student);
-                } else {
-                    setMessage('Student not found or no group data available.');
-                }
-            } catch (error) {
-                console.error('Error fetching student from user:', error);
-                setMessage('Error fetching student data.');
-            }
-        };
-
-        const fetchGrades = async (userID) => {
-            try {
-                const response = await axios.get(`http://localhost:3000/getUserGrades`, {
-                    params: { userID }
-                });
-                setGradesByClass(response.data);
-            } catch (err) {
-                console.error("Error fetching grades:", err);
-                setError('Failed to load grades');
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchUserData();
     }, []);
+
+    const fetchUserData = async () => {
+        try {
+            // Fetch the logged-in user data (student)
+            const response = await axios.get('http://localhost:3000/index', {
+                withCredentials: true,
+            });
+            
+            if (response.data.user && response.data.user.ID) {
+                const userID = response.data.user.ID;
+                setUserID(userID); // Store the student's ID
+                console.log('User ID:', userID); // Log userID
+                await fetchStudentFromUser();
+                await fetchGrades(userID);
+            } else {
+                setMessage('Failed to retrieve students data.');
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            setMessage('Error fetching user data.');
+        }
+    };    
+
+    const fetchStudentFromUser = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/studentFromUser', {
+                withCredentials: true,
+            });
+
+            if (response.data.student && response.data.student.Groups) {
+                setUserStudent(response.data.student);
+            } else {
+                setMessage('Student not found or no group data available.');
+            }
+        } catch (error) {
+            console.error('Error fetching student from user:', error);
+            setMessage('Error fetching student data.');
+        }
+    };
+
+    const fetchGrades = async (userID) => {
+        try {
+            const response = await axios.get(`http://localhost:3000/getUserGrades`, {
+                params: { userID },
+                withCredentials: true,
+            });
+            setGradesByClass(response.data);
+        } catch (err) {
+            console.error("Error fetching grades:", err);
+            setError('Failed to load grades');
+        } finally {
+            setLoading(false);
+        }
+    };
     
     if (loading) return <p>Loading grades...</p>;
     if (error) return <p>{error}</p>;
@@ -73,7 +75,7 @@ const StudentGrades = () => {
     return (
         <div className="content">
             <StudentSideBar />
-            <h2>Your Grades</h2>
+            <h2>Your Ratings</h2>
             {Object.keys(gradesByClass).length > 0 ? (
                 Object.keys(gradesByClass).map(classID => (
                     <div key={classID} className="class-section" style={{ marginBottom: '20px' }}>
@@ -83,7 +85,7 @@ const StudentGrades = () => {
                             const ratingsForGroup = userStudent.Ratings.reduce((acc, rating) => {
                                 
                                 // Filter ratings to only include those for the specified classID
-                                if (rating.classID === classID) {
+                                if (rating.classID == classID) {
                                     rating.dimensions.forEach(dimension => {
                                         
                                         dimension.groupRatings.forEach(groupRating => {

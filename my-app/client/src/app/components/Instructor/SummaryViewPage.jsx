@@ -5,16 +5,15 @@ import axios from 'axios';
 const SummaryViewPage = () => {
     const { classID } = useParams(); // Get classID from the URL
     const [students, setStudents] = useState([]);
-    const [groupDetails, setGroupDetails] = useState([])
+    const [groupDetails, setGroupDetails] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
 
-    // Function to fetch data from the backend
     const fetchStudents = async () => {
         try {
             console.log(`Fetching data for classID: ${classID}`);
             const response = await axios.get(`http://localhost:3000/studentsSummary/${classID}`, {
-                withCredentials: true,  // Ensures credentials (cookies) are sent
+                withCredentials: true,
             });
             console.log('Response data:', response.data);
             setGroupDetails(response.data.groupDetails || []);
@@ -27,7 +26,6 @@ const SummaryViewPage = () => {
         }
     };
 
-    // Fetch student data when the component is mounted or classID changes
     useEffect(() => {
         if (classID) {
             fetchStudents();
@@ -66,20 +64,22 @@ const SummaryViewPage = () => {
                 </thead>
                 <tbody>
                     {students.map((student) => {
-                        // Store each cell's content in a separate variable
                         const studentID = student.ID;
                         const lastName = student.LastName;
                         const firstName = student.FirstName;
-                        const team = (student.Groups.length > 0 && groupDetails.length > 0) ? student.Groups.map(groupID => groupDetails[groupID]) : 'No Team';
+                        const allGroupsExist = Array.isArray(student.Groups) &&
+                        student.Groups.length > 0 &&
+                        student.Groups.some(groupID => groupDetails.hasOwnProperty(groupID));
+                        const team = allGroupsExist ? student.Groups.map(studentGroupID => groupDetails[studentGroupID]) : 'No Teams' ;
                         const cooperation = getDimensionRating(student, 'Cooperation', classID);
                         const conceptualContribution = getDimensionRating(student, 'Conceptual Contribution', classID);
                         const practicalContribution = getDimensionRating(student, 'Practical Contribution', classID);
                         const workEthic = getDimensionRating(student, 'Work Ethic', classID);
-                        const average = calculateStudentAverage(cooperation,conceptualContribution,practicalContribution,workEthic);
+                        const average = calculateStudentAverage(cooperation, conceptualContribution, practicalContribution, workEthic);
                         const peersWhoResponded = getPeersWhoResponded(student, classID);
     
                         return (
-                            <tr key={student.ID}>
+                            <tr key={studentID}>
                                 <td style={{ border: '1px solid black', padding: '8px' }}>{studentID}</td>
                                 <td style={{ border: '1px solid black', padding: '8px' }}>{lastName}</td>
                                 <td style={{ border: '1px solid black', padding: '8px' }}>{firstName}</td>
@@ -99,71 +99,46 @@ const SummaryViewPage = () => {
     );    
 };
 
-// Helper function to calculate the average rating for a given dimension, ensuring the rater is in the same class
 const getDimensionRating = (student, dimensionName, classID) => {
     const ratings = [];
-
-    // Ensure student.Ratings exists
-    if (student.Ratings.length !== 0) {
+    if (student.Ratings && student.Ratings.length !== 0) {
         student.Ratings.forEach(rating => {
-            // Check if the rater is in the same class as the student
-            if (classID == rating.classID) {
-                // Check if the rating has dimensions
-                if (rating.dimensions.length !== 0) {
-                    rating.dimensions.forEach(dimension => {
-                        // Check if the dimension name matches
-                        if (dimension.dimensionName === dimensionName && dimension.groupRatingslength !== 0) {
-                            dimension.groupRatings.forEach(groupRating => {
-                                // Ensure raterID and ratingValue exist
-                                if (groupRating.ratingValue) {
-                                        // If they are in the same class, add the rating to the ratings array
-                                        ratings.push(parseInt(groupRating.ratingValue));
-                                }
-                            });
-                        }
-                    });
-                }
+            if (classID == rating.classID && rating.dimensions && rating.dimensions.length !== 0) {
+                rating.dimensions.forEach(dimension => {
+                    if (dimension.dimensionName === dimensionName && dimension.groupRatings.length !== 0) {
+                        dimension.groupRatings.forEach(groupRating => {
+                            if (groupRating.ratingValue) {
+                                ratings.push(parseInt(groupRating.ratingValue));
+                            }
+                        });
+                    }
+                });
             }
         });
-    }
-
-    // If there are ratings, return the average, otherwise return 'N/A'
-    if (ratings.length !== 0){
-        console.log("student:",student.ID, "ratings:",ratings, "dimensionName:",dimensionName )
     }
     return ratings.length !== 0 ? calculateAverage(ratings) : 'No Rating';
 };
 
-
-// Function to calculate the number of unique peers who have responded
 const getPeersWhoResponded = (student, classID) => {
-    let uniqueRaters = 0;
-    // Ensure student.Ratings exists
-    if (student.Ratings.length !== 0) {
+    const uniqueRaters = new Set();
+    if (student.Ratings && student.Ratings.length !== 0) {
         student.Ratings.forEach(rating => {
-            // Check if the rater is in the same class as the student
-            if (classID == rating.classID) {
-                uniqueRaters = uniqueRaters + 1;
+            if (classID == rating.classID && rating.raterID) {
+                uniqueRaters.add(rating.raterID);
             }
         });
     }
-
-    return uniqueRaters;
+    return uniqueRaters.size;
 };
 
-
-// Calculate the overall average rating for a student across all dimensions
-const calculateStudentAverage = (cooperation,conceptualContribution,practicalContribution,workEthic) => {
-    const sumAllRatings = 
-        parseFloat(cooperation) + 
-        parseFloat(conceptualContribution) + 
-        parseFloat(practicalContribution) + 
-        parseFloat(workEthic);
-    console.log(sumAllRatings)
-    return sumAllRatings !== 0 ? parseFloat(sumAllRatings/4).toFixed(1) : 'N/A';
+const calculateStudentAverage = (cooperation, conceptualContribution, practicalContribution, workEthic) => {
+    const ratings = [cooperation, conceptualContribution, practicalContribution, workEthic].filter(
+        rating => !isNaN(rating)
+    );
+    const sum = ratings.reduce((acc, rating) => acc + parseFloat(rating), 0);
+    return ratings.length ? (sum / ratings.length).toFixed(1) : 'N/A';
 };
 
-// Helper function to calculate the average of an array
 const calculateAverage = (arr) => {
     const sum = arr.reduce((acc, num) => acc + num, 0);
     return parseFloat(sum / arr.length).toFixed(1);

@@ -70,7 +70,7 @@ const SummaryViewPage = () => {
                         const studentID = student.ID;
                         const lastName = student.LastName;
                         const firstName = student.FirstName;
-                        const team = student.Groups.length > 0 ? student.Groups.map(groupID => groupDetails[groupID]) : 'No Team';
+                        const team = (student.Groups.length > 0 && groupDetails.length > 0) ? student.Groups.map(groupID => groupDetails[groupID]) : 'No Team';
                         const cooperation = getDimensionRating(student, 'Cooperation', classID);
                         const conceptualContribution = getDimensionRating(student, 'Conceptual Contribution', classID);
                         const practicalContribution = getDimensionRating(student, 'Practical Contribution', classID);

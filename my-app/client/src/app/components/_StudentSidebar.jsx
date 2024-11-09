@@ -30,7 +30,7 @@ const StudentSidebar = () => {
                 <li onClick={() => navigate('/studentDashboard')}>Dashboard</li>
                 <li onClick={() => navigate('/studentManageClasses')}>My Classes</li>
 
-                <li onClick={() => navigate('/studentReviewRatings')}>Your Ratings</li>
+                <li onClick={() => navigate('/studentReviewRatings')}>Your Grades</li>
 
                 <li onClick={() => navigate('/studentRateMyInstructor')}>Rate My Instructor</li>
 

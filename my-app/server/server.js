@@ -700,7 +700,6 @@ app.get('/hasRated', async (req, res) => {
     }
 });
 
-
 app.get('/getUserGrades', async (req, res) => {
     const { userID } = req.query;
 
@@ -821,7 +820,6 @@ app.get('/studentRateMyInstructor/:instructorID', async (req, res) => {
     }
 });
 
-
 app.post('/instructorRatingsSubmit', async (req, res) => {
     try {
         const { studentID, classID, dimensions, instructorID  } = req.body;
@@ -870,84 +868,12 @@ app.get('/hasRatedInstructor', async (req, res) => {
             'Ratings.dimensions.classRatings.raterID': parseInt(studentID)
         });
 
-        const ratedInstructorID = instructor?.ID;
-        console.log('Rated instructor ID:', ratedInstructorID);
         // If instructor is found with a matching rating, return true
-        res.json({ [classID]: ratedInstructorID });
+        const hasRated = !!instructor; // Convert to boolean (true if found, false if not)
+        res.json({ hasRated });
     } catch (error) {
         console.error('Error checking if instructor has been rated:', error);
         res.status(500).json({ message: 'Error checking if instructor has been rated.' });
-    }
-});
-
-
-// Route to fetch all students in a specified classID along with their details
-app.get('/studentsSummary/:classID', async (req, res) => {
-    try {
-        const { classID } = req.params; // Get classID from the URL
-        const parsedClassID = parseInt(classID, 10);
-        console.log('classID parameter:', parsedClassID);
-
-        // Log incoming request and authentication status
-        console.log('Received request to /studentsSummary/:', parsedClassID);
-        console.log('Authentication status:', req.isAuthenticated());
-
-        // Ensure user is authenticated
-        if (!req.isAuthenticated() || !req.user) {
-            console.log('Unauthorized access attempt');
-            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
-        }
-        
-        // Validate parsedClassID is a number and log result
-        if (isNaN(parsedClassID)) {
-            console.log('Invalid classID format:', classID);
-            return res.status(400).json({ message: 'Invalid class ID.' });
-        }
-        console.log('Parsed classID:', parsedClassID);
-
-        // Log database query to find students
-        console.log('Querying database for students with classID:', parsedClassID);
-        
-        // Fetch students with populated group details (including GroupName)
-        const students = await StudentModel.find(
-            { Classes: parsedClassID }, // Find students with the classID in the Classes field
-            {
-                FirstName: 1,
-                LastName: 1,
-                ID: 1,
-                Email: 1,
-                Username: 1,
-                Department: 1,
-                Classes: 1,
-                Groups: 1,
-                Ratings: 1
-            })
-        console.log('Student ' + students);
-        const groupIDs = students.flatMap(student => student.Groups);
-        const groups = await GroupModel.find({
-            Class: { $in: classID},
-            groupID: { $in: groupIDs}
-        })
-
-        const groupMap = Object.fromEntries(groups.map(group => [group.groupID, group.GroupName]));
-        console.log(`Group List ${groupMap}`);
-         // Log the result of the query
-        if (!students || students.length === 0) {
-            console.log('No students found for classID:', parsedClassID);
-            return res.status(404).json({ message: 'No students found for this class.' });
-        }
-        console.log(`Found ${students.length} students for classID ${parsedClassID}`);
-
-        // Send the students data in the response along with their group details
-        return res.status(200).json({ studentSummary: students , groupDetails: groupMap});
-
-    } catch (error) {
-        // Log any errors encountered during execution
-        console.error('Error fetching student summary:', error);
-        return res.status(500).json({
-            message: 'An unexpected error occurred while fetching student summary.',
-            error: error.message
-        });
     }
 });
 
@@ -974,4 +900,4 @@ app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 });
 
-module.exports = app, router;
+module.exports = app;

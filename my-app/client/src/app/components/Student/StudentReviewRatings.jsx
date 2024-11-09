@@ -73,7 +73,7 @@ const StudentGrades = () => {
     return (
         <div className="content">
             <StudentSideBar />
-            <h2>Your Grades</h2>
+            <h2>Your Ratings</h2>
             {Object.keys(gradesByClass).length > 0 ? (
                 Object.keys(gradesByClass).map(classID => (
                     <div key={classID} className="class-section" style={{ marginBottom: '20px' }}>
@@ -83,7 +83,7 @@ const StudentGrades = () => {
                             const ratingsForGroup = userStudent.Ratings.reduce((acc, rating) => {
                                 
                                 // Filter ratings to only include those for the specified classID
-                                if (rating.classID === classID) {
+                                if (rating.classID == classID) {
                                     rating.dimensions.forEach(dimension => {
                                         
                                         dimension.groupRatings.forEach(groupRating => {

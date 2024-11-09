@@ -119,16 +119,20 @@ const getDimensionRating = (student, dimensionName, classID) => {
     return ratings.length !== 0 ? calculateAverage(ratings) : 'No Rating';
 };
 
+// Function to calculate the number of unique peers who have responded
 const getPeersWhoResponded = (student, classID) => {
-    const uniqueRaters = new Set();
-    if (student.Ratings && student.Ratings.length !== 0) {
+    let uniqueRaters = 0;
+    // Ensure student.Ratings exists
+    if (student.Ratings.length !== 0) {
         student.Ratings.forEach(rating => {
-            if (classID == rating.classID && rating.raterID) {
-                uniqueRaters.add(rating.raterID);
+            // Check if the rater is in the same class as the student
+            if (classID == rating.classID) {
+                uniqueRaters = uniqueRaters + 1;
             }
         });
     }
-    return uniqueRaters.size;
+
+    return uniqueRaters;
 };
 
 const calculateStudentAverage = (cooperation, conceptualContribution, practicalContribution, workEthic) => {

@@ -29,6 +29,7 @@ const InstructorSidebar = () => {
             <ul>
                 <li onClick={() => navigate('/instructorDashboard')}>Dashboard</li>
                 <li onClick={() => navigate('/instructorManageClasses')}>Manage Classes</li>
+                <li onClick={() => navigate('/instructorReviewRatings')}>Your Ratings</li>
                 <li onClick={handleLogout}>Logout</li>
             </ul>
         </div>

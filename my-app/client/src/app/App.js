@@ -7,6 +7,9 @@ import InstructorDashboard from './components/Instructor/InstructorDashboard';
 import InstructorManageClasses from './components/Instructor/InstructorManageClasses'; //can take off?
 //import GroupManagement from './components/groupManagement'; 
 import InstructorManageGroups from './components/Instructor/InstructorManageGroups';
+import SummaryViewPage from './components/Instructor/SummaryViewPage';
+import InstructorReviewRatings from './components/Instructor/InstructorReviewRatings'
+
 import StudentDashboard from './components/Student/StudentDashboard';
 import StudentManageClasses from './components/Student/StudentManageClasses';
 import StudentManageGroups from './components/Student/StudentManageGroups';
@@ -17,7 +20,6 @@ import ConfirmStudentRating from './components/Student/RatingStudent/ConfirmStud
 import StudentRateMyInstructor from './components/Student/StudentRateMyInstructor';
 import InstructorRatePage from './components/Student/RatingInstructor/InstructorRatePage';
 import ConfirmInstructorRating from './components/Student/RatingInstructor/ConfirmInstructorRating';
-import SummaryViewPage from './components/Instructor/SummaryViewPage';
 
 
 const ratingList = [
@@ -37,6 +39,7 @@ const App = () => {
                 <Route path="/instructorManageClasses" element={<InstructorManageClasses />} /> 
                 <Route path="/instructorManageGroups/:classID" element={<InstructorManageGroups />} />
                 <Route path="/studentsSummaryPage/:classID" element={<SummaryViewPage />} />
+                <Route path="/instructorReviewRatings" element={<InstructorReviewRatings />} />
 
 
                 <Route path="/studentDashboard" element={<StudentDashboard />} />

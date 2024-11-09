@@ -788,6 +788,39 @@ app.get('/getUserGrades', async (req, res) => {
     }
 });
 
+app.get('/getInstructorGrades', async (req, res) => {
+    const { userID } = req.query;
+
+    if (!userID) {
+        return res.status(400).json({ message: 'User ID is required.' });
+    }
+
+    try {
+        // Find the instructor by user ID
+        const instructor = await InstructorModel.findOne({ ID: Number(userID) });
+
+        if (!instructor) {
+            return res.status(404).json({ message: 'Instructor not found.' });
+        }
+
+        // Process the ratings to group them by classID
+        const ratingsByClass = instructor.Ratings.reduce((acc, rating) => {
+            const { classID } = rating; // Adjust field names as per your schema
+            if (!acc[classID]) {
+                acc[classID] = [];
+            }
+            acc[classID].push(rating);
+            return acc;
+        }, {});
+
+        res.json(ratingsByClass);
+    } catch (error) {
+        console.error('Error fetching instructor ratings:', error);
+        res.status(500).json({ message: 'Error fetching instructor ratings.' });
+    }
+});
+
+
 app.get('/studentRateMyInstructor/:instructorID', async (req, res) => {
     try {
         if (!req.isAuthenticated() || !req.user) {

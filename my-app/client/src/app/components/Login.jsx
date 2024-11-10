@@ -31,33 +31,129 @@ const Login = () => {
 
     return (
         <div>
-            <div className="bg-slate-800 border boarder-slate-400 rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
-                <h1>Login</h1>
+            <div className="bg-slate-800
+             border 
+             boarder-slate-400 
+             rounded-md 
+             p-8 
+             shadow-lg 
+             backdrop-filter 
+             backdrop-blur-sm 
+             bg-opacity-30 
+             relative">
+                <h1 className="text-4xl 
+                text-white 
+                font-bold 
+                text-center 
+                mb-6">Login</h1>
                 <form onSubmit={handleSubmit}>
 
-                <div>
+                <div className="relative my-4">
                     <input
                         type="text"
-                        placeholder="ID"
+                        className="block 
+                        w-72 
+                        py-2.3 
+                        px-0 
+                        test-sm 
+                        text-white 
+                        bg-transparent 
+                        border-0 
+                        border-b-2 
+                        border-gray-300 
+                        appearance-none 
+                        dark:focus:border-blue-500 
+                        focus:outline-none 
+                        focus:ring-0 
+                        focus-text-white 
+                        focus-border-blue-600 
+                        peer"
+                        placeholder=""
                         value={ID}
                         onChange={(e) => setID(e.target.value)}
                         required
                     />
-                    <label htmlFor="ID">ID</label>
+                    <label htmlFor="ID"
+                    className="absolute 
+                    text-sm 
+                    text-white 
+                    duration-300 
+                    transform 
+                    -translate-y-6 
+                    scale-75 
+                    top-3 
+                    -z-10 
+                    origin-[0] 
+                    peer-focus:left-0 
+                    peer-focus:text-blue-600 
+                    peer-focus:dark:text-blue-500 
+                    peer-placeholder-shown:scale-100 
+                    peer-placeholder-shown:translate-y-0 
+                    peer-focus:scale-75 
+                    peer-focus:-translate-y-6">ID</label>
                 </div>
 
-                <div>
+                <div className="relative my-4">
                     <input
                         type="password"
-                        placeholder="Password"
+                        className="block 
+                        w-72 
+                        py-2.3 
+                        px-0 
+                        test-sm 
+                        text-white 
+                        bg-transparent 
+                        border-0 
+                        border-b-2 
+                        border-gray-300 
+                        appearance-none 
+                        dark:focus:border-blue-500 
+                        focus:outline-none 
+                        focus:ring-0 
+                        focus-text-white 
+                        focus-border-blue-600 
+                        peer"
+                        placeholder=""
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password" 
+                    className="absolute 
+                    text-sm 
+                    text-white 
+                    duration-300 
+                    transform 
+                    -translate-y-6 
+                    scale-75 
+                    top-3 
+                    -z-10 
+                    origin-[0] 
+                    peer-focus:left-0 
+                    peer-focus:text-blue-600 
+                    peer-focus:dark:text-blue-500 
+                    peer-placeholder-shown:scale-100 
+                    peer-placeholder-shown:translate-y-0 
+                    peer-focus:scale-75 
+                    peer-focus:-translate-y-6">Password</label>
+                </div>
+
+                <div>
+                    <input type="checkbox" id="" name="" />
+                    <label htmlFor="remember">Remember me</label>
                 </div>
                 
-                <button type="submit">Login</button>
+                <button 
+                className="w-full 
+                mb-4 text-[18px] 
+                mt-6 rounded-full 
+                bg-white text-blue-800 
+                hover:bg-blue-600 
+                hover:text-white 
+                py-2 
+                transition-colors 
+                duration-300"
+                type="submit">Login</button>
 
                 </form>
             {message && <p>{message}</p>}

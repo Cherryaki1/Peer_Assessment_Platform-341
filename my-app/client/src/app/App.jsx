@@ -31,7 +31,7 @@ const ratingList = [
 
 const App = () => {
     return (
-        <div className='text-white h-[100vh] flex justify-center items-center bg-cover' style={{"background": "url('../src/app/Background.jpg" }}>
+        <div className='text-white h-[100vh] flex justify-center items-center bg-cover' style={{"backgroundImage": "url('./bg.jpg" }}>
         <Router>
             <Routes>
                 <Route path="/" element={<Login />} />

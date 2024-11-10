@@ -31,8 +31,9 @@ const Login = () => {
 
     return (
         <div>
-            <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
+            <div>
+                <h1>Login</h1>
+                    <form onSubmit={handleSubmit}>
                 <div>
                     <input
                         type="text"
@@ -41,6 +42,7 @@ const Login = () => {
                         onChange={(e) => setID(e.target.value)}
                         required
                     />
+                    <label htmlFor="ID">ID</label>
                 </div>
                 <div>
                     <input
@@ -50,10 +52,14 @@ const Login = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
+                    <label htmlFor="password">Password</label>
+                </div>
+                <div>
                     <button type="submit">Login</button>
                 </div>
             </form>
             {message && <p>{message}</p>}
+            </div>
         </div>
     );
 };

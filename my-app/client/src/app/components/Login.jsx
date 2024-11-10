@@ -31,9 +31,10 @@ const Login = () => {
 
     return (
         <div>
-            <div>
+            <div className="bg-slate-800 border boarder-slate-400 rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
                 <h1>Login</h1>
-                    <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
+
                 <div>
                     <input
                         type="text"
@@ -44,6 +45,7 @@ const Login = () => {
                     />
                     <label htmlFor="ID">ID</label>
                 </div>
+
                 <div>
                     <input
                         type="password"
@@ -54,10 +56,10 @@ const Login = () => {
                     />
                     <label htmlFor="password">Password</label>
                 </div>
-                <div>
-                    <button type="submit">Login</button>
-                </div>
-            </form>
+                
+                <button type="submit">Login</button>
+
+                </form>
             {message && <p>{message}</p>}
             </div>
         </div>

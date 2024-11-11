@@ -31,11 +31,11 @@ const ratingList = [
 
 const App = () => {
     return (
-        <div className='text-white h-[100vh] flex justify-center items-center bg-cover' style={{"backgroundImage": "url('./bg.jpg" }}>
+        <div className='text-white h-[100vh] flex justify-center items-center bg-cover' style={{"backgroundImage": "url('./app/components/bg.css"}}>
         <Router>
             <Routes>
                 <Route path="/" element={<Login />} />
-
+                
                 <Route path="/instructorDashboard" element={<InstructorDashboard />} />
                 <Route path="/instructorManageClasses" element={<InstructorManageClasses />} /> 
                 <Route path="/instructorManageGroups/:classID" element={<InstructorManageGroups />} />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BiUser } from 'react-icons/bi';
@@ -47,7 +47,7 @@ const Login = () => {
                 text-white 
                 font-bold 
                 text-center 
-                mb-6">Login</h1>
+                mb-6">Rice++ Login</h1>
                 <form onSubmit={handleSubmit}>
 
                 <div className="relative my-4">
@@ -162,7 +162,7 @@ const Login = () => {
                 hover:text-white 
                 py-2 
                 transition-colors 
-                duration-500"
+                duration-300"
                 type="submit">Login</button>
 
                 </form>

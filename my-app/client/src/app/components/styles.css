@@ -1,5 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 /* Basic styling for the sidebar */
-.sidebar {
+
+
+/* .sidebar {
     width: 200px;
     background-color: #f8f9fa;
     height: 100vh;
@@ -29,8 +34,9 @@
     display: flex;
 }
 
+
 .content {
-    margin-left: 220px; /* Make sure there's space for the sidebar */
+    margin-left: 220px; 
     padding: 20px;
 }
 
@@ -40,4 +46,4 @@ input[type=radio]{
 
 .star{
     cursor: pointer;
-}
+} */

@@ -7,6 +7,7 @@ import InstructorDashboard from './components/Instructor/InstructorDashboard';
 import InstructorManageClasses from './components/Instructor/InstructorManageClasses'; //can take off?
 //import GroupManagement from './components/groupManagement'; 
 import InstructorManageGroups from './components/Instructor/InstructorManageGroups';
+// import Background from './components/rice.jpg';
 import SummaryViewPage from './components/Instructor/SummaryViewPage';
 import InstructorReviewRatings from './components/Instructor/InstructorReviewRatings'
 
@@ -31,7 +32,7 @@ const ratingList = [
 
 const App = () => {
     return (
-        <div className='text-white h-[100vh] flex justify-center items-center bg-cover' style={{"backgroundImage": "url('./app/components/bg.css"}}>
+        // <div className=" text-white h-[100vh] flex justify-center items-center bg-cover" style={{ backgroundImage: `url("${Background}")` }}>
         <Router>
             <Routes>
                 <Route path="/" element={<Login />} />
@@ -57,7 +58,7 @@ const App = () => {
                 <Route path="/confirmInstructorRating" element={<ConfirmInstructorRating />} />
             </Routes>
         </Router>
-        </div>
+        // </div>
     );
 };
 

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BiUser } from 'react-icons/bi';
 import { AiOutlineUnlock } from 'react-icons/ai';
+import Background from './rice.jpg';
 
 const Login = () => {
     const [ID, setID] = useState('');
@@ -32,7 +33,7 @@ const Login = () => {
     };
 
     return (
-        <div>
+        <div className=" text-white h-[100vh] flex justify-center items-center bg-cover" style={{ backgroundImage: `url("${Background}")` }}>
             <div className="bg-slate-800
              border 
              boarder-slate-600 

@@ -45,7 +45,7 @@ const StudentSidebar = () => {
             relative 
             duration-300`}>
                 <img src=".\src\app\components\Collapse.jpg"
-                className={`absolute
+                    className={`absolute
                     cursor-pointer 
                     -right-3 
                     top-9 
@@ -56,7 +56,7 @@ const StudentSidebar = () => {
                 />
                 <div className="flex gap-x-4 items-center">
                     <img src="./src/assets/logo.png"
-                    className={`cursor-pointer duration-500 ${open && "rotate-[360deg]"}`}/>
+                        className={`cursor-pointer duration-500 ${open && "rotate-[360deg]"}`} />
                     <h1 className={`
                     text-white 
                     origin-left 
@@ -68,48 +68,113 @@ const StudentSidebar = () => {
                 </div>
 
                 <ul className="pt-6">
-                <li
+                    <li
                         onClick={() => navigate('/studentDashboard')}
-                        className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-2 bg-light-white"
+                        className="
+                        flex 
+                        rounded-md 
+                        p-2 
+                        cursor-pointer 
+                        hover:bg-light-white 
+                        text-gray-300 
+                        text-sm 
+                        items-center 
+                        gap-x-4 
+                        mt-2 
+                        bg-light-white"
                     >
                         <img src="./src/assets/Chart_fill.png" />
-                        <span className={`${!open && "hidden"} origin-left duration-200`}>
+                        <span className=
+                        {`${!open && "hidden"} 
+                        origin-left 
+                        duration-200`}>
                             Dashboard
                         </span>
                     </li>
                     <li
                         onClick={() => navigate('/studentManageClasses')}
-                        className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-2"
+                        className="
+                        flex 
+                        rounded-md 
+                        p-2 
+                        cursor-pointer 
+                        hover:bg-light-white 
+                        text-gray-300 
+                        text-sm 
+                        items-center
+                         gap-x-4 
+                         mt-2"
                     >
                         <img src="./src/assets/Classes.png" />
-                        <span className={`${!open && "hidden"} origin-left duration-200`}>
+                        <span className=
+                        {`${!open && "hidden"}
+                        origin-left 
+                        duration-200`}>
                             My Classes
                         </span>
                     </li>
                     <li
                         onClick={() => navigate('/studentReviewRatings')}
-                        className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-2"
+                        className="
+                        flex 
+                        rounded-md 
+                        p-2 
+                        cursor-pointer 
+                        hover:bg-light-white 
+                        text-gray-300 
+                        text-sm 
+                        items-center 
+                        gap-x-4 
+                        mt-2"
                     >
                         <img src="./src/assets/Ratings.png" />
-                        <span className={`${!open && "hidden"} origin-left duration-200`}>
+                        <span className=
+                        {`${!open && "hidden"} 
+                        origin-left 
+                        duration-200`}>
                             Your Ratings
                         </span>
                     </li>
                     <li
                         onClick={() => navigate('/studentRateMyInstructor')}
-                        className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-2"
+                        className="
+                        flex 
+                        rounded-md 
+                        p-2 
+                        cursor-pointer 
+                        hover:bg-light-white 
+                        text-gray-300 
+                        text-sm 
+                        items-center 
+                        gap-x-4 mt-2"
                     >
                         <img src="./src/assets/Rate.png" />
-                        <span className={`${!open && "hidden"} origin-left duration-200`}>
+                        <span className=
+                        {`${!open && "hidden"} 
+                        origin-left 
+                        duration-200`}>
                             Rate My Instructor
                         </span>
                     </li>
                     <li
                         onClick={handleLogout}
-                        className="flex rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm items-center gap-x-4 mt-2"
+                        className="
+                        flex 
+                        rounded-md 
+                        p-2 
+                        cursor-pointer 
+                        hover:bg-light-white 
+                        text-gray-300 
+                        text-sm 
+                        items-center 
+                        gap-x-4 
+                        mt-2"
                     >
                         <img src="./src/assets/Logout.png" />
-                        <span className={`${!open && "hidden"} origin-left duration-200`}>
+                        <span className=
+                        {`${!open && "hidden"} 
+                        origin-left 
+                        duration-200`}>
                             Logout
                         </span>
                     </li>

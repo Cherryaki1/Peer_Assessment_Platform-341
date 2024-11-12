@@ -2,6 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 
+import CollapseIcon from './icons/bars-3.svg';
+
+import Dashboard from './icons/home.svg';
+import myClasses from './icons/book-open.svg';
+import yourRatings from './icons/chart-bar.svg';
+import rateInstructor from './icons/academic-cap.svg';
+import logoutIcon from './icons/logout.svg';
+
+
 const StudentSidebar = () => {
     const navigate = useNavigate();
     const [open, setOpen] = useState(true);
@@ -44,7 +53,7 @@ const StudentSidebar = () => {
             pt-8 
             relative 
             duration-300`}>
-                <img src=".\src\app\components\Collapse.jpg"
+                <img src={CollapseIcon}
                     className={`absolute
                     cursor-pointer 
                     -right-3 
@@ -55,8 +64,8 @@ const StudentSidebar = () => {
                     ${!open && "rotate-180"}`} onClick={() => setOpen(!open)}
                 />
                 <div className="flex gap-x-4 items-center">
-                    <img src="./src/assets/logo.png"
-                        className={`cursor-pointer duration-500 ${open && "rotate-[360deg]"}`} />
+                    <img src="./rice.ico"
+                        style={{ width: "40px", height: "40px" }}/>
                     <h1 className={`
                     text-white 
                     origin-left 
@@ -83,7 +92,7 @@ const StudentSidebar = () => {
                         mt-2 
                         bg-light-white"
                     >
-                        <img src="./src/assets/Chart_fill.png" />
+                        <img src={Dashboard} />
                         <span className=
                         {`${!open && "hidden"} 
                         origin-left 
@@ -105,7 +114,7 @@ const StudentSidebar = () => {
                          gap-x-4 
                          mt-2"
                     >
-                        <img src="./src/assets/Classes.png" />
+                        <img src={myClasses} />
                         <span className=
                         {`${!open && "hidden"}
                         origin-left 
@@ -127,7 +136,7 @@ const StudentSidebar = () => {
                         gap-x-4 
                         mt-2"
                     >
-                        <img src="./src/assets/Ratings.png" />
+                        <img src={yourRatings} />
                         <span className=
                         {`${!open && "hidden"} 
                         origin-left 
@@ -148,7 +157,7 @@ const StudentSidebar = () => {
                         items-center 
                         gap-x-4 mt-2"
                     >
-                        <img src="./src/assets/Rate.png" />
+                        <img src={rateInstructor} />
                         <span className=
                         {`${!open && "hidden"} 
                         origin-left 
@@ -170,11 +179,12 @@ const StudentSidebar = () => {
                         gap-x-4 
                         mt-2"
                     >
-                        <img src="./src/assets/Logout.png" />
+                        <img src={logoutIcon} className="w-6 h-6 text-white" alt="Logout Icon" />
                         <span className=
                         {`${!open && "hidden"} 
                         origin-left 
-                        duration-200`}>
+                        duration-200`}
+                        >
                             Logout
                         </span>
                     </li>

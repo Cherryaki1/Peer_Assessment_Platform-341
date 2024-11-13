@@ -9,6 +9,7 @@ import InstructorManageClasses from './components/Instructor/InstructorManageCla
 import InstructorManageGroups from './components/Instructor/InstructorManageGroups';
 // import Background from './components/rice.jpg';
 import SummaryViewPage from './components/Instructor/SummaryViewPage';
+import DetailedViewPage from './components/Instructor/DetailedViewPage';
 import InstructorReviewRatings from './components/Instructor/InstructorReviewRatings'
 
 import StudentDashboard from './components/Student/StudentDashboard';
@@ -42,6 +43,7 @@ const App = () => {
                 <Route path="/instructorManageGroups/:classID" element={<InstructorManageGroups />} />
                 <Route path="/studentsSummaryPage/:classID" element={<SummaryViewPage />} />
                 <Route path="/instructorReviewRatings" element={<InstructorReviewRatings />} />
+                <Route path="/detailView/:classID" element={<DetailedViewPage />}/>
 
 
                 <Route path="/studentDashboard" element={<StudentDashboard />} />

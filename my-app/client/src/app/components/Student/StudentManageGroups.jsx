@@ -159,7 +159,7 @@ const StudentManageGroups = () => {
                     <p>{message}</p>  // Display message if no groups are available
                 )}
 
-                <h2>Students Not in a Group</h2>
+                <h2><b>Students Not in a Group</b></h2>
                 <ul>
                     {ungroupedStudents.length > 0 ? (
                         ungroupedStudents.map(student => (

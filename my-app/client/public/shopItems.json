@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "name": "Lamborghini Aventador",
+        "price": 1000,
+        "photo": "https://paultan.org/image/2019/03/Lamborghini-Aventador-SVJ-Roadster-5.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Lamborghini Urus",
+        "price": 1500,
+        "photo": "https://cdn.motor1.com/images/mgl/6ZZBGl/s1/lamborghini-urus-by-g-power.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Lamborghini Revuelto",
+        "price": 2500,
+        "photo": "https://www.planetcarsz.com/img/carros/2023/05/lamborghini-revuelto-by-dmc-2024-01-20230529173628-1600x900.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Lamborghini Temerario",
+        "price": 3000,
+        "photo": "https://smartcdn.gprod.postmedia.digital/driving/wp-content/uploads/2024/08/Lamborghini-Temerario_05.jpg"
+    },
+    {
+        "id": 5,
+        "name": "Bugatti Mistral Roadster",
+        "price": 3500,
+        "photo": "https://cdn.motor1.com/images/mgl/2NpROp/s1/bugatti-w16-mistral-roadster-in-tokyo-japan.jpg"
+    },
+    {
+        "id": 6,
+        "name": "Bugatti Chiron",
+        "price": 4000,
+        "photo": "https://autonxt.net/wp-content/uploads/2016/02/autocontentexp.comwp-contentuploads201602Bugatti-Chiron11-559bb9383126e69723d7d9860d7dd669ae02c532.jpg"
+    },
+    {
+        "id": 7,
+        "name": "Bugatti Centodieci",
+        "price": 4500,
+        "photo": "https://www.exoticcarlist.com/blog/wp-content/uploads/2019/08/13.jpg"
+    },
+    {
+        "id": 8,
+        "name": "Bugatti Divo",
+        "price": 5000,
+        "photo": "https://car-images.bauersecure.com/pagefiles/83754/053_divo.jpg"
+    },
+    {
+        "id": 9,
+        "name": "Bugatti La Voiture Noire",
+        "price": 5500,
+        "photo": "https://cdn.lifestyleasia.com/wp-content/uploads/2019/09/10171123/Bugatti039s-18.7-million-La-Voiture-Noire-makes-its-US-debut.jpg"
+    },
+    {
+        "id": 10,
+        "name": "Toyota Tercel 1993",
+        "price": 100000,
+        "photo": "https://bringatrailer.com/wp-content/uploads/2019/04/1983_toyota_tercel_sr5_4wd_1556331914d2f93dIMG_6587-e1556651272383.jpg"
+    }
+]

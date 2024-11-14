@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { BiUser } from 'react-icons/bi';
 import { AiOutlineUnlock } from 'react-icons/ai';
-import Background from './rice.jpg';
+import Background from './images/rice.jpg';
 
 const Login = () => {
     const [ID, setID] = useState('');

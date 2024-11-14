@@ -9,6 +9,7 @@ import myClasses from './icons/book-open.svg';
 import yourRatings from './icons/chart-bar.svg';
 import rateInstructor from './icons/academic-cap.svg';
 import logoutIcon from './icons/logout.svg';
+import Shop from './icons/shopping-bag.svg';
 
 
 const StudentSidebar = () => {
@@ -163,6 +164,29 @@ const StudentSidebar = () => {
                         origin-left 
                         duration-200`}>
                             Rate My Instructor
+                        </span>
+                    </li>
+                    <li
+                        onClick={() => navigate('/Shop')} 
+                        className="
+                        flex 
+                        rounded-md 
+                        p-2 
+                        cursor-pointer 
+                        hover:bg-light-white 
+                        text-gray-300 
+                        text-sm 
+                        items-center 
+                        gap-x-4 
+                        mt-2"
+                    >
+                        <img src={Shop} className="w-6 h-6 text-white" alt="Logout Icon" />
+                        <span className=
+                        {`${!open && "hidden"} 
+                        origin-left 
+                        duration-200`}
+                        >
+                            Shop
                         </span>
                     </li>
                     <li

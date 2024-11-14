@@ -25,7 +25,8 @@ const studentSchema = new mongoose.Schema({
     Department: { type: String, required: true },
     Classes: [{ type: Number, ref: 'Class' }],// Referencing the custom class ID
     Groups: [{type: Number, ref: 'Groups' }], // Referencing the custom group ID
-    Ratings: [ratingSchema]  // Array of Rating objects for different classes
+    Ratings: [ratingSchema],  // Array of Rating objects for different classes
+    RiceGrains: { type: Number, default: 0 }  // Number of rice grains earned by the student
 });
 
 const StudentModel = mongoose.model('Student', studentSchema, 'students');

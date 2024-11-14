@@ -5,6 +5,7 @@ import StudentSidebar from '../_StudentSidebar';
 const Shop = () => {
     const [items, setItems] = useState([]);
     const [cartItems, setCartItems] = useState([]);
+    const [riceGrains, setRiceGrains] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,6 +27,20 @@ const Shop = () => {
         setCartItems(storedCartItems);
     }, []);
 
+    useEffect(() => {
+        const fetchStudentData = async () => {
+            try {
+                const response = await fetch('/studentData');
+                const data = await response.json();
+                setRiceGrains(data.riceGrains);
+            } catch (error) {
+                console.error('Error fetching student data:', error);
+            }
+        };
+
+        fetchStudentData();
+    }, []);
+
     const addToCart = (item) => {
         const existingItem = cartItems.find(cartItem => cartItem.id === item.id);
         let updatedCartItems;
@@ -45,30 +60,72 @@ const Shop = () => {
         <div className="shop flex">
             <StudentSidebar />
             <div className="content p-5 flex-1">
-                <div className="flex justify-between items-center mb-5">
-                    <h1 className="text-3xl font-bold">Earn rewards by working hard!</h1>
+                <div className="
+                flex 
+                justify-between 
+                items-center 
+                mb-5">
+                    <h1 className="
+                    text-3xl 
+                    font-bold"
+                    >
+                        Earn rewards by working hard!</h1>
                     <button 
-                        className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300"
+                        className="
+                        bg-blue-500 
+                        text-white 
+                        py-2 px-4 
+                        rounded 
+                        hover:bg-blue-700 
+                        transition-colors 
+                        duration-300"
                         onClick={() => navigate('/cart')}
                     >
                         Cart
                     </button>
                 </div>
-                <h2>Rice Grains: </h2>
-                <div className="items-grid grid grid-cols-5 gap-5">
+                <h2>You have {riceGrains} grains</h2>
+                <div className="
+                items-grid 
+                grid 
+                grid-cols-5 
+                gap-5">
                     {items.map(item => (
-                        <div key={item.id} className="item-card border border-gray-300 p-2 text-center relative">
+                        <div key={item.id} className="
+                        item-card 
+                        border 
+                        border-gray-300 
+                        p-2 
+                        text-center 
+                        relative">
                             <img src={item.photo} alt={item.name} className="w-full h-auto" />
                             <h3>{item.name}</h3>
                             <p>{item.price} grains</p>
                             <button 
-                                className="mt-2 bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-700 transition-colors duration-300"
+                                className="
+                                mt-2 
+                                bg-blue-500 
+                                text-white 
+                                py-1 
+                                px-3 
+                                rounded 
+                                hover:bg-blue-700 
+                                transition-colors duration-300"
                                 onClick={() => addToCart(item)}
                             >
                                 Add to Cart
                             </button>
                             {cartItems.find(cartItem => cartItem.id === item.id) && (
-                                <div className="absolute top-0 right-0 bg-red-500 text-white text-xs px-2 py-1 rounded-bl">
+                                <div className="
+                                absolute 
+                                top-0 
+                                right-0 
+                                bg-red-500 
+                                text-white 
+                                text-xs 
+                                px-2 
+                                py-1 
+                                rounded-bl">
                                     {cartItems.find(cartItem => cartItem.id === item.id).quantity} in cart
                                 </div>
                             )}

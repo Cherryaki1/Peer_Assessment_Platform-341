@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom'; //get class ID from URL
 import StudentSidebar from '../_StudentSidebar';
+import { useParams, useNavigate } from 'react-router-dom'; //get class ID from URL
 
 const StudentManageGroups = () => {
 
@@ -96,10 +96,6 @@ const StudentManageGroups = () => {
             console.error("Error fetching rated students:", error);
         }
     };
-
-    if (loading) {
-        return <div>Loading groups...</div>;  // Show loading state while fetching data
-    }
 
     // Function to handle navigation to the rate page
     const handleRateClick = (student) => {

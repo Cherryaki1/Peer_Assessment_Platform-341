@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StudentSidebar from '../_StudentSidebar';
+import axios from 'axios';
+
 
 const Shop = () => {
     const [items, setItems] = useState([]);
     const [cartItems, setCartItems] = useState([]);
     const [riceGrains, setRiceGrains] = useState(0);
     const navigate = useNavigate();
+
+    const [userID, setUserID] = useState('');
+    const [userStudent, setUserStudent] = useState(null);
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -28,17 +34,45 @@ const Shop = () => {
     }, []);
 
     useEffect(() => {
-        const fetchStudentData = async () => {
+        const fetchUserData = async () => {
             try {
-                const response = await fetch('/studentData');
-                const data = await response.json();
-                setRiceGrains(data.riceGrains);
+                // Fetch the logged-in user data (student)
+                const response = await axios.get('http://localhost:3000/index', {
+                    withCredentials: true,
+                });
+                
+                if (response.data.user && response.data.user.ID) {
+                    const userID = response.data.user.ID;
+                    setUserID(userID); // Store the student's ID
+                    fetchStudentFromUser();
+                } else {
+                    setMessage('Failed to retrieve students data.');
+                }
             } catch (error) {
-                console.error('Error fetching student data:', error);
+                console.error('Error fetching user data:', error);
+                setMessage('Error fetching user data.');
+            }
+        };    
+
+        const fetchStudentFromUser = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/studentFromUser', {
+                    withCredentials: true,
+                });
+    
+                if (response.data.student && response.data.student.Groups) {
+                    setUserStudent(response.data.student);
+                    setRiceGrains(response.data.student.RiceGrains)
+                } else {
+                    setMessage('Student not found or no group data available.');
+                }
+            } catch (error) {
+                console.error('Error fetching student from user:', error);
+                setMessage('Error fetching student data.');
             }
         };
 
-        fetchStudentData();
+        fetchUserData();
     }, []);
 
     const addToCart = (item) => {

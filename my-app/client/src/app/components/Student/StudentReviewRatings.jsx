@@ -67,96 +67,95 @@ const StudentGrades = () => {
         fetchUserData();
     }, []);
     
-    if (loading) return <p>Loading grades...</p>;
-    if (error) return <p>{error}</p>;
-
     return (
-        <div className="content">
+        <div className="manage-classes-container" style={{ display: 'flex' }}>
             <StudentSideBar />
-            <h2>Your Ratings</h2>
-            {Object.keys(gradesByClass).length > 0 ? (
-                Object.keys(gradesByClass).map(classID => (
-                    <div key={classID} className="class-section" style={{ marginBottom: '20px' }}>
-                        <h3>Class ID: {classID}</h3>
-                        {gradesByClass[classID].map(group => {
-                            // Calculate ratings for each group
-                            const ratingsForGroup = userStudent.Ratings.reduce((acc, rating) => {
-                                
-                                // Filter ratings to only include those for the specified classID
-                                if (rating.classID == classID) {
-                                    rating.dimensions.forEach(dimension => {
-                                        
-                                        dimension.groupRatings.forEach(groupRating => {
-                                            // Check if the rating is from a rater in the current group
-                                            const raterInGroup = group.raterStudents.find(raterStudent => raterStudent.ID === groupRating.raterID);
+            <div className="content" style={{ padding: '20px', flex: 1 }}>
+                <h2>Your Ratings</h2>
+                {Object.keys(gradesByClass).length > 0 ? (
+                    Object.keys(gradesByClass).map(classID => (
+                        <div key={classID} className="class-section" style={{ marginBottom: '20px' }}>
+                            <h3>Class ID: {classID}</h3>
+                            {gradesByClass[classID].map(group => {
+                                // Calculate ratings for each group
+                                const ratingsForGroup = userStudent.Ratings.reduce((acc, rating) => {
+                                    
+                                    // Filter ratings to only include those for the specified classID
+                                    if (rating.classID == classID) {
+                                        rating.dimensions.forEach(dimension => {
                                             
-                                            
-                                            if (raterInGroup) {
-                                                // Initialize accumulator for dimension if it doesn't exist
-                                                if (!acc[dimension.dimensionName]) {
-                                                    acc[dimension.dimensionName] = { total: 0, count: 0, comments: []};
+                                            dimension.groupRatings.forEach(groupRating => {
+                                                // Check if the rating is from a rater in the current group
+                                                const raterInGroup = group.raterStudents.find(raterStudent => raterStudent.ID === groupRating.raterID);
+                                                
+                                                
+                                                if (raterInGroup) {
+                                                    // Initialize accumulator for dimension if it doesn't exist
+                                                    if (!acc[dimension.dimensionName]) {
+                                                        acc[dimension.dimensionName] = { total: 0, count: 0, comments: []};
+                                                    }
+                                                    // Add rating value to total and increment count
+                                                    acc[dimension.dimensionName].total += groupRating.ratingValue;
+                                                    acc[dimension.dimensionName].count += 1;
+                                                    if (groupRating.comments) {
+                                                        acc[dimension.dimensionName].comments.push(groupRating.comments);
+                                                    }
                                                 }
-                                                // Add rating value to total and increment count
-                                                acc[dimension.dimensionName].total += groupRating.ratingValue;
-                                                acc[dimension.dimensionName].count += 1;
-                                                if (groupRating.comments) {
-                                                    acc[dimension.dimensionName].comments.push(groupRating.comments);
-                                                }
-                                            }
+                                            });
                                         });
-                                    });
-                                }
-                                return acc;
-                            }, {});
-                            
+                                    }
+                                    return acc;
+                                }, {});
+                                
 
-                            const totalRatingsCount = Object.values(ratingsForGroup).reduce((sum, dimension) => dimension.count, 0);
-                            // Prepare an array of dimensions with their average ratings and count
-                            const averagedRatings = Object.keys(ratingsForGroup).map(dimensionName => {
-                                const { total, count, comments } = ratingsForGroup[dimensionName];
-                                return {
-                                    dimensionName,
-                                    averageRating: count > 0 ? (total / count).toFixed(2) : "N/A",
-                                    count,
-                                    comments,
-                                };
-                            });
-                            console.log("Averaged Ratings:", averagedRatings);
-                            return (
-                                <div key={group.groupID} className="group-section" style={{ marginBottom: '15px' }}>
-                                    <h4>Group: {group.groupName} (Group ID: {group.groupID})</h4>
-                                    <p><strong>Number of Ratings:</strong> {totalRatingsCount}</p>
-                                    <ul>
-                                        {averagedRatings.length > 0 ? (
-                                            averagedRatings.map((dimension, index) => (
-                                                <li key={index}>
-                                                    <strong>{dimension.dimensionName}</strong> - 
-                                                    <strong> Average Rating:</strong> {dimension.averageRating}
-                                                    <ul>
-                                                    {dimension.comments.length > 0 ? (
-                                                        dimension.comments.map((comment, commentIndex) => (
-                                                            <li key={commentIndex}>
-                                                                <strong>Comment:</strong> {comment}
-                                                            </li>
-                                                        ))
-                                                    ) : (
-                                                        <li>No comments</li>
-                                                    )}
-                                                </ul>
-                                                </li>
-                                            ))
-                                        ) : (
-                                            <li>No ratings available</li>
-                                        )}
-                                    </ul>
-                                </div>
-                            );
-                        })}
-                    </div>
-                ))
-            ) : (
-                <p>No grades available.</p>
-            )}
+                                const totalRatingsCount = Object.values(ratingsForGroup).reduce((sum, dimension) => dimension.count, 0);
+                                // Prepare an array of dimensions with their average ratings and count
+                                const averagedRatings = Object.keys(ratingsForGroup).map(dimensionName => {
+                                    const { total, count, comments } = ratingsForGroup[dimensionName];
+                                    return {
+                                        dimensionName,
+                                        averageRating: count > 0 ? (total / count).toFixed(2) : "N/A",
+                                        count,
+                                        comments,
+                                    };
+                                });
+                                console.log("Averaged Ratings:", averagedRatings);
+                                return (
+                                    <div key={group.groupID} className="group-section" style={{ marginBottom: '15px' }}>
+                                        <h4>Group: {group.groupName} (Group ID: {group.groupID})</h4>
+                                        <p><strong>Number of Ratings:</strong> {totalRatingsCount}</p>
+                                        <ul>
+                                            {averagedRatings.length > 0 ? (
+                                                averagedRatings.map((dimension, index) => (
+                                                    <li key={index}>
+                                                        <strong>{dimension.dimensionName}</strong> - 
+                                                        <strong> Average Rating:</strong> {dimension.averageRating}
+                                                        <ul>
+                                                        {dimension.comments.length > 0 ? (
+                                                            dimension.comments.map((comment, commentIndex) => (
+                                                                <li key={commentIndex}>
+                                                                    <strong>Comment:</strong> {comment}
+                                                                </li>
+                                                            ))
+                                                        ) : (
+                                                            <li>No comments</li>
+                                                        )}
+                                                    </ul>
+                                                    </li>
+                                                ))
+                                            ) : (
+                                                <li>No ratings available</li>
+                                            )}
+                                        </ul>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ))
+                ) : (
+                    <p>No grades available.</p>
+                )}
+            </div>
         </div>
     );
 };

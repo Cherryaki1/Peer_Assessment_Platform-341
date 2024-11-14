@@ -53,10 +53,6 @@ const StudentDashboard = () => {
         fetchUserData();
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
     return (
         <div className="dashboard-container" style={{ display: 'flex' }}>
             <StudentSidebar /> {/* Include Sidebar component */}

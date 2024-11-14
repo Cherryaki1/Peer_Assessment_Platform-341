@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { BiUser } from 'react-icons/bi';
 import { AiOutlineUnlock } from 'react-icons/ai';
 import Background from './images/rice.jpg';
+import BackgroundVideo from './images/login.mp4';
 
 const Login = () => {
     const [ID, setID] = useState('');
@@ -33,7 +34,11 @@ const Login = () => {
     };
 
     return (
-        <div className=" text-white h-[100vh] flex justify-center items-center bg-cover" style={{ backgroundImage: `url("${Background}")` }}>
+        <div className=" text-white h-[100vh] flex justify-center items-center">
+            <video autoPlay loop muted className="absolute w-full h-full object-cover">
+                <source src={BackgroundVideo} type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
             <div className="bg-slate-800
              border 
              boarder-slate-600 

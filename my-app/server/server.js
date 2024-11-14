@@ -664,6 +664,27 @@ app.post('/studentRatingsSubmit', async (req, res) => {
     try {
         const { studentID, classID, dimensions } = req.body;
 
+        // Calculate RiceGrains
+        let totalRiceGrains = 0;
+        let isPerfectRating = true;
+
+        dimensions.forEach(dimension => {
+            dimension.groupRatings.forEach(groupRating => {
+                totalRiceGrains += groupRating.ratingValue * 10; // 10 grains for each star
+
+                // Check if the rating is perfect (5 stars); if not, mark isPerfectRating as false
+                if (groupRating.ratingValue !== 5) {
+                    isPerfectRating = false;
+                }
+            });
+        });
+
+        // Add a bonus of 50 grains if all dimensions have a perfect rating
+        if (isPerfectRating) {
+            totalRiceGrains += 50;
+        }
+
+        // Create the rating object to store in the database
         const rating = {
             classID,
             dimensions: dimensions.map(dimension => ({
@@ -673,17 +694,26 @@ app.post('/studentRatingsSubmit', async (req, res) => {
                     ratingValue: groupRating.ratingValue,
                     comments: groupRating.comments
                 }))
-            }))
+            })),
+            riceGrainsAwarded: totalRiceGrains // Add rice grains to the rating
         };
 
+        // Update the student document with the new rating and add the rice grains
         const student = await StudentModel.findOneAndUpdate(
             { ID: studentID },
-            { $push: { Ratings: rating } },
+            { 
+                $push: { Ratings: rating },
+                $inc: { RiceGrains: totalRiceGrains } // Increment RiceGrains by the calculated amount
+            },
             { new: true } // Return the updated document
         );
 
         if (student) {
-            res.status(200).send('Rating saved successfully');
+            res.status(200).json({
+                message: 'Rating saved successfully',
+                riceGrainsAwarded: totalRiceGrains, // Send RiceGrains in the response as well
+                totalRiceGrains: student.RiceGrains // Send updated total rice grains
+            });
         } else {
             res.status(404).send('Student not found');
         }
@@ -691,6 +721,7 @@ app.post('/studentRatingsSubmit', async (req, res) => {
         res.status(500).send('Error saving rating: ' + error.message);
     }
 });
+
 
 app.get('/hasRated', async (req, res) => {
     const { userID, classID } = req.query; // Get userID and classID from query parameters

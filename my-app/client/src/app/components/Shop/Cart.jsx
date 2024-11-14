@@ -81,17 +81,42 @@ const Cart = () => {
         return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
     };
 
-    const handlePlaceOrder = () => {
+    const handlePlaceOrder = async () => {
         const totalCost = calculateTotal();
+    
         if (riceGrains >= totalCost) {
-            setModalMessage('Your ordered items will be delivered to the address you have provided to your school. Please allow 1-2 business days for the delivery. You have worked hard and earned it!');
-            setModalButtonText('Awesome!');
-            setShowModal(true);
+            try {
+                // Send a POST request to place the order
+                const response = await axios.post('http://localhost:3000/placeOrder', {
+                    items: cartItems,  // Replace with the actual items array from your cart
+                    totalCost: totalCost,
+                }, {
+                    withCredentials: true, // Needed if using session-based authentication
+                });
+    
+                // If the request was successful
+                setModalMessage('Your ordered items will be delivered to the address you have provided to your school. Please allow 1-2 business days for the delivery. You have worked hard and earned it!');
+                setModalButtonText('Awesome!');
+                setRiceGrains(response.data.remainingGrains); // Update riceGrains with the new balance from the response
+            } catch (error) {
+                // Handle errors
+                if (error.response && error.response.data && error.response.data.message) {
+                    // Display server error message if available
+                    setModalMessage(error.response.data.message);
+                } else {
+                    // Fallback error message
+                    setModalMessage('An error occurred while placing your order. Please try again.');
+                }
+                setModalButtonText('I understand');
+            }
         } else {
+            // Not enough grains to place the order
             setModalMessage('Sorry but you have not earned enough points yet to make this purchase.');
             setModalButtonText('I understand');
-            setShowModal(true);
         }
+    
+        // Show the modal regardless of the outcome
+        setShowModal(true);
     };
 
     const handleModalClose = () => {

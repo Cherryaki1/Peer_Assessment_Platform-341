@@ -1003,6 +1003,37 @@ app.get('/studentsSummary/:classID', async (req, res) => {
     }
 });
 
+// Route to place an order
+app.post('/placeOrder', async (req, res) => {
+    try {
+        // Ensure the user is authenticated and is a student
+        if (!req.isAuthenticated() || !req.user) {
+            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
+        }
+
+        // Extract order details from the request body
+        const { items, totalCost } = req.body;
+        const studentID = req.user.ID;
+
+        // Find and update the student in one atomic operation
+        const student = await StudentModel.findOneAndUpdate(
+            { ID: studentID, RiceGrains: { $gte: totalCost } }, // Ensures student has enough grains
+            { $inc: { RiceGrains: -totalCost } }, // Deduct grains
+            { new: true } // Return the updated document
+        );
+
+        if (!student) {
+            return res.status(400).json({ message: 'Not enough grains to complete the purchase or student not found' });
+        }
+
+        res.status(200).json({ message: 'Order placed successfully', remainingGrains: student.RiceGrains });
+    } catch (error) {
+        console.error('Error placing order:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
+
+
 
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {

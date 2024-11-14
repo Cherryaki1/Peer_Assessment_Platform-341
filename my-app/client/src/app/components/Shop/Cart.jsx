@@ -84,7 +84,7 @@ const Cart = () => {
     const handlePlaceOrder = () => {
         const totalCost = calculateTotal();
         if (riceGrains >= totalCost) {
-            setModalMessage('Your ordered items will be delivered to your address that have provided to the school within 1-2 business days. You have worked hard and earned it!');
+            setModalMessage('Your ordered items will be delivered to the address you have provided to your school. Please allow 1-2 business days for the delivery. You have worked hard and earned it!');
             setModalButtonText('Awesome!');
             setShowModal(true);
         } else {

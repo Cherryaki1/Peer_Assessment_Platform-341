@@ -53,7 +53,12 @@ const Login = () => {
                 text-white 
                 font-bold 
                 text-center 
-                mb-6">Rice++ Login</h1>
+                mb-1">Rice++</h1>
+                <h2 className="text-3xl 
+                text-white 
+                font-bold 
+                text-center 
+                mb-6">Peer Assessment</h2>
                 <form onSubmit={handleSubmit}>
 
                 <div className="relative my-4">
@@ -70,11 +75,11 @@ const Login = () => {
                         border-b-2 
                         border-gray-300 
                         appearance-none 
-                        dark:focus:border-blue-500 
+                        dark:focus:border-emerald-500 
                         focus:outline-none 
                         focus:ring-0 
                         focus:text-white 
-                        focus:border-blue-600 
+                        focus:border-emerald-600 
                         peer"
                         placeholder=""
                         value={ID}
@@ -93,8 +98,8 @@ const Login = () => {
                         -z-10 
                         origin-[0] 
                         peer-focus:left-0 
-                        peer-focus:text-blue-600 
-                        peer-focus:dark:text-blue-500 
+                        peer-focus:text-emerald-600 
+                        peer-focus:dark:text-emerald-500 
                         peer-placeholder-shown:scale-100 
                         peer-placeholder-shown:translate-y-0 
                         peer-focus:scale-75 
@@ -119,11 +124,11 @@ const Login = () => {
                         border-b-2 
                         border-gray-300 
                         appearance-none 
-                        dark:focus:border-blue-500 
+                        dark:focus:border-emerald-500 
                         focus:outline-none 
                         focus:ring-0 
                         focus:text-white 
-                        focus:border-blue-600 
+                        focus:border-emerald-600 
                         peer"
                         placeholder=""
                         value={password}
@@ -142,8 +147,8 @@ const Login = () => {
                         -z-10 
                         origin-[0] 
                         peer-focus:left-0 
-                        peer-focus:text-blue-600 
-                        peer-focus:dark:text-blue-500 
+                        peer-focus:text-emerald-600 
+                        peer-focus:dark:text-emerald-500 
                         peer-placeholder-shown:scale-100 
                         peer-placeholder-shown:translate-y-0 
                         peer-focus:scale-75 
@@ -155,7 +160,7 @@ const Login = () => {
                 </div>
 
                 <div className="flex">
-                    <input type="checkbox" id="" name="" />
+                    <input type="checkbox" className="color-emerald-600" id="" name="" />
                     <label htmlFor="remember">Remember me</label>
                 </div>
                 
@@ -163,8 +168,8 @@ const Login = () => {
                 className="w-full 
                 mb-4 text-[18px] 
                 mt-6 rounded-full 
-                bg-white text-blue-800 
-                hover:bg-blue-600 
+                bg-white text-emerald-800 
+                hover:bg-emerald-600 
                 hover:text-white 
                 py-2 
                 transition-colors 

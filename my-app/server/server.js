@@ -39,6 +39,25 @@ app.use(cors({
     credentials: true 
 }));
 
+// Endpoint to serve shop items
+app.get('/shopItems', (req, res) => {
+    res.json(shopItems);
+});
+
+// Endpoint to get student data
+app.get('/studentData', async (req, res) => {
+    try {
+        const student = await StudentModel.findById(req.user.id);
+        if (!student) {
+            return res.status(404).json({ message: 'Student not found' });
+        }
+        res.json({ riceGrains: student.RiceGrains });
+    } catch (error) {
+        console.error('Error fetching student data:', error);
+        res.status(500).json({ message: 'An unexpected error occurred while fetching student data.', error: error.message || error });
+    }
+});
+
 app.set('view engine', 'ejs');
 
 // Passport Local Strategy

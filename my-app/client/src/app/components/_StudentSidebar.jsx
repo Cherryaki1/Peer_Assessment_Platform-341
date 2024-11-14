@@ -53,7 +53,7 @@ const StudentSidebar = () => {
                 onClick={handleToggle}
             />
             <div className="flex gap-x-4 items-center">
-                <img src="./rice.ico" style={{ width: "40px", height: "40px" }} />
+                <img src="/rice.ico" style={{ width: "40px", height: "40px" }} />
                 <h1 className={`text-white origin-left font-medium text-xl duration-200 ${!open && "scale-0"}`}>
                     Student
                 </h1>

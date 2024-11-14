@@ -72,8 +72,7 @@ const StudentGrades = () => {
             <StudentSideBar />
             <div className="content" style={{ padding: '20px', flex: 1 }}>
                 <h2>Your Ratings</h2>
-                {Object.keys(gradesByClass).length > 0 ? (
-                    Object.keys(gradesByClass).map(classID => (
+                {Object.keys(gradesByClass).map(classID => (
                         <div key={classID} className="class-section" style={{ marginBottom: '20px' }}>
                             <h3>Class ID: {classID}</h3>
                             {gradesByClass[classID].map(group => {
@@ -151,10 +150,7 @@ const StudentGrades = () => {
                                 );
                             })}
                         </div>
-                    ))
-                ) : (
-                    <p>No grades available.</p>
-                )}
+                    ))}
             </div>
         </div>
     );

@@ -47,7 +47,7 @@ const StudentSidebar = () => {
     };
 
     return (
-        <div className={` ${open ? "w-72" : "w-20"} bg-blue-500 h-screen p-5 pt-8 relative ${animate ? "duration-300" : ""}`}>
+        <div className={` ${open ? "w-72" : "w-20"} bg-emerald-900 h-screen p-5 pt-8 relative ${animate ? "duration-300" : ""}`}>
             <img src={CollapseIcon}
                 className={`absolute cursor-pointer -right-3 top-9 w-7 border-dark-purple border-2 rounded-full ${!open && "rotate-180"}`}
                 onClick={handleToggle}

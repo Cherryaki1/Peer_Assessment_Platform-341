@@ -58,5 +58,17 @@
         "name": "Toyota Tercel 1993",
         "price": 100000,
         "photo": "https://bringatrailer.com/wp-content/uploads/2019/04/1983_toyota_tercel_sr5_4wd_1556331914d2f93dIMG_6587-e1556651272383.jpg"
+    },
+    {
+        "id": 11,
+        "name": "Toyota Corolla 1995",
+        "price": 100000,
+        "photo": "https://bringatrailer.com/wp-content/uploads/2019/04/1995_toyota_corolla_dx_1556331914d2f93dIMG_6588-e1556651272383.jpg"
+    },
+    {
+        "id": 12,
+        "name": "Starbucks 20$ Gift Card",
+        "price": 100000,
+        "photo": "https://media.sodagift.com/img/image/2047721612933380.jpg"
     }
 ]

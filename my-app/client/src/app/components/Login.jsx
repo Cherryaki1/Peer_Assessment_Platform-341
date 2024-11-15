@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { BiUser } from 'react-icons/bi';
 import { AiOutlineUnlock } from 'react-icons/ai';
 import Background from './images/rice.jpg';
-import BackgroundVideo from './images/login.mp4';
+import BackgroundVideo from './images/login3.mp4';
 
 const Login = () => {
     const [ID, setID] = useState('');
@@ -24,10 +24,10 @@ const Login = () => {
 
             setMessage(response.data.message);
             console.log('Logged in user:', response.data.user);
-            
+
             // Navigate to the dashboard on successful login
             (ID.startsWith('1')) ? navigate('/instructorDashboard') : navigate('/studentDashboard');
-    
+
         } catch (error) {
             setMessage(error.response?.data?.message || 'Login failed');
         }
@@ -47,7 +47,7 @@ const Login = () => {
              shadow-lg 
              backdrop-filter 
              backdrop-blur-sm 
-             bg-opacity-30 
+             bg-opacity-60 
              relative">
                 <h1 className="text-4xl 
                 text-white 
@@ -61,10 +61,10 @@ const Login = () => {
                 mb-6">Peer Assessment</h2>
                 <form onSubmit={handleSubmit}>
 
-                <div className="relative my-4">
-                    <input
-                        type="text"
-                        className="block 
+                    <div className="relative my-4">
+                        <input
+                            type="text"
+                            className="block 
                         w-72 
                         py-2 
                         px-0 
@@ -81,13 +81,13 @@ const Login = () => {
                         focus:text-white 
                         focus:border-emerald-600 
                         peer"
-                        placeholder=""
-                        value={ID}
-                        onChange={(e) => setID(e.target.value)}
-                        required
-                    />
-                    <label htmlFor="ID"
-                        className="absolute 
+                            placeholder=""
+                            value={ID}
+                            onChange={(e) => setID(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="ID"
+                            className="absolute 
                         text-sm 
                         text-white 
                         duration-300 
@@ -104,16 +104,16 @@ const Login = () => {
                         peer-placeholder-shown:translate-y-0 
                         peer-focus:scale-75 
                         peer-focus:-translate-y-6">ID</label>
-                    <BiUser 
-                        className="absolute 
+                        <BiUser
+                            className="absolute 
                         top-4 
                         right-4"/>
-                </div>
+                    </div>
 
-                <div className="relative my-4">
-                    <input
-                        type="password"
-                        className="block 
+                    <div className="relative my-4">
+                        <input
+                            type="password"
+                            className="block 
                         w-72 
                         py-2 
                         px-0 
@@ -130,13 +130,13 @@ const Login = () => {
                         focus:text-white 
                         focus:border-emerald-600 
                         peer"
-                        placeholder=""
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <label htmlFor="password" 
-                        className="absolute 
+                            placeholder=""
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <label htmlFor="password"
+                            className="absolute 
                         text-sm 
                         text-white 
                         duration-300 
@@ -153,19 +153,24 @@ const Login = () => {
                         peer-placeholder-shown:translate-y-0 
                         peer-focus:scale-75 
                         peer-focus:-translate-y-6">Password</label>
-                    <AiOutlineUnlock
-                        className="absolute 
+                        <AiOutlineUnlock
+                            className="absolute 
                         top-4 
                         right-4"/>
-                </div>
+                    </div>
 
-                <div className="flex">
-                    <input type="checkbox" className="color-emerald-600" id="" name="" />
-                    <label htmlFor="remember">Remember me</label>
-                </div>
-                
-                <button 
-                className="w-full 
+                    <div className="flex items-center my-4">
+                        <input
+                            type="checkbox"
+                            className="text-emerald-600 focus:ring-emerald-500 h-4 w-4 checked:bg-emerald-600"
+                            id="remember"
+                            name="remember"
+                        />
+                        <label htmlFor="remember" className="ml-2 text-sm text-white">Remember me</label>
+                    </div>
+
+                    <button
+                        className="w-full 
                 mb-4 text-[18px] 
                 mt-6 rounded-full 
                 bg-white text-emerald-800 
@@ -174,7 +179,7 @@ const Login = () => {
                 py-2 
                 transition-colors 
                 duration-300"
-                type="submit">Login</button>
+                        type="submit">Login</button>
 
                 </form>
                 {message && <p className="text-red-500">{message}</p>}

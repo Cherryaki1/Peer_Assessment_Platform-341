@@ -68,7 +68,7 @@ const StudentSidebar = () => {
                 {expanded && <h1 className="text-xl font-bold flex-1 text-center">Rice++</h1>}
                 <button
                     onClick={() => setExpanded((curr) => !curr)}
-                    className="p-1.5 rounded-lg bg-emerald-600 hover:bg-gradient-to-r hover:from-emerald-500 hover:to-emerald-800 transition-all duration-300"
+                    className="p-1.5 rounded-lg bg-emerald-600 hover:bg-gradient-to-r hover:from-emerald-500 hover:to-emerald-600 transition-all duration-300"
                 >
                     {expanded ? <ChevronFirst /> : <ChevronLast />}
                 </button>
@@ -111,7 +111,7 @@ const StudentSidebar = () => {
                     bg-emerald-600 
                     hover:bg-gradient-to-r 
                     hover:from-emerald-500 
-                    hover:to-emerald-800 
+                    hover:to-emerald-600 
                     transition-all 
                     duration-300">
                         <img src={logoutIcon} alt="Logout" className="mr-2" />
@@ -141,10 +141,10 @@ const SidebarItem = ({ icon, text, onClick, active }) => {
                 rounded-md 
                 cursor-pointer 
                 transition-colors 
-                group ${active ? "bg-gradient-to-r from-emerald-500 to-emerald-900" : ""} 
+                group ${active ? "bg-gradient-to-r from-emerald-500 to-emerald-600" : ""} 
                 hover:bg-gradient-to-r 
                 hover:from-emerald-500 
-                hover:to-emerald-900 
+                hover:to-emerald-600 
                 text-white`}
             onClick={onClick}
             style={{ width: '100%', whiteSpace: 'nowrap' }}

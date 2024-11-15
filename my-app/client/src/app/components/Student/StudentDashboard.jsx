@@ -1,13 +1,12 @@
-// client/src/app/Dashboard.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import StudentSidebar from '../_StudentSidebar';
 
 const StudentDashboard = () => {
     const [user, setUser] = useState(null);
-    const [studentID, setStudentID] = useState(null); //store student ID
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(true);
+    const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -17,14 +16,6 @@ const StudentDashboard = () => {
                 });
                 setUser(response.data.user);
                 setMessage(response.data.message);
-
-                if (response.data.user && response.data.user.ID) {
-                    const userID = response.data.user.ID;
-                    setStudentID(userID); // Store the student's ID
-                    await fetchStudentFromUser(userID);
-                } else {
-                    setMessage('Failed to retrieve students data.');
-                }
             } catch (error) {
                 setMessage(error.response?.data?.message || 'Failed to fetch user');
             } finally {
@@ -39,7 +30,6 @@ const StudentDashboard = () => {
                 });
     
                 if (response.data.student && response.data.student.Groups) {
-                    //setStudentData(response.data.student); // Store the student's data, including groupID
                     console.log("Setting groupID:", response.data.student.Groups);
                 } else {
                     setMessage('Student not found or no group data available.');
@@ -51,16 +41,22 @@ const StudentDashboard = () => {
         };
 
         fetchUserData();
+
+        const timer = setInterval(() => {
+            setCurrentTime(new Date().toLocaleTimeString());
+        }, 1000);
+
+        return () => clearInterval(timer);
     }, []);
 
     return (
         <div className="dashboard-container" style={{ display: 'flex' }}>
             <StudentSidebar /> {/* Include Sidebar component */}
-            <div className="content" style={{ padding: '20px', flex: 1 }}>
+            <div className="content" style={{ padding: '20px', flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
                 {user ? (
-                    <div>
-                        <h2>{message}</h2>
-                        <h2>Welcome {user.FirstName} {user.LastName}!</h2>
+                    <div style={{ textAlign: 'center' }}>
+                        <h2 style={{ fontSize: '2em', fontWeight: 'bold' }}>Welcome {user.FirstName} {user.LastName}!</h2>
+                        <h3>{currentTime}</h3>
                     </div>
                 ) : (
                     <p>{message}</p>

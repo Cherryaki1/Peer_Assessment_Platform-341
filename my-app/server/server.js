@@ -1084,10 +1084,12 @@ app.get('/logout', (req, res) => {
     });
 });
 
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(3000, () => {
+        console.log('Server is running on http://localhost:3000');
+    });
+}
 
 
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
-});
-
-module.exports = app, router;
+// Export the app for testing and router for route modules
+module.exports = { app, router };

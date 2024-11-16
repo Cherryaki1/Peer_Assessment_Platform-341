@@ -20,11 +20,23 @@ test('renders login page as the first page upon entering the website URL', () =>
         </BrowserRouter>
     );
 
-    // Check if the login page header is visible
-    expect(screen.getByText(/Rice\+\+ Login/i)).toBeInTheDocument();
+    // Check if the Rice++ text is visible
+    expect(screen.getByText(/Rice\+\+/i)).toBeInTheDocument();
+
+    // Check if the Peer Assessment text is visible
+    expect(screen.getByText(/Peer Assessment/i)).toBeInTheDocument();
+
     // Verify that the login button is visible
     expect(screen.getByRole('button', { name: /login/i })).toBeInTheDocument();
+
+    // Check if the input boxes for ID and password are present
+    expect(screen.getByLabelText(/id/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
+
+    // Verify that no error message is displayed initially
+    expect(screen.queryByText(/login failed/i)).not.toBeInTheDocument();
 });
+
 
 test('displays input boxes for ID and password', () => {
     render(
@@ -87,10 +99,8 @@ test('navigates to student dashboard on successful login with ID not starting wi
 });
 
 test('displays error message on failed login attempt', async () => {
-    // Mock axios response for a failed login
-    axios.post.mockResolvedValueOnce({
-        response: { status: 401 },
-        data: { message: 'Invalid credentials' },
+    axios.post.mockRejectedValueOnce({
+        response: { data: { message: 'Invalid credentials' } },
     });
 
     render(
@@ -99,15 +109,14 @@ test('displays error message on failed login attempt', async () => {
         </BrowserRouter>
     );
 
-    // Simulate form input
     fireEvent.change(screen.getByLabelText('ID'), { target: { value: 'wrongID' } });
     fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'wrongPassword' } });
     fireEvent.click(screen.getByRole('button', { name: /login/i }));
 
-    // Wait for the error message to be displayed
     await waitFor(() => {
         expect(screen.getByText('Invalid credentials')).toBeInTheDocument();
     });
 });
+
 
 

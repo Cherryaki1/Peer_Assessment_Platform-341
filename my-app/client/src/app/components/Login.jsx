@@ -4,7 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { BiUser } from 'react-icons/bi';
 import { AiOutlineUnlock } from 'react-icons/ai';
 import Background from './images/rice.jpg';
+import React from 'react';
 import BackgroundVideo from './images/login3.mp4';
+
 
 const Login = () => {
     const [ID, setID] = useState('');
@@ -59,11 +61,14 @@ const Login = () => {
                 font-bold 
                 text-center 
                 mb-6">Peer Assessment</h2>
+
                 <form onSubmit={handleSubmit}>
 
                     <div className="relative my-4">
                         <input
                             type="text"
+                            id="ID" // Added ID for input
+
                             className="block 
                         w-72 
                         py-2 
@@ -81,11 +86,13 @@ const Login = () => {
                         focus:text-white 
                         focus:border-emerald-600 
                         peer"
+
                             placeholder=""
                             value={ID}
                             onChange={(e) => setID(e.target.value)}
                             required
                         />
+
                         <label htmlFor="ID"
                             className="absolute 
                         text-sm 
@@ -108,11 +115,15 @@ const Login = () => {
                             className="absolute 
                         top-4 
                         right-4"/>
+
                     </div>
 
                     <div className="relative my-4">
                         <input
                             type="password"
+
+                            id="password" // Added ID for input
+
                             className="block 
                         w-72 
                         py-2 
@@ -130,11 +141,13 @@ const Login = () => {
                         focus:text-white 
                         focus:border-emerald-600 
                         peer"
+
                             placeholder=""
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
+                              
                         <label htmlFor="password"
                             className="absolute 
                         text-sm 
@@ -181,6 +194,15 @@ const Login = () => {
                 duration-300"
                         type="submit">Login</button>
 
+
+                    <div className="flex">
+                        <input type="checkbox" id="remember" name="remember" />
+                        <label htmlFor="remember">Remember me</label>
+                    </div>
+                    
+                    <button 
+                        className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-blue-800 hover:bg-blue-600 hover:text-white py-2 transition-colors duration-300"
+                        type="submit">Login</button>
                 </form>
                 {message && <p className="text-red-500">{message}</p>}
             </div>

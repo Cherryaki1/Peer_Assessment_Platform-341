@@ -49,7 +49,6 @@ const StudentManageGroups = () => {
             });
 
             if (response.data.student && response.data.student.Groups) {
-                //setStudentData(response.data.student); // Store the student's data, including groupID
                 console.log("Setting groupID:", response.data.student.Groups);
                 setGroupID(response.data.student.Groups); // Set the student's group ID
             } else {

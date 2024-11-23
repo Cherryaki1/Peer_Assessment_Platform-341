@@ -64,4 +64,3 @@ describe('GET /groups/:classID', () => {
         expect(GroupModel.find).toHaveBeenCalledWith({ classID: '123' });
     });
 });
-c

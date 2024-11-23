@@ -6,8 +6,9 @@ module.exports = {
   ],
   theme: {
     extend: {
-      "dark-purple": "#081A51",
-      "light-white": "rgba(255,255,255,0.17)",
+      height: {
+        '45': '12.25rem',
+      },
     },
   },
   plugins: [],

@@ -1,39 +1,39 @@
 [
     {
         "id": 1,
-        "name": "Lamborghini Aventador",
-        "price": 1000,
-        "photo": "https://paultan.org/image/2019/03/Lamborghini-Aventador-SVJ-Roadster-5.jpg"
+        "name": "$20 Amazon Gift Card",
+        "price": 2000,
+        "photo": "https://m.media-amazon.com/images/I/61xfK9dU7+L._AC_UF350,350_QL80_.jpg"
     },
     {
         "id": 2,
-        "name": "Lamborghini Urus",
-        "price": 1500,
-        "photo": "https://cdn.motor1.com/images/mgl/6ZZBGl/s1/lamborghini-urus-by-g-power.jpg"
+        "name": "$20 UberEats Gift Card",
+        "price": 2000,
+        "photo": "https://d3dbtxes2rri5w.cloudfront.net/product/51cc345f-449a-497d-9755-d32465654003.webp"
     },
     {
         "id": 3,
-        "name": "Koenigsegg Jesko",
-        "price": 2500,
-        "photo": "https://wallpapercave.com/wp/wp6852463.jpg"
+        "name": "$20 Apple Gift Card",
+        "price": 2000,
+        "photo": "https://img.cryptorefills.com/logos_v2/everything-apple.webp"
     },
     {
         "id": 4,
-        "name": "Lamborghini Temerario",
-        "price": 3000,
-        "photo": "https://smartcdn.gprod.postmedia.digital/driving/wp-content/uploads/2024/08/Lamborghini-Temerario_05.jpg"
+        "name": "$20 Google Play Gift Card",
+        "price": 2000,
+        "photo": "https://www.giftstation.co.nz/media/catalog/product/cache/805f723204a5f09db06b08b4500ccfcf/g/s/gs_giftcards_frontart_googelplay.png"
     },
     {
         "id": 5,
-        "name": "Bugatti Mistral Roadster",
-        "price": 3500,
-        "photo": "https://cdn.motor1.com/images/mgl/2NpROp/s1/bugatti-w16-mistral-roadster-in-tokyo-japan.jpg"
+        "name": "$20 Tim Hortons Gift Card",
+        "price": 2000,
+        "photo": "https://m.media-amazon.com/images/I/41QqB1Q+9aL.jpg"
     },
     {
         "id": 6,
         "name": "Bugatti Chiron",
         "price": 4000,
-        "photo": "https://autonxt.net/wp-content/uploads/2016/02/autocontentexp.comwp-contentuploads201602Bugatti-Chiron11-559bb9383126e69723d7d9860d7dd669ae02c532.jpg"
+        "photo": "https://m.media-amazon.com/images/I/51uaCmbWvLL._AC_SL1224_.jpg"
     },
     {
         "id": 7,
@@ -61,14 +61,8 @@
     },
     {
         "id": 11,
-        "name": "Toyota Corolla 1995",
+        "name": "Toyota Tercel 1993",
         "price": 100000,
-        "photo": "https://bringatrailer.com/wp-content/uploads/2019/04/1995_toyota_corolla_dx_1556331914d2f93dIMG_6588-e1556651272383.jpg"
-    },
-    {
-        "id": 12,
-        "name": "Starbucks 20$ Gift Card",
-        "price": 100000,
-        "photo": "https://media.sodagift.com/img/image/2047721612933380.jpg"
+        "photo": "https://bringatrailer.com/wp-content/uploads/2019/04/1983_toyota_tercel_sr5_4wd_1556331914d2f93dIMG_6587-e1556651272383.jpg"
     }
 ]

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import StudentSidebar from '../../_StudentSidebar';
 
 const InstructorRatePage = () => {
     const [ratingValues, setRatingValues] = useState({});
@@ -85,9 +86,24 @@ const InstructorRatePage = () => {
     if (!instructor) return <p>Loading...</p>;
 
     return (
-        <div>
-            <h2>Rate {instructor.name} as an instructor</h2>
-            <h3>Class: {classInfo.name} - {classInfo.subject} (Section: {classInfo.section})</h3> {/* Display class info */}
+        <div className="flex">
+            <StudentSidebar />
+            <div className="content p-5 flex-1">
+            <div className="
+                    w-full 
+                    bg-emerald-500 
+                    text-white 
+                    py-10 
+                    text-center 
+                    rounded-md 
+                    mb-4">
+            <h2 className="
+                        text-3xl 
+                        font-bold
+                        mb-2">
+                            Rate {instructor.name} as an instructor</h2>
+                        <h3>Class: {classInfo.name} - {classInfo.subject} (Section: {classInfo.section})</h3>
+            </div>
             <form onSubmit={handleSubmit}>
                 {ratings.map((rating) => (
                     <div key={rating.id}>
@@ -121,6 +137,7 @@ const InstructorRatePage = () => {
                 ))}
                 <button type="submit">Next</button>
             </form>
+            </div>
         </div>
     );
 };

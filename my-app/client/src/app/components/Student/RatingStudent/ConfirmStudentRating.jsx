@@ -52,7 +52,7 @@ const ConfirmRatingPage = () => {
 
         try {
             const response = await axios.post(`http://localhost:3000/studentRatingsSubmit`, {
-                studentID: userID,  // Student ID
+                studentID: student.id,  // Student ID
                 classID: classID,  // Class ID associated with the rating
                 dimensions: Object.keys(ratingValues).map(dimensionName => ({
                     dimensionName: (ratingList.find(rating => rating.id === dimensionName)).title,

@@ -41,7 +41,7 @@ const Shop = () => {
                 const response = await axios.get('http://localhost:3000/index', {
                     withCredentials: true,
                 });
-                
+
                 if (response.data.user && response.data.user.ID) {
                     const userID = response.data.user.ID;
                     setUserID(userID); // Store the student's ID
@@ -53,14 +53,14 @@ const Shop = () => {
                 console.error('Error fetching user data:', error);
                 setMessage('Error fetching user data.');
             }
-        };    
+        };
 
         const fetchStudentFromUser = async () => {
             try {
                 const response = await axios.get('http://localhost:3000/studentFromUser', {
                     withCredentials: true,
                 });
-    
+
                 if (response.data.student && response.data.student.Groups) {
                     setUserStudent(response.data.student);
                     setRiceGrains(response.data.student.RiceGrains)
@@ -92,7 +92,7 @@ const Shop = () => {
     };
 
     return (
-        <div className="shop flex">
+        <div className="shop flex ">
             <StudentSidebar />
             <div className="content p-5 flex-1">
                 <div className="
@@ -100,26 +100,52 @@ const Shop = () => {
                 justify-between 
                 items-center 
                 mb-5">
-                    <h1 className="
+                    <div className="
+                    w-full 
+                    bg-emerald-500 
+                    text-white 
+                    py-10 
+                    text-center  
+                    rounded-md">
+                        <h1 className="
                     text-3xl 
                     font-bold"
-                    >
-                        Earn rewards by working hard!</h1>
-                    <button 
-                        className="
+                        >
+                            Earn rewards by working hard!</h1>
+                    </div>
+                </div>
+                <div className="
+                w-full 
+                bg-gray-200 
+                text-black 
+                py-4 
+                px-5 
+                mb-5 
+                rounded-md 
+                flex 
+                justify-between 
+                items-center">
+                    <h2 className="text-xl font-bold">You have {riceGrains} grains</h2>
+                    <p className="text-right">
+                        Earn points when you receive a peer rating.<br />
+                        Each star gives you 10 grains.<br />
+                        Getting a perfect 5 star in all dimensions gives you a bonus of 50 grains (total of 250 grains).
+                    </p>
+                </div>
+                <button
+                    className="
                         bg-blue-500 
                         text-white 
                         py-2 px-4 
                         rounded 
                         hover:bg-blue-700 
                         transition-colors 
-                        duration-300"
-                        onClick={() => navigate('/cart')}
-                    >
-                        Cart
-                    </button>
-                </div>
-                <h2>You have {riceGrains} grains</h2>
+                        duration-300
+                        mb-5"
+                    onClick={() => navigate('/cart')}
+                >
+                    Cart
+                </button>
                 <div className="
                 items-grid 
                 grid 
@@ -132,11 +158,22 @@ const Shop = () => {
                         border-gray-300 
                         p-2 
                         text-center 
-                        relative">
-                            <img src={item.photo} alt={item.name} className="w-full h-auto" />
+                        relative
+                        rounded-md
+                        bg-gray-200">
+                            <div className="
+                            w-full 
+                            h-45 
+                            overflow-hidden 
+                            rounded-md">
+                                <img src={item.photo} alt={item.name} className="
+                                w-full 
+                                h-full 
+                                object-cover"/>
+                            </div>
                             <h3>{item.name}</h3>
                             <p>{item.price} grains</p>
-                            <button 
+                            <button
                                 className="
                                 mt-2 
                                 bg-blue-500 

@@ -20,6 +20,7 @@ require('dotenv').config();
 const router = express.Router();
 
 
+
 const app = express();
 
 // Middleware
@@ -38,8 +39,6 @@ app.use(cors({
     origin: 'http://localhost:3001',
     credentials: true 
 }));
-
-
 app.set('view engine', 'ejs');
 
 // Passport Local Strategy
@@ -155,7 +154,9 @@ app.get('/instructorManageClasses', async (req, res) => {
             subject: classItem.Subject,
             section: classItem.Section,
             studentCount: classItem.StudentDetails.length,
-            groupCount: Math.ceil(classItem.StudentDetails.length / 5) // Example calculation
+            groupCount: Math.ceil(classItem.StudentDetails.length / 5), // Example calculation
+            submissionDeadline: classItem.submissionDeadline // Include deadline
+
         }));
 
         return res.status(200).json({ classes: formattedClasses });
@@ -1029,7 +1030,108 @@ app.post('/placeOrder', async (req, res) => {
     }
 });
 
+// Route to get the deadline for a specific class
+app.get('/classDeadline/:classID', async (req, res) => {
+    const { classID } = req.params;
 
+    try {
+        const classData = await ClassModel.findById(classID);
+        if (!classData || !classData.submissionDeadline) {
+            return res.status(404).json({ message: 'Submission deadline not set for this class.' });
+        }
+        res.status(200).json({ submissionDeadline: classData.submissionDeadline });
+    } catch (error) {
+        console.error('Error fetching class deadline:', error);
+        res.status(500).json({ message: 'Internal server error while fetching deadline.' });
+    }
+});
+
+// Route to update the deadline for a class
+app.post('/updateDeadline', async (req, res) => {
+    const { classID, submissionDeadline } = req.body;
+
+    if (!classID || !submissionDeadline) {
+        return res.status(400).json({ message: 'Class ID and valid deadline are required.' });
+    }
+
+    try {
+        const deadlineDate = new Date(submissionDeadline);
+        if (isNaN(deadlineDate.getTime())) {
+            return res.status(400).json({ message: 'Invalid date format.' });
+        }
+
+        const updatedClass = await ClassModel.findByIdAndUpdate(
+            classID,
+            { submissionDeadline: deadlineDate },
+            { new: true },
+        );
+
+        if (!updatedClass) {
+            return res.status(404).json({ message: 'Class not found.' });
+        }
+
+        res.status(200).json({ message: 'Deadline updated successfully.', class: updatedClass });
+    } catch (error) {
+        console.error('Error updating deadline:', error);
+        res.status(500).json({ message: 'Internal server error while updating deadline.' });
+    }
+});
+
+
+// Route to fetch all classes for instructors and include deadlines
+app.get('/instructorManageClasses', async (req, res) => {
+    try {
+        if (!req.isAuthenticated() || !req.user) {
+            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
+        }
+
+        const instructorID = req.user.ID;
+        const classes = await ClassModel.aggregate([
+            { $match: { Instructor: instructorID } },
+            { $lookup: { from: 'students', localField: 'Students', foreignField: 'ID', as: 'StudentDetails' } },
+        ]);
+
+        if (!classes || classes.length === 0) {
+            return res.status(200).json({ classes: [], message: 'No classes found for this instructor.' });
+        }
+
+        const formattedClasses = classes.map(classItem => ({
+            id: classItem.ID,
+            name: classItem.Name,
+            subject: classItem.Subject,
+            section: classItem.Section,
+            studentCount: classItem.StudentDetails.length,
+            groupCount: Math.ceil(classItem.StudentDetails.length / 5),
+            submissionDeadline: classItem.submissionDeadline,
+        }));
+
+        return res.status(200).json({ classes: formattedClasses });
+    } catch (error) {
+        console.error('Error fetching classes:', error.stack || error);
+        return res.status(500).json({ message: 'An unexpected error occurred while fetching classes.', error: error.message || error });
+    }
+});
+
+// Route to validate submission deadlines (optional, to enhance the backend)
+app.post('/validateDeadline', async (req, res) => {
+    const { submissionDeadline } = req.body;
+
+    if (!submissionDeadline) {
+        return res.status(400).json({ message: 'Submission deadline is required.' });
+    }
+
+    try {
+        const deadlineDate = new Date(submissionDeadline);
+        if (isNaN(deadlineDate.getTime())) {
+            return res.status(400).json({ message: 'Invalid date format.' });
+        }
+
+        res.status(200).json({ message: 'Valid deadline.' });
+    } catch (error) {
+        console.error('Error validating deadline:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+});
 
 
 /*

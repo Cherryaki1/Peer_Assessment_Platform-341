@@ -17,7 +17,9 @@ const StudentDashboard = () => {
                 setUser(response.data.user);
                 setMessage(response.data.message);
             } catch (error) {
-                setMessage(error.response?.data?.message || 'Failed to fetch user');
+                const errorMsg = error.response?.data?.message || 'Failed to fetch user';
+                console.log('Error message:', errorMsg); // Log the error message
+                setMessage(errorMsg);
             } finally {
                 setLoading(false); // Always stop loading regardless of success/failure
             }
@@ -53,17 +55,21 @@ const StudentDashboard = () => {
         <div className="dashboard-container" style={{ display: 'flex' }}>
             <StudentSidebar /> {/* Include Sidebar component */}
             <div className="content" style={{ padding: '20px', flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-                {user ? (
-                    <div style={{ textAlign: 'center' }}>
-                        <h2 style={{ fontSize: '2em', fontWeight: 'bold' }}>Welcome {user.FirstName} {user.LastName}!</h2>
-                        <h3>{currentTime}</h3>
+                {loading ? (
+                    <p data-testid="loading-message">Loading...</p> // Render a loading message when loading is true
+                ) : user ? (
+                    <div style={{ textAlign: 'center' }} data-testid="welcome-message">
+                        <h2 style={{ fontSize: '2em', fontWeight: 'bold' }} data-testid="user-name">
+                            Welcome {user.FirstName} {user.LastName}!
+                        </h2>
+                        <h3 data-testid="current-time">{currentTime}</h3>
                     </div>
                 ) : (
-                    <p>{message}</p>
+                    <p data-testid="error-message">{message}</p>
                 )}
             </div>
         </div>
-    );
+    );    
 };
 
 export default StudentDashboard;

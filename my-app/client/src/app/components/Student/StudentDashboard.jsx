@@ -10,6 +10,8 @@ import Reminder from 'Reminder';
     const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
     const [groupID, setGroupID] = useState(null);
     const [submissionDeadline, setSubmissionDeadline] = useState(null);
+    const [daysUntilDeadline, setDaysUntilDeadline] = useState(null);
+
 
     }
 
@@ -45,10 +47,22 @@ import Reminder from 'Reminder';
             }
         };
 
+        fetchUserData();
+
+          // Update time every second
+        const timer = setInterval(() => {
+            setCurrentTime(new Date().toLocaleTimeString());
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, []);
+
+    useEffect(() => {
+        // Fetch submission deadline for the assigned class
         const fetchClassDeadline = async () => {
-            if (groupID) {
+            if (classID) {
                 try {
-                    const response = await axios.get(`http://localhost:3000/classDeadline/${groupID}`);
+                    const response = await axios.get(`http://localhost:3000/classDeadline/${classID}`);
                     setSubmissionDeadline(response.data.submissionDeadline);
                 } catch (error) {
                     console.error('Error fetching submission deadline:', error);
@@ -56,17 +70,20 @@ import Reminder from 'Reminder';
             }
         };
 
-        fetchUserData();
-        fetchStudentFromUser();
         fetchClassDeadline();
+    }, [classID]);
+
+    const calculateDaysLeft = () => {
+        if (!submissionDeadline) return null;
+        const deadlineDate = new Date(submissionDeadline);
+        const today = new Date();
+        return Math.ceil((deadlineDate - today) / (1000 * 3600 * 24)); // Calculate days left
+    };
+
+    const daysLeft = calculateDaysLeft();
 
 
-        const timer = setInterval(() => {
-            setCurrentTime(new Date().toLocaleTimeString());
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, []);
+        return () => clearInterval(interval); // Cleanup interval on unmount
 
     return (
         <div className="dashboard-container" style={{ display: 'flex' }}>
@@ -79,23 +96,36 @@ import Reminder from 'Reminder';
                     {groupID ? (
                         <div>
                             <h3>Group ID: {groupID}</h3> {/* Display the student group */}
+
+                            {/*Reminder Notification*/}
                             {submissionDeadline ? (
                                  <div
                                  style={{
-                                     padding: '20px',
-                                     border: '1px solid #ccc',
-                                     borderRadius: '5px',
-                                     backgroundColor: '#f9f9f9',
-                                     color: 'red',
-                                     fontWeight: 'bold',
-                                     marginTop: '10px',
+                                    top: '20px',
+                                    right: '20px',
+                                    backgroundColor: '#ffe6e6', // Light red background
+                                    border: '1px solid #ff0000', // Red border
+                                    color: '#ff0000', // Red text
+                                    padding: '10px',
+                                    borderRadius: '5px',
+                                    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                                    maxWidth: '300px',
                                  }}
                              >
-                                 <h4>Submission Deadline</h4>
-                                 <p>
-                                     The deadline is{' '}
-                                     {new Date(submissionDeadline).toLocaleDateString()}. Make sure to
-                                     submit your peer assessments before the deadline!
+                                         <h4
+                                    style={{
+                                        margin: 0,
+                                        fontSize: '1.5em',
+                                        fontWeight: 'bold',
+                                        textTransform: 'uppercase',
+                                    }}
+                                >
+                                    REMINDER!
+                                </h4>
+                                <p style={{ margin: '5px 0' }}>
+                                {daysLeft > 0
+                                ? `You have ${daysLeft} day${daysLeft !== 1 ? 's' : ''} to submit your peer assessment before the deadline.`
+                                : 'The submission deadline has passed!'}
                                  </p>
                              </div>
                          ) : (
@@ -103,7 +133,7 @@ import Reminder from 'Reminder';
                          )}
                      </div>
                  ) : (
-                        <p>You are not assigned to any group yet.</p> /* Message when student has no group */
+                        <p>No submission deadline set for this class.</p> 
                     )}
                     {message && <p>{message}</p>} {/* Show message if available */}
                 </div>

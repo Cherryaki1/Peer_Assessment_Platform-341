@@ -1036,13 +1036,13 @@ app.get('/classDeadline/:classID', async (req, res) => {
 
     try {
         const classData = await ClassModel.findById(classID);
-        if (!classData) {
-            return res.status(404).json({ message: 'Class not found.' });
+        if (!classData || !classData.submissionDeadline) {
+            return res.status(404).json({ message: 'Submission deadline not set for this class.' });
         }
         res.status(200).json({ submissionDeadline: classData.submissionDeadline });
     } catch (error) {
         console.error('Error fetching class deadline:', error);
-        res.status(500).json({ message: 'Internal server error.' });
+        res.status(500).json({ message: 'Internal server error while fetching deadline.' });
     }
 });
 
@@ -1051,13 +1051,18 @@ app.post('/updateDeadline', async (req, res) => {
     const { classID, submissionDeadline } = req.body;
 
     if (!classID || !submissionDeadline) {
-        return res.status(400).json({ message: 'Class ID and deadline are required.' });
+        return res.status(400).json({ message: 'Class ID and valid deadline are required.' });
     }
 
     try {
+        const deadlineDate = new Date(submissionDeadline);
+        if (isNaN(deadlineDate.getTime())) {
+            return res.status(400).json({ message: 'Invalid date format.' });
+        }
+
         const updatedClass = await ClassModel.findByIdAndUpdate(
             classID,
-            { submissionDeadline: new Date(submissionDeadline) },
+            { submissionDeadline: deadlineDate },
             { new: true },
         );
 
@@ -1068,9 +1073,10 @@ app.post('/updateDeadline', async (req, res) => {
         res.status(200).json({ message: 'Deadline updated successfully.', class: updatedClass });
     } catch (error) {
         console.error('Error updating deadline:', error);
-        res.status(500).json({ message: 'Internal server error.' });
+        res.status(500).json({ message: 'Internal server error while updating deadline.' });
     }
 });
+
 
 // Route to fetch all classes for instructors and include deadlines
 app.get('/instructorManageClasses', async (req, res) => {

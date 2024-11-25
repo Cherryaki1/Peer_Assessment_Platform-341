@@ -5,6 +5,7 @@ import axios from 'axios';
 const Reminder = ({ classID }) => {
     const [submissionDeadline, setSubmissionDeadline] = useState(null);
     const [daysLeft, setDaysLeft] = useState(null);
+    const [error, setError] = useState(null);
     
     useEffect(() => {
         // Fetch the class deadline from the backend
@@ -31,19 +32,63 @@ const Reminder = ({ classID }) => {
         }
     }, [classID]);
     if (error) {
-        return <div style={{ color: 'red', fontWeight: 'bold' }}>Error fetching deadline.</div>;
+        return (
+            <div
+                className="reminder-box"
+                style={{
+                    backgroundColor: '#ffe6e6',
+                    border: '1px solid #ff0000',
+                    padding: '10px',
+                    borderRadius: '5px',
+                    color: '#ff0000',
+                }}
+            >
+                <h3 style={{ margin: 0 }}>REMINDER!</h3>
+                <p>{error}</p>
+            </div>
+        );
     }
+
     if (!submissionDeadline) {
-        return <div>Loading reminder...</div>;
+        return (
+            <div
+                className="reminder-box"
+                style={{
+                    backgroundColor: '#ffe6e6',
+                    border: '1px solid #ff0000',
+                    padding: '10px',
+                    borderRadius: '5px',
+                    color: '#ff0000',
+                }}
+            >
+                <h3 style={{ margin: 0 }}>REMINDER!</h3>
+                <p>Loading reminder...</p>
+            </div>
+        );
     }
 
     return (
-        <div className="reminder">
-            <h2>Peer Assessment Deadline Reminder</h2>
+        <div
+            className="reminder-box"
+            style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                backgroundColor: '#ffe6e6',
+                border: '1px solid #ff0000',
+                color: '#ff0000',
+                padding: '15px',
+                borderRadius: '8px',
+                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                maxWidth: '300px',
+                fontFamily: 'Arial, sans-serif',
+            }}
+        >
+            <h3 style={{ margin: 0, fontSize: '1.4em', fontWeight: 'bold' }}>REMINDER!</h3>
             {daysLeft >= 0 ? (
-                <p>You have {daysLeft} day{daysLeft !== 1 ? 's' : ''} left to submit your peer assessments.</p>
+                <p>You have {daysLeft} day{daysLeft !== 1 ? 's' : ''} to submit your peer assessment.</p>
             ) : (
-                <p>The peer assessment deadline has passed.</p>
+                <p>The submission deadline has passed.</p>
             )}
         </div>
     );

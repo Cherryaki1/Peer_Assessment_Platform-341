@@ -129,7 +129,7 @@ const Shop = () => {
                     <p className="text-right">
                         Earn points when you receive a peer rating.<br />
                         Each star gives you 10 grains.<br />
-                        Getting a perfect 5 star in all dimensions gives you a bonus of.
+                        Getting a perfect 5 star in all dimensions gives you a bonus of 50 grains (total of 250 grains).
                     </p>
                 </div>
                 <button

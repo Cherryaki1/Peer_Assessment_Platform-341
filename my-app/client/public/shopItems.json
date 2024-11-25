@@ -28,41 +28,5 @@
         "name": "$20 Tim Hortons Gift Card",
         "price": 2000,
         "photo": "https://m.media-amazon.com/images/I/41QqB1Q+9aL.jpg"
-    },
-    {
-        "id": 6,
-        "name": "Bugatti Chiron",
-        "price": 4000,
-        "photo": "https://m.media-amazon.com/images/I/51uaCmbWvLL._AC_SL1224_.jpg"
-    },
-    {
-        "id": 7,
-        "name": "Bugatti Centodieci",
-        "price": 4500,
-        "photo": "https://www.exoticcarlist.com/blog/wp-content/uploads/2019/08/13.jpg"
-    },
-    {
-        "id": 8,
-        "name": "Bugatti Divo",
-        "price": 5000,
-        "photo": "https://car-images.bauersecure.com/pagefiles/83754/053_divo.jpg"
-    },
-    {
-        "id": 9,
-        "name": "Bugatti La Voiture Noire",
-        "price": 5500,
-        "photo": "https://cdn.lifestyleasia.com/wp-content/uploads/2019/09/10171123/Bugatti039s-18.7-million-La-Voiture-Noire-makes-its-US-debut.jpg"
-    },
-    {
-        "id": 10,
-        "name": "Toyota Tercel 1993",
-        "price": 100000,
-        "photo": "https://bringatrailer.com/wp-content/uploads/2019/04/1983_toyota_tercel_sr5_4wd_1556331914d2f93dIMG_6587-e1556651272383.jpg"
-    },
-    {
-        "id": 11,
-        "name": "Toyota Tercel 1993",
-        "price": 100000,
-        "photo": "https://bringatrailer.com/wp-content/uploads/2019/04/1983_toyota_tercel_sr5_4wd_1556331914d2f93dIMG_6587-e1556651272383.jpg"
     }
 ]

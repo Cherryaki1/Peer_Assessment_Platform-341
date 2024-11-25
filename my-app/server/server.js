@@ -20,6 +20,7 @@ require('dotenv').config();
 const router = express.Router();
 
 
+
 const app = express();
 
 // Middleware
@@ -38,26 +39,6 @@ app.use(cors({
     origin: 'http://localhost:3001',
     credentials: true 
 }));
-
-// Endpoint to serve shop items
-app.get('/shopItems', (req, res) => {
-    res.json(shopItems);
-});
-
-// Endpoint to get student data
-app.get('/studentData', async (req, res) => {
-    try {
-        const student = await StudentModel.findById(req.user.id);
-        if (!student) {
-            return res.status(404).json({ message: 'Student not found' });
-        }
-        res.json({ riceGrains: student.RiceGrains });
-    } catch (error) {
-        console.error('Error fetching student data:', error);
-        res.status(500).json({ message: 'An unexpected error occurred while fetching student data.', error: error.message || error });
-    }
-});
-
 app.set('view engine', 'ejs');
 
 // Passport Local Strategy
@@ -98,7 +79,7 @@ passport.deserializeUser(async (ID, done) => {
 mongoose.connect(process.env.MONGO_URI, {}).then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
 
-// Routes
+// Main Route
 app.get('/', (req, res) => {
     res.render('login', { messages: req.flash() }); 
 });
@@ -120,41 +101,12 @@ app.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-// Group Routes 
-// Route to get all groups for a student
-app.get('/student/groups', async (req, res) => {
-    try {
-        // Ensure the user is authenticated and is a student
-        if (!req.isAuthenticated() || !req.user) {
-            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
-        }
 
-        const studentID = req.user.ID;  // The logged-in student's ID
-
-        // Find all classes the student is enrolled in
-        const classes = await ClassModel.find({ Students: studentID });
-
-        if (classes.length === 0) {
-            return res.status(404).json({ message: 'No classes found for this student.' });
-        }
-
-        // Get all class IDs for this student
-        const classIDs = classes.map(classItem => classItem.ID);
-
-        // Find all groups in the classes that the student is enrolled in
-        const groups = await GroupModel.find({ ClassID: { $in: classIDs } });
-
-        if (groups.length === 0) {
-            return res.status(404).json({ message: 'No groups found for this student.' });
-        }
-
-        // Send the list of groups as a response
-        res.status(200).json({ groups });
-    } catch (error) {
-        console.error('Error fetching groups:', error);
-        res.status(500).json({ message: 'An error occurred while fetching groups.' });
-    }
-});
+/*
+*
+* ===== INSTRUCTOR ROUTES =====
+*
+*/
 
 app.get('/instructorManageClasses', async (req, res) => {
     try {
@@ -202,7 +154,9 @@ app.get('/instructorManageClasses', async (req, res) => {
             subject: classItem.Subject,
             section: classItem.Section,
             studentCount: classItem.StudentDetails.length,
-            groupCount: Math.ceil(classItem.StudentDetails.length / 5) // Example calculation
+            groupCount: Math.ceil(classItem.StudentDetails.length / 5), // Example calculation
+            submissionDeadline: classItem.submissionDeadline // Include deadline
+
         }));
 
         return res.status(200).json({ classes: formattedClasses });
@@ -487,6 +441,117 @@ app.post('/removeStudentsFromGroup', async (req, res) => {
         res.status(500).json({ message: 'Error removing students from group.' });
     }
 });
+
+app.get('/getInstructorGrades', async (req, res) => {
+    const { userID } = req.query;
+
+    if (!userID) {
+        return res.status(400).json({ message: 'User ID is required.' });
+    }
+
+    try {
+        // Find the instructor by user ID
+        const instructor = await InstructorModel.findOne({ ID: Number(userID) });
+
+        if (!instructor) {
+            return res.status(404).json({ message: 'Instructor not found.' });
+        }
+
+        // Process the ratings to group them by classID
+        const ratingsByClass = instructor.Ratings.reduce((acc, rating) => {
+            const { classID } = rating; // Adjust field names as per your schema
+            if (!acc[classID]) {
+                acc[classID] = [];
+            }
+            acc[classID].push(rating);
+            return acc;
+        }, {});
+
+        res.json(ratingsByClass);
+    } catch (error) {
+        console.error('Error fetching instructor ratings:', error);
+        res.status(500).json({ message: 'Error fetching instructor ratings.' });
+    }
+});
+
+// Route to fetch all students in a specified classID along with their details
+app.get('/studentsSummary/:classID', async (req, res) => {
+    try {
+        const { classID } = req.params; // Get classID from the URL
+        const parsedClassID = parseInt(classID, 10);
+        console.log('classID parameter:', parsedClassID);
+
+        // Log incoming request and authentication status
+        console.log('Received request to /studentsSummary/:', parsedClassID);
+        console.log('Authentication status:', req.isAuthenticated());
+
+        // Ensure user is authenticated
+        if (!req.isAuthenticated() || !req.user) {
+            console.log('Unauthorized access attempt');
+            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
+        }
+        
+        // Validate parsedClassID is a number and log result
+        if (isNaN(parsedClassID)) {
+            console.log('Invalid classID format:', classID);
+            return res.status(400).json({ message: 'Invalid class ID.' });
+        }
+        console.log('Parsed classID:', parsedClassID);
+
+        // Log database query to find students
+        console.log('Querying database for students with classID:', parsedClassID);
+        
+        // Fetch students with populated group details (including GroupName)
+        const students = await StudentModel.find(
+            { Classes: parsedClassID }, // Find students with the classID in the Classes field
+            {
+                FirstName: 1,
+                LastName: 1,
+                ID: 1,
+                Email: 1,
+                Username: 1,
+                Department: 1,
+                Classes: 1,
+                Groups: 1,
+                Ratings: 1
+            })
+        console.log('Student ' + students);
+        const groupIDs = students.flatMap(student => student.Groups);
+        const groups = await GroupModel.find({
+            Class: { $in: classID},
+            groupID: { $in: groupIDs}
+        })
+
+        const groupMap = Object.fromEntries(groups.map(group => [group.groupID, group.GroupName]));
+        console.log(`Group List ${groupMap}`);
+         // Log the result of the query
+        if (!students || students.length === 0) {
+            console.log('No students found for classID:', parsedClassID);
+            return res.status(404).json({ message: 'No students found for this class.' });
+        }
+        console.log(`Found ${students.length} students for classID ${parsedClassID}`);
+
+        // Send the students data in the response along with their group details
+        return res.status(200).json({ studentSummary: students , groupDetails: groupMap});
+
+    } catch (error) {
+        // Log any errors encountered during execution
+        console.error('Error fetching student summary:', error);
+        return res.status(500).json({
+            message: 'An unexpected error occurred while fetching student summary.',
+            error: error.message
+        });
+    }
+});
+
+
+
+/*
+*
+* ===== STUDENT ROUTES =====
+*
+*/
+
 
 app.get('/studentManageClasses', async (req, res) => {
     try {
@@ -838,39 +903,6 @@ app.get('/getUserGrades', async (req, res) => {
     }
 });
 
-app.get('/getInstructorGrades', async (req, res) => {
-    const { userID } = req.query;
-
-    if (!userID) {
-        return res.status(400).json({ message: 'User ID is required.' });
-    }
-
-    try {
-        // Find the instructor by user ID
-        const instructor = await InstructorModel.findOne({ ID: Number(userID) });
-
-        if (!instructor) {
-            return res.status(404).json({ message: 'Instructor not found.' });
-        }
-
-        // Process the ratings to group them by classID
-        const ratingsByClass = instructor.Ratings.reduce((acc, rating) => {
-            const { classID } = rating; // Adjust field names as per your schema
-            if (!acc[classID]) {
-                acc[classID] = [];
-            }
-            acc[classID].push(rating);
-            return acc;
-        }, {});
-
-        res.json(ratingsByClass);
-    } catch (error) {
-        console.error('Error fetching instructor ratings:', error);
-        res.status(500).json({ message: 'Error fetching instructor ratings.' });
-    }
-});
-
-
 app.get('/studentRateMyInstructor/:instructorID', async (req, res) => {
     try {
         if (!req.isAuthenticated() || !req.user) {
@@ -963,75 +995,9 @@ app.get('/hasRatedInstructor', async (req, res) => {
     }
 });
 
-
-// Route to fetch all students in a specified classID along with their details
-app.get('/studentsSummary/:classID', async (req, res) => {
-    try {
-        const { classID } = req.params; // Get classID from the URL
-        const parsedClassID = parseInt(classID, 10);
-        console.log('classID parameter:', parsedClassID);
-
-        // Log incoming request and authentication status
-        console.log('Received request to /studentsSummary/:', parsedClassID);
-        console.log('Authentication status:', req.isAuthenticated());
-
-        // Ensure user is authenticated
-        if (!req.isAuthenticated() || !req.user) {
-            console.log('Unauthorized access attempt');
-            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
-        }
-        
-        // Validate parsedClassID is a number and log result
-        if (isNaN(parsedClassID)) {
-            console.log('Invalid classID format:', classID);
-            return res.status(400).json({ message: 'Invalid class ID.' });
-        }
-        console.log('Parsed classID:', parsedClassID);
-
-        // Log database query to find students
-        console.log('Querying database for students with classID:', parsedClassID);
-        
-        // Fetch students with populated group details (including GroupName)
-        const students = await StudentModel.find(
-            { Classes: parsedClassID }, // Find students with the classID in the Classes field
-            {
-                FirstName: 1,
-                LastName: 1,
-                ID: 1,
-                Email: 1,
-                Username: 1,
-                Department: 1,
-                Classes: 1,
-                Groups: 1,
-                Ratings: 1
-            })
-        console.log('Student ' + students);
-        const groupIDs = students.flatMap(student => student.Groups);
-        const groups = await GroupModel.find({
-            Class: { $in: classID},
-            groupID: { $in: groupIDs}
-        })
-
-        const groupMap = Object.fromEntries(groups.map(group => [group.groupID, group.GroupName]));
-        console.log(`Group List ${groupMap}`);
-         // Log the result of the query
-        if (!students || students.length === 0) {
-            console.log('No students found for classID:', parsedClassID);
-            return res.status(404).json({ message: 'No students found for this class.' });
-        }
-        console.log(`Found ${students.length} students for classID ${parsedClassID}`);
-
-        // Send the students data in the response along with their group details
-        return res.status(200).json({ studentSummary: students , groupDetails: groupMap});
-
-    } catch (error) {
-        // Log any errors encountered during execution
-        console.error('Error fetching student summary:', error);
-        return res.status(500).json({
-            message: 'An unexpected error occurred while fetching student summary.',
-            error: error.message
-        });
-    }
+// Endpoint to serve shop items
+app.get('/shopItems', (req, res) => {
+    res.json(shopItems);
 });
 
 // Route to place an order
@@ -1064,7 +1030,115 @@ app.post('/placeOrder', async (req, res) => {
     }
 });
 
+// Route to get the deadline for a specific class
+app.get('/classDeadline/:classID', async (req, res) => {
+    const { classID } = req.params;
 
+    try {
+        const classData = await ClassModel.findById(classID);
+        if (!classData || !classData.submissionDeadline) {
+            return res.status(404).json({ message: 'Submission deadline not set for this class.' });
+        }
+        res.status(200).json({ submissionDeadline: classData.submissionDeadline });
+    } catch (error) {
+        console.error('Error fetching class deadline:', error);
+        res.status(500).json({ message: 'Internal server error while fetching deadline.' });
+    }
+});
+
+// Route to update the deadline for a class
+app.post('/updateDeadline', async (req, res) => {
+    const { classID, submissionDeadline } = req.body;
+
+    if (!classID || !submissionDeadline) {
+        return res.status(400).json({ message: 'Class ID and valid deadline are required.' });
+    }
+
+    try {
+        const deadlineDate = new Date(submissionDeadline);
+        if (isNaN(deadlineDate.getTime())) {
+            return res.status(400).json({ message: 'Invalid date format.' });
+        }
+
+        const updatedClass = await ClassModel.findByIdAndUpdate(
+            classID,
+            { submissionDeadline: deadlineDate },
+            { new: true },
+        );
+
+        if (!updatedClass) {
+            return res.status(404).json({ message: 'Class not found.' });
+        }
+
+        res.status(200).json({ message: 'Deadline updated successfully.', class: updatedClass });
+    } catch (error) {
+        console.error('Error updating deadline:', error);
+        res.status(500).json({ message: 'Internal server error while updating deadline.' });
+    }
+});
+
+
+// Route to fetch all classes for instructors and include deadlines
+app.get('/instructorManageClasses', async (req, res) => {
+    try {
+        if (!req.isAuthenticated() || !req.user) {
+            return res.status(401).json({ message: 'Unauthorized: Please log in to access this resource.' });
+        }
+
+        const instructorID = req.user.ID;
+        const classes = await ClassModel.aggregate([
+            { $match: { Instructor: instructorID } },
+            { $lookup: { from: 'students', localField: 'Students', foreignField: 'ID', as: 'StudentDetails' } },
+        ]);
+
+        if (!classes || classes.length === 0) {
+            return res.status(200).json({ classes: [], message: 'No classes found for this instructor.' });
+        }
+
+        const formattedClasses = classes.map(classItem => ({
+            id: classItem.ID,
+            name: classItem.Name,
+            subject: classItem.Subject,
+            section: classItem.Section,
+            studentCount: classItem.StudentDetails.length,
+            groupCount: Math.ceil(classItem.StudentDetails.length / 5),
+            submissionDeadline: classItem.submissionDeadline,
+        }));
+
+        return res.status(200).json({ classes: formattedClasses });
+    } catch (error) {
+        console.error('Error fetching classes:', error.stack || error);
+        return res.status(500).json({ message: 'An unexpected error occurred while fetching classes.', error: error.message || error });
+    }
+});
+
+// Route to validate submission deadlines (optional, to enhance the backend)
+app.post('/validateDeadline', async (req, res) => {
+    const { submissionDeadline } = req.body;
+
+    if (!submissionDeadline) {
+        return res.status(400).json({ message: 'Submission deadline is required.' });
+    }
+
+    try {
+        const deadlineDate = new Date(submissionDeadline);
+        if (isNaN(deadlineDate.getTime())) {
+            return res.status(400).json({ message: 'Invalid date format.' });
+        }
+
+        res.status(200).json({ message: 'Valid deadline.' });
+    } catch (error) {
+        console.error('Error validating deadline:', error);
+        res.status(500).json({ message: 'Internal server error.' });
+    }
+});
+
+
+/*
+ * 
+ * ===== GENERAL ROUTES =====
+ * 
+ */ 
 
 app.get('/index', (req, res) => {
     if (req.isAuthenticated()) {
@@ -1084,10 +1158,12 @@ app.get('/logout', (req, res) => {
     });
 });
 
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(3000, () => {
+        console.log('Server is running on http://localhost:3000');
+    });
+}
 
 
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
-});
-
-module.exports = app, router;
+// Export the app for testing and router for route modules
+module.exports = { app, router };

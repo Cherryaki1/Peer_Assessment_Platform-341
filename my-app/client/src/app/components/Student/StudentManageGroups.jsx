@@ -47,6 +47,7 @@ const StudentManageGroups = () => {
             });
 
             if (response.data.student && response.data.student.Groups) {
+                console.log("Setting groupID:", response.data.student.Groups);
                 setGroupID(response.data.student.Groups); // Set the student's group ID
             } else {
                 setMessage('Student not found or no group data available.');

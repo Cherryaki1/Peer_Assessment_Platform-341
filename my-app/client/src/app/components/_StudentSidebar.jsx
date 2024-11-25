@@ -64,7 +64,7 @@ const StudentSidebar = () => {
 
     return (
         <aside className="h-screen sticky top-0 bg-gradient-to-r from-emerald-900 to-emerald-500 border-r shadow-sm text-white transition-all duration-300 flex flex-col">
-            <div className="p-4 pb-2 flex justify-between items-center">
+            <div className="p-4 pb-2 flex justify-between items-center" data-testid="sidebar">
                 {expanded && <h1 className="text-xl font-bold flex-1 text-center">Rice++</h1>}
                 <button
                     onClick={() => setExpanded((curr) => !curr)}
@@ -75,7 +75,7 @@ const StudentSidebar = () => {
             </div>
 
             <SidebarContext.Provider value={{ expanded }}>
-                <ul className="flex-1 px-3">
+                <ul className="flex-1 px-3" >
                     <SidebarItem icon={<img src={Dashboard} />} text="Dashboard" onClick={() => navigate('/studentDashboard')} active={location.pathname === '/studentDashboard'} />
                     <SidebarItem icon={<img src={myClasses} />} text="My Classes" onClick={() => navigate('/studentManageClasses')} active={location.pathname === '/studentManageClasses'} />
                     <SidebarItem icon={<img src={yourRatings} />} text="Your Ratings" onClick={() => navigate('/studentReviewRatings')} active={location.pathname === '/studentReviewRatings'} />

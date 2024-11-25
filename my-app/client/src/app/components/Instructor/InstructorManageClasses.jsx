@@ -12,6 +12,9 @@ const InstructorManageClasses = () => {
     const [newClassID, setNewClassID] = useState('');
     const [message, setMessage] = useState('');
     const [instructorID, setInstructorID] = useState(null); // Store instructor's ID
+    const [selectedClassID, setSelectedClassID] = useState(''); // To update deadlines
+    const [newDeadline, setNewDeadline] = useState(''); // To update deadlines
+    const [editingDeadline, setEditingDeadline] = useState(false); // Deadline editing state
     const navigate = useNavigate();  // React Router hook for navigation
 
     // Fetch current classes and instructor details when the component mounts
@@ -96,7 +99,8 @@ const InstructorManageClasses = () => {
                 subject: newClassSubject.trim(),
                 section: newClassSection.trim(),
                 studentCount: response.data.studentCount,
-                groupCount: response.data.groupCount
+                groupCount: response.data.groupCount,
+                submissionDeadline: null 
             }]);
 
             // Clear form fields after a successful upload
@@ -119,6 +123,37 @@ const InstructorManageClasses = () => {
             console.error('No classID found!');
         }
     };
+    const handleEditDeadline = (classID) => {
+        setSelectedClassID(classID);
+        setEditingDeadline(true);
+    };
+
+    const handleSaveDeadline = async () => {
+        if (!newDeadline) {
+            alert('Please enter a valid deadline.');
+            return;
+        }
+        try {
+            const response = await axios.post('http://localhost:3000/updateDeadline', {
+                classID: selectedClassID,
+                submissionDeadline: newDeadline,
+            });
+
+            setClasses(classes.map((classItem) =>
+                classItem.id === selectedClassID
+                    ? { ...classItem, submissionDeadline: new Date(newDeadline) }
+                    : classItem
+            ));
+
+            setMessage(response.data.message);
+            setEditingDeadline(false);
+            setNewDeadline('');
+            setSelectedClassID('');
+        } catch (error) {
+            console.error('Error updating deadline:', error);
+            alert('Failed to update deadline.');
+        }
+    };
 
     return (
         <div className="manage-classes-container" style={{ display: 'flex' }}>
@@ -134,6 +169,15 @@ const InstructorManageClasses = () => {
                                 <li key={index}>
                                     <button onClick={() => handleClassClick(classItem.id)} style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer' }}>
                                         <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - {classItem.studentCount} Students, {classItem.groupCount} Groups
+                                        </button>
+                                    <span style={{ marginLeft: '10px' }}>
+                                        Deadline: {classItem.submissionDeadline ? new Date(classItem.submissionDeadline).toLocaleDateString() : 'No deadline set'}
+                                    </span>
+                                    <button
+                                        onClick={() => handleEditDeadline(classItem.id)}
+                                        style={{ marginLeft: '10px', color: 'red', cursor: 'pointer' }}
+                                    >
+                                        Edit Deadline
                                     </button>
                                 </li>
                             ))}
@@ -177,6 +221,36 @@ const InstructorManageClasses = () => {
                     <input type="file" accept=".csv" onChange={handleFileChange} />
                     <button onClick={handleUpload}>Upload Roster</button>
                     {message && <p>{message}</p>}
+                      </div>
+
+                {/* Update Deadline Section */}
+                <div
+                    style={{
+                        marginTop: '20px',
+                        borderTop: '1px solid #ccc',
+                        paddingTop: '10px',
+                    }}
+                >
+                    <h3>Update Class Deadline</h3>
+                    <select
+                        onChange={(e) => setSelectedClassID(e.target.value)}
+                        value={selectedClassID}
+                    >
+                        <option value="">Select a class</option>
+                        {classes.map((classItem) => (
+                            <option key={classItem.id} value={classItem.id}>
+                                {classItem.name}
+                            </option>
+                        ))}
+                    </select>
+                    <br />
+                    <input
+                        type="date"
+                        onChange={(e) => setNewDeadline(e.target.value)}
+                        value={newDeadline}
+                    />
+                    <button onClick={handleUpdateDeadline}>Update Deadline</button>
+
                 </div>
             </div>
         </div>

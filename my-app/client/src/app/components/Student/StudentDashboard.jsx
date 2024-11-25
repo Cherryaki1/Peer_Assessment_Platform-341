@@ -24,7 +24,9 @@ import Reminder from 'Reminder';
                 setUser(response.data.user);
                 setMessage(response.data.message);
             } catch (error) {
-                setMessage(error.response?.data?.message || 'Failed to fetch user');
+                const errorMsg = error.response?.data?.message || 'Failed to fetch user';
+                console.log('Error message:', errorMsg); // Log the error message
+                setMessage(errorMsg);
             } finally {
                 setLoading(false); // Always stop loading regardless of success/failure
             }

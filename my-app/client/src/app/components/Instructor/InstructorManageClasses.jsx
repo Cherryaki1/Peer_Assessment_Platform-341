@@ -64,7 +64,7 @@ const InstructorManageClasses = () => {
         fetchUserData(); // Fetch the instructor's information
         fetchClasses();  // Fetch the list of classes
     }, []);
-
+    
     // Handle file selection for the new class roster
     const handleFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
@@ -157,73 +157,101 @@ const InstructorManageClasses = () => {
 
     return (
         <div className="manage-classes-container" style={{ display: 'flex' }}>
-            <Sidebar /> {/* Include Sidebar component */}
+            <InstructorSidebar />
             <div className="content" style={{ padding: '20px', flex: 1 }}>
-                <h2>Manage Classes</h2>
-                {/* Display current classes */}
+                <div
+                    className="
+                    w-full 
+                    bg-blue-500 
+                    text-white 
+                    py-10 
+                    text-center  
+                    rounded-md"
+                >
+                    <h2
+                        className="
+                        text-3xl 
+                        font-bold"
+                    >
+                        Manage Classes
+                    </h2>
+                </div>
                 <div>
-                    <h3>Current Classes</h3>
                     {classes.length > 0 ? (
-                        <ul>
+                        <div
+                            className="
+                            grid 
+                            grid-cols-3 
+                            gap-4 
+                            mt-4"
+                        >
                             {classes.map((classItem, index) => (
-                                <li key={index}>
-                                    <button onClick={() => handleClassClick(classItem.id)} style={{ background: 'none', border: 'none', color: 'blue', cursor: 'pointer' }}>
-                                        <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - {classItem.studentCount} Students, {classItem.groupCount} Groups
-                                        </button>
-                                    <span style={{ marginLeft: '10px' }}>
-                                        Deadline: {classItem.submissionDeadline ? new Date(classItem.submissionDeadline).toLocaleDateString() : 'No deadline set'}
-                                    </span>
-                                    <button
-                                        onClick={() => handleEditDeadline(classItem.id)}
-                                        style={{ marginLeft: '10px', color: 'red', cursor: 'pointer' }}
-                                    >
-                                        Edit Deadline
-                                    </button>
-                                </li>
+                                <div
+                                    key={index}
+                                    className="
+                                    p-4 
+                                    bg-gray-200 
+                                    rounded-md 
+                                    cursor-pointer 
+                                    hover:bg-gray-300 
+                                    transition-colors 
+                                    duration-300"
+                                    onClick={() => handleClassClick(classItem.id)}
+                                >
+                                    <h3 className="text-xl font-bold">{classItem.name}</h3>
+                                    <p>{classItem.subject}, Section: {classItem.section}</p>
+                                    <p>{classItem.studentCount} Students</p>
+                                    <p>{classItem.groupCount} Groups</p>
+                                    <p>
+                                        Deadline:{" "}
+                                        {classItem.submissionDeadline
+                                            ? new Date(classItem.submissionDeadline).toLocaleDateString()
+                                            : "No deadline set"}
+                                    </p>
+                                </div>
                             ))}
-                        </ul>
+                        </div>
                     ) : (
-                        <p>{message}</p> // Display the message if there are no classes
+                        <p>{message}</p>
                     )}
                 </div>
 
-                {/* File upload section */}
-                <div style={{ marginTop: '20px', borderTop: '1px solid #ccc', paddingTop: '10px' }}>
+                <div
+                    style={{
+                        marginTop: '20px',
+                        borderTop: '1px solid #ccc',
+                        paddingTop: '10px',
+                    }}
+                >
                     <h3>Add a New Class</h3>
                     <input
                         type="text"
-                        placeholder="Enter Class Name"
+                        placeholder="Class Name"
                         value={newClassName}
                         onChange={(e) => setNewClassName(e.target.value)}
                     />
-                    <br />
                     <input
                         type="text"
-                        placeholder="Enter Subject"
+                        placeholder="Subject"
                         value={newClassSubject}
                         onChange={(e) => setNewClassSubject(e.target.value)}
                     />
-                    <br />
                     <input
                         type="text"
-                        placeholder="Enter Section"
+                        placeholder="Section"
                         value={newClassSection}
                         onChange={(e) => setNewClassSection(e.target.value)}
                     />
-                    <br />
                     <input
                         type="text"
-                        placeholder="Enter Class ID"
+                        placeholder="Class ID"
                         value={newClassID}
                         onChange={(e) => setNewClassID(e.target.value)}
                     />
-                    <br />
-                    <input type="file" accept=".csv" onChange={handleFileChange} />
-                    <button onClick={handleUpload}>Upload Roster</button>
-                    {message && <p>{message}</p>}
-                      </div>
+                    <input type="file" onChange={handleFileChange} />
+                    <button onClick={handleUpload}>Upload</button>
+                </div>
 
-                {/* Update Deadline Section */}
                 <div
                     style={{
                         marginTop: '20px',
@@ -236,21 +264,19 @@ const InstructorManageClasses = () => {
                         onChange={(e) => setSelectedClassID(e.target.value)}
                         value={selectedClassID}
                     >
-                        <option value="">Select a class</option>
+                        <option value="">Select Class</option>
                         {classes.map((classItem) => (
                             <option key={classItem.id} value={classItem.id}>
                                 {classItem.name}
                             </option>
                         ))}
                     </select>
-                    <br />
                     <input
                         type="date"
                         onChange={(e) => setNewDeadline(e.target.value)}
                         value={newDeadline}
                     />
-                    <button onClick={handleUpdateDeadline}>Update Deadline</button>
-
+                    <button onClick={handleSaveDeadline}>Save Deadline</button>
                 </div>
             </div>
         </div>

@@ -71,41 +71,85 @@ const InstructorReviewRatings = () => {
     if (error) return <p>{error}</p>;
 
     return (
-        <div className="content">
+        <div className="manage-classes-container" style={{ display: 'flex' }}>
             <InstructorSideBar />
-            <h2>Your Ratings</h2>
-            {Object.keys(gradesByClass).length > 0 ? (
-                Object.keys(gradesByClass).map(classID => (
-                    <div key={classID} className="class-section" style={{ marginBottom: '20px' }}>
-                        <h3 style={{ marginBottom: '10px' }}>Class ID: {classID}</h3>
-                        {gradesByClass[classID].map((rating, index) => (
-                            <div key={index} style={{ marginBottom: '15px', paddingLeft: '20px' }}>
-                                <h4 style={{ borderBottom: '1px solid #ccc', marginBottom: '10px' }}>Rating Details</h4>
-                                {rating.dimensions.map((dimension, dimIndex) => (
-                                    <div key={dimIndex} style={{ marginBottom: '10px', paddingLeft: '20px' }}>
-                                        <strong>Dimension:</strong> {dimension.dimensionName}
-                                        <ul style={{ paddingLeft: '20px', listStyleType: 'none' }}>
-                                            {dimension.classRatings.map((classRating, rateIndex) => (
-                                                <li key={rateIndex} style={{ marginBottom: '5px', paddingLeft: '20px' }}>
-                                                    <strong>Rating Value:</strong> {classRating.ratingValue} <br />
-                                                    <p style={{ marginLeft: '10px' }}>
-                                                        <strong>Comments:</strong>{' '}
-                                                        {classRating.comments && classRating.comments.trim()
-                                                            ? classRating.comments
-                                                            : 'No Comments'}
-                                                    </p>
-                                                </li>
-                                            ))}
-                                        </ul>
+            <div className="content" style={{ padding: '20px', flex: 1 }}>
+                <div
+                    className="
+                    w-full 
+                    bg-blue-500 
+                    text-white 
+                    py-10 
+                    text-center 
+                    rounded-md 
+                    mb-4"
+                >
+                    <h2
+                        className="
+                        text-3xl 
+                        font-bold"
+                    >
+                        Your Ratings
+                    </h2>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                    {Object.keys(gradesByClass).map((classID) => (
+                        <div
+                            key={classID}
+                            className="
+                            p-4 
+                            border 
+                            rounded-md 
+                            bg-gray-200"
+                        >
+                            <h3
+                                className="
+                                text-xl 
+                                font-bold  
+                                text-center"
+                            >
+                                Class ID: {classID}
+                            </h3>
+                            {gradesByClass[classID].map((rating, index) => (
+                                <div key={index} className="group-section mb-4">
+                                    <h4
+                                        className="
+                                        text-lg 
+                                        font-bold 
+                                        text-center 
+                                        mb-2"
+                                    >
+                                        Group: {rating.groupName} (ID: {rating.groupID})
+                                    </h4>
+                                    <p>Number of Ratings: {rating.totalRatings}</p>
+                                    <div className="grid grid-cols-1 gap-2 mb-2">
+                                        {rating.dimensions.map((dimension, dimIndex) => (
+                                            <div
+                                                key={dimIndex}
+                                                className="p-2 border rounded-md bg-white"
+                                            >
+                                                <strong>{dimension.dimensionName}</strong> - Average Rating:{" "}
+                                                {dimension.averageRating}
+                                                <ul>
+                                                    {dimension.comments.length > 0 ? (
+                                                        dimension.comments.map((comment, commentIndex) => (
+                                                            <li key={commentIndex}>
+                                                                <strong>Comment:</strong> {comment}
+                                                            </li>
+                                                        ))
+                                                    ) : (
+                                                        <li>No comments</li>
+                                                    )}
+                                                </ul>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-                ))
-            ) : (
-                <p>No grades available.</p>
-            )}
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 };

@@ -60,6 +60,19 @@ const InstructorDashboard = () => {
         }
     };
 
+    const handleDetailClick = (classID) => {
+        if (parseInt(classID)) {
+            console.log("Navigating",classID);
+            navigate(`/detailView/${classID}`);
+        } else {
+            console.error('No classID found!');
+        }
+    };
+
+    if (loading) {
+        return <div className="loading-indicator">Loading...</div>; // Consider adding a spinner or loading animation
+    }
+
     return (
         <div className="dashboard-container" style={{ display: 'flex' }}>
             <Sidebar />
@@ -113,6 +126,9 @@ const InstructorDashboard = () => {
                                     >
                                         Summary View
                                     </button>
+                                    <button onClick={() => handleDetailClick(classItem.id)} >
+                                         Detailed View
+                                      </button>
                                 </div>
                             ))}
                         </div>

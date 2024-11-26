@@ -665,6 +665,7 @@ app.get('/studentManageGroups/:classID', async (req, res) => {
         
         const studentID = req.user.ID;
         const { classID } = req.params; 
+
         console.log('Class ID:', classID);
 
         if (!Number.isInteger(studentID)) {
@@ -683,6 +684,11 @@ app.get('/studentManageGroups/:classID', async (req, res) => {
                 }
             }
         ]);
+
+        if (!groups || groups.length === 0) {
+            console.log('No groups found for class:', classID);
+            return res.status(404).json({ message: 'Class not found or no groups available.' });
+        }
 
         // 2. Get all student IDs from the groups
         const studentIDsInGroups = groups.flatMap(group => group.Students);

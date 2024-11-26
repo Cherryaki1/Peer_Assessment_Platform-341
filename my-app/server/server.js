@@ -1030,54 +1030,6 @@ app.post('/placeOrder', async (req, res) => {
     }
 });
 
-// Route to get the deadline for a specific class
-app.get('/classDeadline/:classID', async (req, res) => {
-    const { classID } = req.params;
-
-    try {
-        const classData = await ClassModel.findById(classID);
-        if (!classData || !classData.submissionDeadline) {
-            return res.status(404).json({ message: 'Submission deadline not set for this class.' });
-        }
-        res.status(200).json({ submissionDeadline: classData.submissionDeadline });
-    } catch (error) {
-        console.error('Error fetching class deadline:', error);
-        res.status(500).json({ message: 'Internal server error while fetching deadline.' });
-    }
-});
-
-// Route to update the deadline for a class
-app.post('/updateDeadline', async (req, res) => {
-    const { classID, submissionDeadline } = req.body;
-
-    if (!classID || !submissionDeadline) {
-        return res.status(400).json({ message: 'Class ID and valid deadline are required.' });
-    }
-
-    try {
-        const deadlineDate = new Date(submissionDeadline);
-        if (isNaN(deadlineDate.getTime())) {
-            return res.status(400).json({ message: 'Invalid date format.' });
-        }
-
-        const updatedClass = await ClassModel.findByIdAndUpdate(
-            classID,
-            { submissionDeadline: deadlineDate },
-            { new: true },
-        );
-
-        if (!updatedClass) {
-            return res.status(404).json({ message: 'Class not found.' });
-        }
-
-        res.status(200).json({ message: 'Deadline updated successfully.', class: updatedClass });
-    } catch (error) {
-        console.error('Error updating deadline:', error);
-        res.status(500).json({ message: 'Internal server error while updating deadline.' });
-    }
-});
-
-
 // Route to fetch all classes for instructors and include deadlines
 app.get('/instructorManageClasses', async (req, res) => {
     try {
@@ -1130,6 +1082,136 @@ app.post('/validateDeadline', async (req, res) => {
     } catch (error) {
         console.error('Error validating deadline:', error);
         res.status(500).json({ message: 'Internal server error.' });
+    }
+});
+
+// Route to get the deadline for a specific class
+app.get('/classDeadline/:classID', async (req, res) => {
+    const { classID } = req.params;
+
+    try {
+        const classData = await ClassModel.findById(classID);
+        if (!classData || !classData.submissionDeadline) {
+            return res.status(404).json({ message: 'Submission deadline not set for this class.' });
+        }
+        res.status(200).json({ submissionDeadline: classData.submissionDeadline });
+    } catch (error) {
+        console.error('Error fetching class deadline:', error);
+        res.status(500).json({ message: 'Internal server error while fetching deadline.' });
+    }
+});
+
+// Route to update the deadline for a class
+app.post('/updateDeadline', async (req, res) => {
+    const { classID, submissionDeadline } = req.body;
+
+    if (!classID || !submissionDeadline) {
+        return res.status(400).json({ message: 'Class ID and valid deadline are required.' });
+    }
+
+    try {
+        // Ensure `classID` is parsed as an integer
+        const classIDAsInt = parseInt(classID, 10);
+        if (isNaN(classIDAsInt)) {
+            return res.status(400).json({ message: 'Class ID must be a valid integer.' });
+        }
+
+        // Validate the deadline
+        const deadlineDate = new Date(submissionDeadline);
+        if (isNaN(deadlineDate.getTime())) {
+            return res.status(400).json({ message: 'Invalid date format.' });
+        }
+
+        // Update the class in the database by its integer `classID`
+        const updatedClass = await ClassModel.findOneAndUpdate(
+            { ID: classIDAsInt }, // Adjust this to match your schema field for `classID`
+            { submissionDeadline: deadlineDate },
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedClass) {
+            return res.status(404).json({ message: 'Class not found.' });
+        }
+
+        res.status(200).json({ message: 'Deadline updated successfully.', class: updatedClass });
+    } catch (error) {
+        console.error('Error updating deadline:', error);
+        res.status(500).json({ message: 'Internal server error while updating deadline.' });
+    }
+});
+
+app.get('/studentDeadlines', async (req, res) => {
+    const { studentID } = req.query;
+
+    if (!studentID) {
+        return res.status(400).json({ message: 'Student ID is required.' });
+    }
+
+    try {
+        // Perform aggregation with $lookup to fetch group and class details
+        const groups = await StudentModel.aggregate([
+            {
+                $match: { ID: parseInt(studentID, 10) } // Match the student by ID
+            },
+            {
+                $lookup: {
+                    from: 'groups', // The target collection (groups)
+                    localField: 'Groups', // Field in the current collection (student) that contains group IDs
+                    foreignField: 'groupID', // Field in the target collection (groups) that matches the group IDs
+                    as: 'GroupDetails' // Name of the resulting field
+                }
+            },
+            {
+                $unwind: { path: '$GroupDetails', preserveNullAndEmptyArrays: true } // Flatten the array of groups
+            },
+            {
+                $lookup: {
+                    from: 'classes', // The target collection (classes)
+                    localField: 'GroupDetails.Class', // Field in the groups collection that contains the class ID
+                    foreignField: 'ID', // Field in the classes collection that matches the class ID
+                    as: 'ClassDetails' // Name of the resulting field
+                }
+            },
+            {
+                $unwind: { path: '$ClassDetails', preserveNullAndEmptyArrays: true } // Flatten the array of class details
+            },
+            {
+                $project: { // Select the fields you want to return
+                    ID: 1, // Student ID
+                    FirstName: 1,
+                    LastName: 1,
+                    GroupDetails: {
+                        groupID: '$GroupDetails.groupID', // Group ID
+                        groupName: '$GroupDetails.GroupName', // Group Name
+                    },
+                    ClassDetails: {
+                        name: '$ClassDetails.Name', // Class Name
+                        subject: '$ClassDetails.Subject', // Class Subject
+                        section: '$ClassDetails.Section', // Class Section
+                        submissionDeadline: '$ClassDetails.submissionDeadline' // Submission Deadline
+                    }
+                }
+            }
+        ]);
+
+        if (!groups || groups.length === 0) {
+            return res.status(404).json({ message: 'No groups or deadlines found for this student.' });
+        }
+
+        // Map the response to include groupName and class details at the top level for clarity
+        const formattedGroups = groups.map(group => ({
+            groupID: group.GroupDetails.groupID,
+            groupName: group.GroupDetails.groupName,
+            className: group.ClassDetails.name,
+            classSubject: group.ClassDetails.subject,
+            classSection: group.ClassDetails.section,
+            submissionDeadline: group.ClassDetails.submissionDeadline
+        }));
+
+        res.status(200).json({ groups: formattedGroups });
+    } catch (error) {
+        console.error('Error fetching student deadlines:', error);
+        res.status(500).json({ message: 'Internal server error while fetching deadlines.' });
     }
 });
 

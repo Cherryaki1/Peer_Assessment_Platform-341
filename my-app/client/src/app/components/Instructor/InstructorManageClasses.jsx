@@ -128,7 +128,7 @@ const InstructorManageClasses = () => {
         setEditingDeadline(true);
     };
 
-    const handleSaveDeadline = async () => {
+    const handleUpdateDeadline = async () => {
         if (!newDeadline) {
             alert('Please enter a valid deadline.');
             return;

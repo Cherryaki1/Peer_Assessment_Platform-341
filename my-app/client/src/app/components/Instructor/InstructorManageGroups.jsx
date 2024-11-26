@@ -60,9 +60,6 @@ const InstructorManageGroups = () => {
         fetchGroups();  // Fetch groups when component mounts
     }, [classID]);  // Re-fetch if classID changes
 
-    if (loading) {
-        return <div>Loading groups...</div>;  // Show loading state while fetching data
-    }
 
     // Handle creating a new group
     const handleCreateGroup = async () => {

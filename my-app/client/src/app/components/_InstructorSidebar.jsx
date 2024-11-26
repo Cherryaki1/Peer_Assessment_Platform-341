@@ -1,13 +1,14 @@
 // client/src/app/Sidebar.js
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useContext, createContext } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ChevronLast, ChevronFirst } from "lucide-react";
-import axios from 'axios'
+import axios from 'axios';
 
 import DashboardIcon from './icons/home.svg';
 import manageClassesIcon from './icons/book-open.svg';
 import reviewRatingsIcon from './icons/chart-bar.svg';
 import logoutIcon from './icons/logout.svg';
+
 
 const SidebarContext = createContext();
 

@@ -451,21 +451,62 @@ app.get('/getInstructorGrades', async (req, res) => {
 
     try {
         // Find the instructor by user ID
-        const instructor = await InstructorModel.findOne({ ID: Number(userID) });
+        const instructor = await InstructorModel.findOne({ ID: parseInt(userID) });
 
         if (!instructor) {
             return res.status(404).json({ message: 'Instructor not found.' });
         }
 
-        // Process the ratings to group them by classID
-        const ratingsByClass = instructor.Ratings.reduce((acc, rating) => {
-            const { classID } = rating; // Adjust field names as per your schema
-            if (!acc[classID]) {
-                acc[classID] = [];
+        const classRatingsMap = {};
+
+        // Process each rating in the Ratings array
+        instructor.Ratings.forEach((rating) => {
+            const { classID, dimensions } = rating;
+
+            if (!classRatingsMap[classID]) {
+                classRatingsMap[classID] = {};
             }
-            acc[classID].push(rating);
-            return acc;
-        }, {});
+
+            // Process dimensions for the current rating
+            dimensions.forEach((dimension) => {
+                const { dimensionName, classRatings } = dimension;
+
+                if (!classRatingsMap[classID][dimensionName]) {
+                    classRatingsMap[classID][dimensionName] = {
+                        totalRatings: 0,
+                        totalValue: 0,
+                        comments: [],
+                    };
+                }
+
+                // Process the classRating object (even if it's an array with one object)
+                classRatings.forEach((classRating) => {
+                    classRatingsMap[classID][dimensionName].totalRatings += 1;
+                    classRatingsMap[classID][dimensionName].totalValue += classRating.ratingValue;
+
+                    if (classRating.comments && classRating.comments.trim().length > 0) {
+                        classRatingsMap[classID][dimensionName].comments.push(classRating.comments);
+                    }
+                });
+            });
+        });
+
+        // Format the response
+        const ratingsByClass = Object.keys(classRatingsMap).map((classID) => {
+            const dimensions = Object.keys(classRatingsMap[classID]).map((dimensionName) => {
+                const data = classRatingsMap[classID][dimensionName];
+                return {
+                    dimensionName,
+                    averageRating: (data.totalValue / data.totalRatings).toFixed(2), // Calculate average
+                    comments: data.comments, // Collect comments
+                };
+            });
+
+            return {
+                classID,
+                dimensions,
+            };
+        });
 
         res.json(ratingsByClass);
     } catch (error) {
@@ -473,6 +514,8 @@ app.get('/getInstructorGrades', async (req, res) => {
         res.status(500).json({ message: 'Error fetching instructor ratings.' });
     }
 });
+
+
 
 // Route to fetch all students in a specified classID along with their details
 app.get('/studentsSummary/:classID', async (req, res) => {
@@ -1090,7 +1133,7 @@ app.get('/classDeadline/:classID', async (req, res) => {
     const { classID } = req.params;
 
     try {
-        const classData = await ClassModel.findById(classID);
+        const classData = await ClassModel.findOne({ ID: parseInt(req.params.classID, 10) });
         if (!classData || !classData.submissionDeadline) {
             return res.status(404).json({ message: 'Submission deadline not set for this class.' });
         }
@@ -1183,6 +1226,7 @@ app.get('/studentDeadlines', async (req, res) => {
                     GroupDetails: {
                         groupID: '$GroupDetails.groupID', // Group ID
                         groupName: '$GroupDetails.GroupName', // Group Name
+                        classID: '$GroupDetails.Class',
                     },
                     ClassDetails: {
                         name: '$ClassDetails.Name', // Class Name
@@ -1202,6 +1246,7 @@ app.get('/studentDeadlines', async (req, res) => {
         const formattedGroups = groups.map(group => ({
             groupID: group.GroupDetails.groupID,
             groupName: group.GroupDetails.groupName,
+            classID: group.GroupDetails.classID,
             className: group.ClassDetails.name,
             classSubject: group.ClassDetails.subject,
             classSection: group.ClassDetails.section,

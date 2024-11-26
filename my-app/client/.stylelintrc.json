@@ -1,0 +1,44 @@
+{
+    "extends": [
+      "stylelint-config-standard",
+      "stylelint-config-prettier"
+    ],
+    "plugins": [
+      "stylelint-order"
+    ],
+    "rules": {
+      "indentation": 2,
+      "string-quotes": "double",
+      "color-hex-case": "lower",
+      "color-hex-length": "short",
+      "block-no-empty": true,
+      "unit-whitelist": ["em", "rem", "%", "s", "px"],
+      "order/order": [
+        "custom-properties",
+        "declarations"
+      ],
+      "order/properties-alphabetical-order": true,
+      "selector-class-pattern": "^[a-z][a-zA-Z0-9]+$",
+      "selector-id-pattern": "^[a-z][a-zA-Z0-9]+$",
+      "max-nesting-depth": 3,
+      "no-duplicate-selectors": true,
+      "declaration-block-no-duplicate-properties": true,
+      "declaration-block-trailing-semicolon": "always",
+      "block-opening-brace-space-before": "always",
+      "block-closing-brace-newline-after": "always",
+      "selector-pseudo-element-colon-notation": "double",
+      "at-rule-no-unknown": [
+        true,
+        {
+          "ignoreAtRules": [
+            "extends",
+            "tailwind",
+            "apply",
+            "variants",
+            "responsive",
+            "screen"
+          ]
+        }
+      ]
+    }
+  }

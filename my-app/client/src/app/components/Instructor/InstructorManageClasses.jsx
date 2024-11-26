@@ -19,51 +19,51 @@ const InstructorManageClasses = () => {
 
     // Fetch current classes and instructor details when the component mounts
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                // Fetch the logged-in user data (instructor)
-                const response = await axios.get('http://localhost:3000/index', {
-                    withCredentials: true,
-                });
-                
-                if (response.data.user && response.data.user.ID) {
-                    setInstructorID(response.data.user.ID); // Store the instructor's ID
-                } else {
-                    setMessage('Failed to retrieve instructor data.');
-                }
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-                setMessage('Error fetching user data.');
-            }
-        };
-
-        const fetchClasses = async () => {
-            try {
-                const response = await axios.get('http://localhost:3000/instructorManageClasses', {
-                    withCredentials: true,
-                });
-                setClasses(response.data.classes);
-                if (response.data.classes.length === 0) {
-                    setMessage('No classes are available (None added).');
-                } else {
-                    setMessage(''); // Clear the message if there are classes
-                }
-            } catch (error) {
-                console.error('Error fetching classes:', error);
-
-                if (error.response) {
-                    setMessage(`Error: ${error.response.data.message || 'Failed to fetch classes.'}`);
-                } else if (error.request) {
-                    setMessage('No response from server. Check if the server is running.');
-                } else {
-                    setMessage('Error setting up the request.');
-                }
-            }
-        };
-
         fetchUserData(); // Fetch the instructor's information
         fetchClasses();  // Fetch the list of classes
     }, []);
+
+    const fetchUserData = async () => {
+        try {
+            // Fetch the logged-in user data (instructor)
+            const response = await axios.get('http://localhost:3000/index', {
+                withCredentials: true,
+            });
+            
+            if (response.data.user && response.data.user.ID) {
+                setInstructorID(response.data.user.ID); // Store the instructor's ID
+            } else {
+                setMessage('Failed to retrieve instructor data.');
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+            setMessage('Error fetching user data.');
+        }
+    };
+
+    const fetchClasses = async () => {
+        try {
+            const response = await axios.get('http://localhost:3000/instructorManageClasses', {
+                withCredentials: true,
+            });
+            setClasses(response.data.classes);
+            if (response.data.classes.length === 0) {
+                setMessage('No classes are available (None added).');
+            } else {
+                setMessage(''); // Clear the message if there are classes
+            }
+        } catch (error) {
+            console.error('Error fetching classes:', error);
+
+            if (error.response) {
+                setMessage(`Error: ${error.response.data.message || 'Failed to fetch classes.'}`);
+            } else if (error.request) {
+                setMessage('No response from server. Check if the server is running.');
+            } else {
+                setMessage('Error setting up the request.');
+            }
+        }
+    };
 
     // Handle file selection for the new class roster
     const handleFileChange = (event) => {
@@ -128,32 +128,39 @@ const InstructorManageClasses = () => {
         setEditingDeadline(true);
     };
 
-    const handleSaveDeadline = async () => {
+    const handleUpdateDeadline = async () => {
         if (!newDeadline) {
             alert('Please enter a valid deadline.');
             return;
         }
+    
         try {
+            // Ensure `selectedClassID` is sent as a string
             const response = await axios.post('http://localhost:3000/updateDeadline', {
-                classID: selectedClassID,
-                submissionDeadline: newDeadline,
+                classID: parseInt(selectedClassID, 10), // Ensure it's sent as an integer
+                submissionDeadline: new Date(newDeadline).toISOString(),
             });
-
-            setClasses(classes.map((classItem) =>
-                classItem.id === selectedClassID
-                    ? { ...classItem, submissionDeadline: new Date(newDeadline) }
-                    : classItem
-            ));
-
-            setMessage(response.data.message);
-            setEditingDeadline(false);
+    
+            setClasses((prevClasses) =>
+                prevClasses.map((classItem) =>
+                    classItem.ID === parseInt(selectedClassID, 10)
+                        ? { ...classItem, submissionDeadline: new Date(newDeadline) }
+                        : classItem
+                )
+            );
+            
             setNewDeadline('');
             setSelectedClassID('');
+            await fetchClasses();
+            setMessage(response.data.message);
+            setEditingDeadline(false);
+
         } catch (error) {
             console.error('Error updating deadline:', error);
             alert('Failed to update deadline.');
         }
     };
+    
 
     return (
         <div className="manage-classes-container" style={{ display: 'flex' }}>
@@ -171,7 +178,7 @@ const InstructorManageClasses = () => {
                                         <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - {classItem.studentCount} Students, {classItem.groupCount} Groups
                                         </button>
                                     <span style={{ marginLeft: '10px' }}>
-                                        Deadline: {classItem.submissionDeadline ? new Date(classItem.submissionDeadline).toLocaleDateString() : 'No deadline set'}
+                                        Deadline: {classItem.submissionDeadline ? new Date(classItem.submissionDeadline).toISOString().slice(0, 10) : 'No deadline set'}
                                     </span>
                                     <button
                                         onClick={() => handleEditDeadline(classItem.id)}

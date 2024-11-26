@@ -1055,15 +1055,23 @@ app.post('/updateDeadline', async (req, res) => {
     }
 
     try {
+        // Ensure `classID` is parsed as an integer
+        const classIDAsInt = parseInt(classID, 10);
+        if (isNaN(classIDAsInt)) {
+            return res.status(400).json({ message: 'Class ID must be a valid integer.' });
+        }
+
+        // Validate the deadline
         const deadlineDate = new Date(submissionDeadline);
         if (isNaN(deadlineDate.getTime())) {
             return res.status(400).json({ message: 'Invalid date format.' });
         }
 
-        const updatedClass = await ClassModel.findByIdAndUpdate(
-            classID,
+        // Update the class in the database by its integer `classID`
+        const updatedClass = await ClassModel.findOneAndUpdate(
+            { ID: classIDAsInt }, // Adjust this to match your schema field for `classID`
             { submissionDeadline: deadlineDate },
-            { new: true },
+            { new: true } // Return the updated document
         );
 
         if (!updatedClass) {
@@ -1076,6 +1084,7 @@ app.post('/updateDeadline', async (req, res) => {
         res.status(500).json({ message: 'Internal server error while updating deadline.' });
     }
 });
+
 
 
 // Route to fetch all classes for instructors and include deadlines

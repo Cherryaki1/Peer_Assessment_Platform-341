@@ -2,18 +2,19 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ "**" ]
+    branches:
+      - '**'
   pull_request:
-    branches: [ "**" ]
+    branches:
+      - '**'
 
 jobs:
-  build:
+  client:
+    name: Client Build and Test
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
-
     steps:
       - uses: actions/checkout@v4
 
@@ -23,7 +24,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      # Install and test in the client directory
       - name: Install dependencies and run tests in client
         working-directory: my-app/client
         run: |
@@ -31,10 +31,25 @@ jobs:
           CI=false npm run build --if-present
           CI=false npm test
 
-      # Install and test in the server directory
+  server:
+    name: Server Build and Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
       - name: Install dependencies and run tests in server
         working-directory: my-app/server
         run: |
           CI=false npm ci
           CI=false npm run build --if-present
           CI=false npm test
+

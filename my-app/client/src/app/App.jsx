@@ -23,6 +23,9 @@ import StudentRateMyInstructor from './components/Student/StudentRateMyInstructo
 import InstructorRatePage from './components/Student/RatingInstructor/InstructorRatePage';
 import ConfirmInstructorRating from './components/Student/RatingInstructor/ConfirmInstructorRating';
 
+import Shop from './components/Shop/Shop';
+import Cart from './components/Shop/Cart';
+
 
 const ratingList = [
     { id: 'Cooperation', title: 'Cooperation' },
@@ -58,6 +61,9 @@ const App = () => {
                 <Route path="/studentRateMyInstructor" element={<StudentRateMyInstructor />} />
                 <Route path="/studentRateMyInstructor/:instructorID" element={<InstructorRatePage />} />
                 <Route path="/confirmInstructorRating" element={<ConfirmInstructorRating />} />
+
+                <Route path="/Shop" element={<Shop />} />
+                <Route path="/Cart" element={<Cart />} />
             </Routes>
         </Router>
         // </div>

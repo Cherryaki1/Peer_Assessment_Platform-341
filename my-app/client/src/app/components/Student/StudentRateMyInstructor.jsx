@@ -89,29 +89,39 @@ const StudentRateMyInstructor = () => {
         <div className="manage-classes-container" style={{ display: 'flex' }}>
             <StudentSidebar />
             <div className="content" style={{ padding: '20px', flex: 1 }}>
-                <h2>My Instructors</h2>
+                <div className="
+                    w-full 
+                    bg-emerald-500 
+                    text-white 
+                    py-10 
+                    text-center 
+                    rounded-md 
+                    mb-4">
+                    <h2 className="
+                        text-3xl 
+                        font-bold
+                        ">Rate My Instructor</h2>
+                </div>
                 <div>
-                    <h3>Current Classes and Instructors</h3>
                     {classes.length > 0 ? (
-                        <ul>
+                        <div className="grid grid-cols-3 gap-4">
                             {classes.map((classItem, index) => (
-                                <li key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                                    <div style={{ flex: 1 }}>
-                                        <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - Instructor: {classItem.instructorName}
-                                    </div>
+                                <div key={index} className="p-4 border rounded-md bg-gray-200">
+                                    <h3 className="text-xl font-bold mb-2">{classItem.instructorName}</h3>
+                                    <p>{classItem.name} ({classItem.subject}, Section: {classItem.section})</p>
                                     {ratedInstructors[classItem.id] === classItem.instructorID ? (
-                                        <span style={{ marginLeft: '10px', color: 'green' }}>Rated ✔</span>
+                                        <span className="text-green-600">Rated ✔</span>
                                     ) : (
                                         <button 
                                             onClick={() => handleRateInstructor(classItem.instructorID, classItem)}
-                                            style={{ marginLeft: '10px', cursor: 'pointer' }}
+                                            className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors duration-300"
                                         >
                                             Rate My Instructor
                                         </button>
                                     )}
-                                </li>
+                                </div>
                             ))}
-                        </ul>
+                        </div>
                     ) : (
                         <p>{message}</p>
                     )}

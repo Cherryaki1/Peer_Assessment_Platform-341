@@ -56,6 +56,7 @@ const StudentManageClasses = () => {
                     py-10 
                     text-center  
                     rounded-md"
+                    data-testid="my-classes"
                     >
                     <h2 className="
                         text-3xl 

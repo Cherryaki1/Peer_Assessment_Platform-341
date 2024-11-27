@@ -14,7 +14,6 @@ const InstructorManageClasses = () => {
     const [instructorID, setInstructorID] = useState(null); // Store instructor's ID
     const [selectedClassID, setSelectedClassID] = useState(''); // To update deadlines
     const [newDeadline, setNewDeadline] = useState(''); // To update deadlines
-    const [handleUpdateDeadline, setEditingDeadline] = useState(false); // Deadline editing state
     const navigate = useNavigate();  // React Router hook for navigation
 
     useEffect(() => {
@@ -152,9 +151,12 @@ const InstructorManageClasses = () => {
                         <div className="grid grid-cols-3 gap-4 mt-4">
                             {classes.map((classItem, index) => (
                                 <div
+                                    role="button"
+                                    tabIndex={0}
                                     key={index}
                                     className="p-4 bg-gray-200 rounded-md cursor-pointer hover:bg-gray-300 transition-colors duration-300"
                                     onClick={() => handleClassClick(classItem.id)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleClassClick()}
                                 >
                                     <h3 className="text-xl font-bold">{classItem.name}</h3>
                                     <p>{classItem.subject}, Section: {classItem.section}</p>

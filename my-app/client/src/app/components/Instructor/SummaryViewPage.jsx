@@ -89,7 +89,7 @@ const SummaryViewPage = () => {
                                     Array.isArray(student.Groups) &&
                                     student.Groups.length > 0 &&
                                     student.Groups.some((groupID) =>
-                                        groupDetails.hasOwnProperty(groupID)
+                                        Object.prototype.hasOwnProperty.call(groupDetails, groupID),
                                     );
                                 const team = allGroupsExist
                                     ? student.Groups.map(

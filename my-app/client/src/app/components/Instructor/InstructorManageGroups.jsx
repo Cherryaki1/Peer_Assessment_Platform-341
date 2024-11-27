@@ -60,9 +60,6 @@ const InstructorManageGroups = () => {
         fetchGroups();  // Fetch groups when component mounts
     }, [classID]);  // Re-fetch if classID changes
 
-    if (loading) {
-        return <div>Loading groups...</div>;  // Show loading state while fetching data
-    }
 
     // Handle creating a new group
     const handleCreateGroup = async () => {
@@ -124,72 +121,91 @@ const InstructorManageGroups = () => {
 
     return (
         <div className="manage-groups-container" style={{ display: 'flex' }}>
-            <Sidebar /> {/* Include Sidebar if it's part of your layout */}
+            <Sidebar />
             <div className="content" style={{ padding: '20px', flex: 1 }}>
-                <h2>Manage Groups for Class {classID}</h2>
-                {groups.length > 0 ? (
-                    <ul>
-                        {groups.map((group) => (
-                            <li key={group.id}>
-                                <h3>{group.name}</h3>  {/* Display group name */}
-                                <p>Group ID: {group.id}</p>
-                                <h4>Members:</h4>
-                                <ul>
-                                    {group.groupMembers.map((student) => (
-                                        <li key={student.id}>
-                                            {student.name} (ID: {student.id})
-                                        </li>
-                                    ))}
-                                </ul>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>{message}</p>  // Display message if no groups are available
-                )}
+                <div
+                    className="w-full bg-blue-500 text-white py-10 text-center rounded-md mb-4"
+                >
+                    <h1 className="text-3xl font-bold">Manage Groups for Class {classID}</h1>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-gray-100 rounded-md shadow-md">
+                        <h2 className="text-xl font-bold mb-2">Groups</h2>
+                        {groups.length > 0 ? (
+                            groups.map((group) => (
+                                <div key={group.id} className="mb-4">
+                                    <h3 className="text-lg font-semibold">{group.name}</h3>
+                                    <p>Group ID: {group.id}</p>
+                                    <h4 className="font-semibold">Members:</h4>
+                                    <ul className="list-disc pl-5">
+                                        {group.groupMembers.map((student) => (
+                                            <li key={student.id}>
+                                                {student.name} (ID: {student.id})
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <button
+                                        onClick={() => handleAddStudentsToGroup(group.id)}
+                                        className="mt-2 px-3 py-1 bg-blue-600 text-white rounded-md"
+                                    >
+                                        Add Students
+                                    </button>
+                                </div>
+                            ))
+                        ) : (
+                            <p>{message}</p>
+                        )}
+                    </div>
 
-                <h2>Students Not in a Group</h2>
-                <ul>
-                    {ungroupedStudents.length > 0 ? (
-                        ungroupedStudents.map(student => (
-                            <li key={student.id}>
-                                {student.name} (ID: {student.id})
-                            </li>
-                        ))
-                    ) : (
-                        <p>All students have been assigned to groups.</p>
-                    )}
-                </ul>
+                    <div className="p-4 bg-gray-100 rounded-md shadow-md">
+                        <h2 className="text-xl font-bold mb-2">Students Not in a Group</h2>
+                        <ul>
+                            {ungroupedStudents.length > 0 ? (
+                                ungroupedStudents.map((student) => (
+                                    <li key={student.id}>
+                                        {student.name} (ID: {student.id})
+                                    </li>
+                                ))
+                            ) : (
+                                <p>All students have been assigned to groups.</p>
+                            )}
+                        </ul>
+                    </div>
+                </div>
 
-                <h2>Create a New Group</h2>
-                <form onSubmit={handleCreateGroup}>
-                    <input
-                        type="text"
-                        placeholder="Group Name"
-                        value={newGroupName}
-                        onChange={(e) => setNewGroupName(e.target.value)}
-                        required
-                    />
-                    <br />
-                    <input
-                        type="text"
-                        placeholder="Student IDs (comma-separated)"
-                        value={newStudentIDs.join(',')}
-                        onChange={(e) => setNewStudentIDs(e.target.value.split(',').map(id => id.trim()))}
-                    />
-                    <br />
-                    <input
-                        type="text"
-                        placeholder="Enter Group ID"
-                        value={newGroupID}
-                        onChange={(e) => setNewGroupID(e.target.value)}
-                    />
-                    <button type="submit">Create Group</button>
-                </form>
+                <div className="mt-6 p-4 bg-gray-100 rounded-md shadow-md">
+                    <h2 className="text-xl font-bold mb-2">Create a New Group</h2>
+                    <form onSubmit={handleCreateGroup} className="space-y-4">
+                        <input
+                            type="text"
+                            placeholder="Group Name"
+                            value={newGroupName}
+                            onChange={(e) => setNewGroupName(e.target.value)}
+                            className="w-full p-2 border rounded-md"
+                            required
+                        />
+                        <input
+                            type="text"
+                            placeholder="Student IDs (comma-separated)"
+                            value={newStudentIDs.join(',')}
+                            onChange={(e) => setNewStudentIDs(e.target.value.split(',').map((id) => id.trim()))}
+                            className="w-full p-2 border rounded-md"
+                        />
+                        <input
+                            type="text"
+                            placeholder="Group ID"
+                            value={newGroupID}
+                            onChange={(e) => setNewGroupID(e.target.value)}
+                            className="w-full p-2 border rounded-md"
+                        />
+                        <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md">
+                            Create Group
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     );
 };
 
 export default InstructorManageGroups;
-

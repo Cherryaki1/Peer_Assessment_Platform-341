@@ -14,7 +14,7 @@ const InstructorManageClasses = () => {
     const [instructorID, setInstructorID] = useState(null); // Store instructor's ID
     const [selectedClassID, setSelectedClassID] = useState(''); // To update deadlines
     const [newDeadline, setNewDeadline] = useState(''); // To update deadlines
-    const [editingDeadline, setEditingDeadline] = useState(false); // Deadline editing state
+    const [handleUpdateDeadline, setEditingDeadline] = useState(false); // Deadline editing state
     const navigate = useNavigate();  // React Router hook for navigation
 
     // Fetch current classes and instructor details when the component mounts

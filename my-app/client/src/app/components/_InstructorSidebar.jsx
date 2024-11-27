@@ -105,11 +105,7 @@ const InstructorSidebar = () => {
                 />
                 <div
                     className={`
-                        flex 
-                        justify-between 
-                        items-center 
-                        overflow-hidden 
-                        transition-all 
+                        flex justify-between items-center overflow-hidden transition-all 
                         duration-300 ${expanded ? "w-52 ml-3" : "w-0"}`}
                 >
                     <div className="
@@ -121,16 +117,12 @@ const InstructorSidebar = () => {
                     <button
                         onClick={handleLogout}
                         className="
-                            flex 
-                            items-center 
-                            p-1.5 
-                            rounded-lg 
-                            bg-blue-600 
+                            flex items-center p-1.5 rounded-lg transition-all duration-300
                             hover:bg-gradient-to-r 
+                            bg-blue-600 
                             hover:from-blue-500 
                             hover:to-blue-600 
-                            transition-all 
-                            duration-300">
+                            ">
                         <img src={logoutIcon} alt="Logout" className="mr-2" />
                         <span className="whitespace-nowrap">Logout</span>
                     </button>
@@ -146,16 +138,8 @@ const SidebarItem = ({ icon, text, onClick, active }) => {
     return (
         <li
             className={`
-                relative 
-                flex 
-                items-center 
-                py-2 
-                px-3 
-                my-1 
-                font-medium 
-                rounded-md 
-                cursor-pointer 
-                transition-colors 
+                relative flex items-center py-2 px-3 my-1 
+                font-medium rounded-md cursor-pointer transition-colors 
                 group ${active ? "bg-gradient-to-r from-blue-500 to-blue-600" : ""} 
                 hover:bg-gradient-to-r 
                 hover:from-blue-500 
@@ -176,17 +160,8 @@ const SidebarItem = ({ icon, text, onClick, active }) => {
             {!expanded && (
                 <div
                     className={`
-                        absolute 
-                        left-full 
-                        rounded-md 
-                        px-2 
-                        py-1 
-                        ml-6 
-                        bg-indigo-100 
-                        text-indigo-800 
-                        text-sm invisible 
-                        opacity-20 
-                        -translate-x-3 
+                        absolute left-full rounded-md px-2 py-1 ml-6 
+                        bg-indigo-100 text-indigo-800 text-sm invisible opacity-20 -translate-x-3 
                         transition-all 
                         duration-300 
                         group-hover:visible 

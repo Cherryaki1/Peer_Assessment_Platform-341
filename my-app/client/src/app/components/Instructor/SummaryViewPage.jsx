@@ -52,18 +52,11 @@ const SummaryViewPage = () => {
             <div className="content" style={{ padding: '20px', flex: 1 }}>
                 <div
                     className="
-                    w-full 
-                    bg-blue-500 
-                    text-white 
-                    py-10 
-                    text-center 
-                    rounded-md 
-                    mb-4"
+                    w-full bg-blue-500 text-white py-10 text-center rounded-md mb-4"
                 >
                     <h1
                         className="
-                        text-3xl 
-                        font-bold"
+                        text-3xl font-bold"
                     >
                         Summary View for Class {classID}
                     </h1>
@@ -71,12 +64,7 @@ const SummaryViewPage = () => {
                 <div className="table-container overflow-x-auto">
                     <table
                         className="
-                        w-full 
-                        text-left 
-                        border-collapse 
-                        bg-white 
-                        shadow-md 
-                        rounded-lg"
+                        w-full text-left border-collapse bg-white shadow-md rounded-lg"
                     >
                         <thead className="bg-blue-600 text-white">
                             <tr>

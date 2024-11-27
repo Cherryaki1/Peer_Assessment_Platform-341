@@ -55,10 +55,13 @@ const StudentManageClasses = () => {
                     text-white 
                     py-10 
                     text-center  
-                    rounded-md">
+                    rounded-md"
+                    data-testid="my-classes"
+                    >
                     <h2 className="
                         text-3xl 
-                        font-bold">My Classes</h2>
+                        font-bold"
+                    >My Classes</h2>
                 </div>
                 <div>
                     {classes.length > 0 ? (

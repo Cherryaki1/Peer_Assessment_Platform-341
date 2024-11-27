@@ -15,6 +15,11 @@ const InstructorManageClasses = () => {
     const [selectedClassID, setSelectedClassID] = useState('');
     const [newDeadline, setNewDeadline] = useState('');
     const navigate = useNavigate();
+    const [instructorID, setInstructorID] = useState(null); // Store instructor's ID
+    const [selectedClassID, setSelectedClassID] = useState(''); // To update deadlines
+    const [newDeadline, setNewDeadline] = useState(''); // To update deadlines
+    const [handleUpdateDeadline, setEditingDeadline] = useState(false); // Deadline editing state
+    const navigate = useNavigate();  // React Router hook for navigation
 
     useEffect(() => {
         fetchUserData();

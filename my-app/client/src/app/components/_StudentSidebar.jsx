@@ -64,12 +64,11 @@ const StudentSidebar = () => {
 
     return (
         <aside className="h-screen sticky top-0 bg-gradient-to-r from-emerald-900 to-emerald-500 border-r shadow-sm text-white transition-all duration-300 flex flex-col">
-            <div className="p-4 pb-2 flex justify-between items-center">
+            <div className="p-4 pb-2 flex justify-between items-center" data-testid="sidebar">
                 {expanded && <h1 className="text-xl font-bold flex-1 text-center">Rice++</h1>}
                 <button
                     onClick={() => setExpanded((curr) => !curr)}
-                    className="p-1.5 rounded-lg bg-emerald-600 hover:bg-gradient-to-r hover:from-emerald-500 hover:to-emerald-600 transition-all duration-300"
-                    data-testid="sidebar">
+                    className="p-1.5 rounded-lg bg-emerald-600 hover:bg-gradient-to-r hover:from-emerald-500 hover:to-emerald-600 transition-all duration-300">
                     {expanded ? <ChevronFirst /> : <ChevronLast />}
                 </button>
             </div>

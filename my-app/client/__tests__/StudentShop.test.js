@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, } from 'react-router-dom';
 import Login from '../src/app/components/Login.jsx';
 import StudentDashboard from '../src/app/components/Student/StudentDashboard.jsx';
-import StudentReviewRatings from '../src/app/components/Student/StudentReviewRatings.jsx';
+import Shop from '../src/app/components/Shop/Shop.jsx';
 import axios from 'axios';
 import '@testing-library/jest-dom/extend-expect';
 import StudentSidebar from '../src/app/components/_StudentSidebar.jsx';
@@ -39,20 +39,20 @@ test('navigates and clicks "Your Ratings" button on the sidebar', async () => {
     // Scope to the sidebar
     const sidebar = screen.getByTestId('sidebar');
     sidebar.click();
-    const YourRatingsButton = screen.getByText(/Your Ratings/i);
+    const ShopButton = screen.getByText(/Shop/i);
     
-    expect(YourRatingsButton).toBeInTheDocument();
+    expect(ShopButton).toBeInTheDocument();
 
     // Simulate a click
-    YourRatingsButton.click();
+    ShopButton.click();
 
     render(
         <MemoryRouter>
-            <StudentReviewRatings />
+            <Shop />
         </MemoryRouter>
     );
 
     // Verify the navigation
-    await waitFor(() => expect(screen.getByTestId("your-ratings")).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId("shop")).toBeInTheDocument());
 
 });

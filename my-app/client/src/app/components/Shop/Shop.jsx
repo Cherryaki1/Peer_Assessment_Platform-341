@@ -100,7 +100,7 @@ const Shop = () => {
             <div className="content p-5 flex-1">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-5">
-                    <div className="w-full bg-emerald-500 text-white py-10 text-center rounded-md">
+                    <div className="w-full bg-emerald-500 text-white py-10 text-center rounded-md" data-testid="shop">
                         <h1 className="text-3xl font-bold">Earn rewards by working hard!</h1>
                     </div>
                 </div>

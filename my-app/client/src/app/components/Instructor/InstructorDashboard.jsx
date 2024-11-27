@@ -85,10 +85,11 @@ const InstructorDashboard = () => {
                                         <li key={index}>
                                             <strong>{classItem.name}</strong> ({classItem.subject}, Section: {classItem.section}) - {classItem.studentCount} Students, {classItem.groupCount} Groups
                                             <br/>
-                                            <button onClick={() => handleSummaryClick(classItem.id)}>
+                                            <button onClick={() => handleSummaryClick(classItem.id)} data-testid="summary">
                                                 Summary View
                                             </button>
-                                            <button onClick={() => handleDetailClick(classItem.id)} >
+                                            <br/>
+                                            <button onClick={() => handleDetailClick(classItem.id)} data-testid="detailedView">
                                                 Detailed View
                                             </button>
                                         </li>

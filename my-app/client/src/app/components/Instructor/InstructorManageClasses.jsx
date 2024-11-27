@@ -11,10 +11,6 @@ const InstructorManageClasses = () => {
     const [newClassSection, setNewClassSection] = useState('');
     const [newClassID, setNewClassID] = useState('');
     const [message, setMessage] = useState('');
-    const [instructorID, setInstructorID] = useState(null);
-    const [selectedClassID, setSelectedClassID] = useState('');
-    const [newDeadline, setNewDeadline] = useState('');
-    const navigate = useNavigate();
     const [instructorID, setInstructorID] = useState(null); // Store instructor's ID
     const [selectedClassID, setSelectedClassID] = useState(''); // To update deadlines
     const [newDeadline, setNewDeadline] = useState(''); // To update deadlines

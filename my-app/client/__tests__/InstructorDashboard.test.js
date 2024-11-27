@@ -31,6 +31,6 @@ test('renders instructor dashboard upon successful login', async () => {
 
     // Wait for navigation and check the Instructor Dashboard content
     await waitFor(() => {
-        expect(screen.getByTestId('sidebar')).toBeInTheDocument();;    });
+        expect(screen.getByTestId('instructorSidebar')).toBeInTheDocument();;    });
 });
 

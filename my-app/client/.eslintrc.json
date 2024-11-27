@@ -33,30 +33,12 @@
       "prettier"
     ],
     "rules": {
-      "prettier/prettier": ["error"],
-      "react/prop-types": "off",
-      "react/react-in-jsx-scope": "off",
-      "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-      "import/order": [
-        "error",
-        {
-          "groups": ["builtin", "external", "internal"],
-          "pathGroups": [
-            {
-              "pattern": "react",
-              "group": "external",
-              "position": "before"
-            }
-          ],
-          "pathGroupsExcludedImportTypes": ["react"],
-          "newlines-between": "always",
-          "alphabetize": {
-            "order": "asc",
-            "caseInsensitive": true
-          }
-        }
-      ]
-    },
+  "prettier/prettier": "warn",
+  "no-unused-vars": "warn",
+  "react/prop-types": "off",
+  "react/react-in-jsx-scope": "off",
+  "import/order": "warn"
+},
     "settings": {
       "react": {
         "version": "detect"

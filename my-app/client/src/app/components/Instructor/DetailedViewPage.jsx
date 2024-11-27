@@ -130,7 +130,7 @@ const DetailedViewPage = () => {
                                             {rater.ID === ratee.ID ? '-' : (
                                                 <div>
                                                     <div>{rating}</div>
-                                                    {comment && <div style={{ fontSize: '0.8em', color: '#666' }}>"{comment}"</div>}
+                                                    {comment && <div style={{ fontSize: '0.8em', color: '#666' }}>{comment}</div>}
                                                 </div>
                                             )}
                                         </td>
@@ -147,7 +147,7 @@ const DetailedViewPage = () => {
                                             {rater.ID === ratee.ID ? '-' : (
                                                 <div>
                                                     <div>{rating}</div>
-                                                    {comment && <div style={{ fontSize: '0.8em', color: '#666' }}>"{comment}"</div>}
+                                                    {comment && <div style={{ fontSize: '0.8em', color: '#666' }}>{comment}</div>}
                                                 </div>
                                             )}
                                         </td>
@@ -164,7 +164,7 @@ const DetailedViewPage = () => {
                                             {rater.ID === ratee.ID ? '-' : (
                                                 <div>
                                                     <div>{rating}</div>
-                                                    {comment && <div style={{ fontSize: '0.8em', color: '#666' }}>"{comment}"</div>}
+                                                    {comment && <div style={{ fontSize: '0.8em', color: '#666' }}>{comment}</div>}
                                                 </div>
                                             )}
                                         </td>
@@ -181,7 +181,7 @@ const DetailedViewPage = () => {
                                             {rater.ID === ratee.ID ? '-' : (
                                                 <div>
                                                     <div>{rating}</div>
-                                                    {comment && <div style={{ fontSize: '0.8em', color: '#666' }}>"{comment}"</div>}
+                                                    {comment && <div style={{ fontSize: '0.8em', color: '#666' }}>{comment}</div>}
                                                 </div>
                                             )}
                                         </td>

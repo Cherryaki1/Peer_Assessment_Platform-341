@@ -75,11 +75,11 @@ const StudentSidebar = () => {
 
             <SidebarContext.Provider value={{ expanded }}>
                 <ul className="flex-1 px-3" >
-                    <SidebarItem icon={<img src={Dashboard} />} text="Dashboard" onClick={() => navigate('/studentDashboard')} active={location.pathname === '/studentDashboard'} />
-                    <SidebarItem icon={<img src={myClasses} />} text="My Classes" onClick={() => navigate('/studentManageClasses')} active={location.pathname === '/studentManageClasses'} dataTestId="my-classes-btn-1" />
-                    <SidebarItem icon={<img src={yourRatings} />} text="Your Ratings" onClick={() => navigate('/studentReviewRatings')} active={location.pathname === '/studentReviewRatings'} dataTestId="your-ratings-btn" />
-                    <SidebarItem icon={<img src={rateInstructor} />} text="Rate My Instructor" onClick={() => navigate('/studentRateMyInstructor')} active={location.pathname === '/studentRateMyInstructor'} dataTestId="rate-instructor-btn" />
-                    <SidebarItem icon={<img src={Shop} />} text="Shop" onClick={() => navigate('/Shop')} active={location.pathname === '/Shop'} dataTestId="shop-btn" />
+                    <SidebarItem icon={<img src={Dashboard} alt='' />} text="Dashboard" onClick={() => navigate('/studentDashboard')} active={location.pathname === '/studentDashboard'} />
+                    <SidebarItem icon={<img src={myClasses} alt=''/>} text="My Classes" onClick={() => navigate('/studentManageClasses')} active={location.pathname === '/studentManageClasses'} dataTestId="my-classes-btn-1" />
+                    <SidebarItem icon={<img src={yourRatings} alt=''/>} text="Your Ratings" onClick={() => navigate('/studentReviewRatings')} active={location.pathname === '/studentReviewRatings'} dataTestId="your-ratings-btn" />
+                    <SidebarItem icon={<img src={rateInstructor} alt=''/>} text="Rate My Instructor" onClick={() => navigate('/studentRateMyInstructor')} active={location.pathname === '/studentRateMyInstructor'} dataTestId="rate-instructor-btn" />
+                    <SidebarItem icon={<img src={Shop} alt=''/>} text="Shop" onClick={() => navigate('/Shop')} active={location.pathname === '/Shop'} dataTestId="shop-btn" />
                 </ul>
             </SidebarContext.Provider>
 
@@ -128,7 +128,7 @@ const SidebarItem = ({ icon, text, onClick, active, dataTestId }) => {
     const { expanded } = useContext(SidebarContext);
 
     return (
-        <li
+        <button
             data-testid={dataTestId} // Pass data-testid here
             className={`
                 relative 
@@ -181,7 +181,7 @@ const SidebarItem = ({ icon, text, onClick, active, dataTestId }) => {
                 {text}
                 </div>
             )}
-        </li>
+        </button>
     );
 };
 

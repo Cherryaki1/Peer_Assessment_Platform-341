@@ -81,6 +81,9 @@ const StudentManageClasses = () => {
                                     hover:bg-gray-300 
                                     transition-colors 
                                     duration-300"
+                                    role="button"
+                                    tabIndex={0}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleClassClick()}
                                     onClick={() => handleClassClick(classItem.id)}
                                 >
                                     <h3 className="text-xl font-bold">{classItem.name}</h3>

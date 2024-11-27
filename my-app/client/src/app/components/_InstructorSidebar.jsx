@@ -25,7 +25,7 @@ const InstructorSidebar = () => {
     };
     
     return (
-        <div className="sidebar" data-testid="sidebar">
+        <div className="sidebar" data-testid="instructorSidebar">
             <ul>
                 <li onClick={() => navigate('/instructorDashboard')}>Dashboard</li>
                 <li onClick={() => navigate('/instructorManageClasses')}>Manage Classes</li>

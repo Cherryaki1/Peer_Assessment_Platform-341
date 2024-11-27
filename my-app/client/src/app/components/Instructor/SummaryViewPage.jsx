@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import InstructorSidebar from '../_InstructorSidebar';
+
 
 const SummaryViewPage = () => {
     const { classID } = useParams(); // Get classID from the URL
@@ -45,68 +47,149 @@ const SummaryViewPage = () => {
     }
 
     return (
-        <div>
-            <h1>Summary View for Class {classID}</h1>
-            <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-                <thead>
-                    <tr>
-                        <th style={{ border: '1px solid black', padding: '8px' }}>Student ID</th>
-                        <th style={{ border: '1px solid black', padding: '8px' }}>Last Name</th>
-                        <th style={{ border: '1px solid black', padding: '8px' }}>First Name</th>
-                        <th style={{ border: '1px solid black', padding: '8px' }}>Team</th>
-                        <th style={{ border: '1px solid black', padding: '8px' }}>Cooperation</th>
-                        <th style={{ border: '1px solid black', padding: '8px' }}>Conceptual Contribution</th>
-                        <th style={{ border: '1px solid black', padding: '8px' }}>Practical Contribution</th>
-                        <th style={{ border: '1px solid black', padding: '8px' }}>Work Ethic</th>
-                        <th style={{ border: '1px solid black', padding: '8px' }}>Average</th>
-                        <th style={{ border: '1px solid black', padding: '8px' }}>Peers Who Responded</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {students.map((student) => {
-                        const studentID = student.ID;
-                        const lastName = student.LastName;
-                        const firstName = student.FirstName;
-                        const allGroupsExist = Array.isArray(student.Groups) &&
-                        student.Groups.length > 0 &&
-                        student.Groups.some(groupID => groupDetails.hasOwnProperty(groupID));
-                        const team = allGroupsExist ? student.Groups.map(studentGroupID => groupDetails[studentGroupID]) : 'No Teams' ;
-                        const cooperation = getDimensionRating(student, 'Cooperation', classID);
-                        const conceptualContribution = getDimensionRating(student, 'Conceptual Contribution', classID);
-                        const practicalContribution = getDimensionRating(student, 'Practical Contribution', classID);
-                        const workEthic = getDimensionRating(student, 'Work Ethic', classID);
-                        const average = calculateStudentAverage(cooperation, conceptualContribution, practicalContribution, workEthic);
-                        const peersWhoResponded = getPeersWhoResponded(student, classID);
-    
-                        return (
-                            <tr key={studentID}>
-                                <td style={{ border: '1px solid black', padding: '8px' }}>{studentID}</td>
-                                <td style={{ border: '1px solid black', padding: '8px' }}>{lastName}</td>
-                                <td style={{ border: '1px solid black', padding: '8px' }}>{firstName}</td>
-                                <td style={{ border: '1px solid black', padding: '8px' }}>{team}</td>
-                                <td style={{ border: '1px solid black', padding: '8px' }}>{cooperation}</td>
-                                <td style={{ border: '1px solid black', padding: '8px' }}>{conceptualContribution}</td>
-                                <td style={{ border: '1px solid black', padding: '8px' }}>{practicalContribution}</td>
-                                <td style={{ border: '1px solid black', padding: '8px' }}>{workEthic}</td>
-                                <td style={{ border: '1px solid black', padding: '8px' }}>{average}</td>
-                                <td style={{ border: '1px solid black', padding: '8px' }}>{peersWhoResponded}</td>
+        <div className="summary-view-container" style={{ display: 'flex' }}>
+            <InstructorSidebar />
+            <div className="content" style={{ padding: '20px', flex: 1 }}>
+                <div
+                    className="
+                    w-full bg-blue-500 text-white py-10 text-center rounded-md mb-4"
+                >
+                    <h1
+                        className="
+                        text-3xl font-bold"
+                    >
+                        Summary View for Class {classID}
+                    </h1>
+                </div>
+                <div className="table-container overflow-x-auto">
+                    <table
+                        className="
+                        w-full text-left border-collapse bg-white shadow-md rounded-lg"
+                    >
+                        <thead className="bg-blue-600 text-white">
+                            <tr>
+                                <th className="px-4 py-2 border">Student ID</th>
+                                <th className="px-4 py-2 border">Last Name</th>
+                                <th className="px-4 py-2 border">First Name</th>
+                                <th className="px-4 py-2 border">Team</th>
+                                <th className="px-4 py-2 border">Cooperation</th>
+                                <th className="px-4 py-2 border">Conceptual Contribution</th>
+                                <th className="px-4 py-2 border">Practical Contribution</th>
+                                <th className="px-4 py-2 border">Work Ethic</th>
+                                <th className="px-4 py-2 border">Average</th>
+                                <th className="px-4 py-2 border">Peers Who Responded</th>
                             </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
+                        </thead>
+                        <tbody>
+                            {students.map((student) => {
+                                const studentID = student.ID;
+                                const lastName = student.LastName;
+                                const firstName = student.FirstName;
+                                const allGroupsExist =
+                                    Array.isArray(student.Groups) &&
+                                    student.Groups.length > 0 &&
+                                    student.Groups.some((groupID) =>
+                                        groupDetails.hasOwnProperty(groupID)
+                                    );
+                                const team = allGroupsExist
+                                    ? student.Groups.map(
+                                          (studentGroupID) =>
+                                              groupDetails[studentGroupID]
+                                      )
+                                    : 'No Teams';
+                                const cooperation = getDimensionRating(
+                                    student,
+                                    'Cooperation',
+                                    classID
+                                );
+                                const conceptualContribution =
+                                    getDimensionRating(
+                                        student,
+                                        'Conceptual Contribution',
+                                        classID
+                                    );
+                                const practicalContribution = getDimensionRating(
+                                    student,
+                                    'Practical Contribution',
+                                    classID
+                                );
+                                const workEthic = getDimensionRating(
+                                    student,
+                                    'Work Ethic',
+                                    classID
+                                );
+                                const average = calculateStudentAverage(
+                                    cooperation,
+                                    conceptualContribution,
+                                    practicalContribution,
+                                    workEthic
+                                );
+                                const peersWhoResponded = getPeersWhoResponded(
+                                    student,
+                                    classID
+                                );
+
+                                return (
+                                    <tr
+                                        key={studentID}
+                                        className="hover:bg-gray-100"
+                                    >
+                                        <td className="px-4 py-2 border">
+                                            {studentID}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                            {lastName}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                            {firstName}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                            {team}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                            {cooperation}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                            {conceptualContribution}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                            {practicalContribution}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                            {workEthic}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                            {average}
+                                        </td>
+                                        <td className="px-4 py-2 border">
+                                            {peersWhoResponded}
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-    );    
+    );
 };
 
 const getDimensionRating = (student, dimensionName, classID) => {
     const ratings = [];
     if (student.Ratings && student.Ratings.length !== 0) {
-        student.Ratings.forEach(rating => {
-            if (classID == rating.classID && rating.dimensions && rating.dimensions.length !== 0) {
-                rating.dimensions.forEach(dimension => {
-                    if (dimension.dimensionName === dimensionName && dimension.groupRatings.length !== 0) {
-                        dimension.groupRatings.forEach(groupRating => {
+        student.Ratings.forEach((rating) => {
+            if (
+                classID == rating.classID &&
+                rating.dimensions &&
+                rating.dimensions.length !== 0
+            ) {
+                rating.dimensions.forEach((dimension) => {
+                    if (
+                        dimension.dimensionName === dimensionName &&
+                        dimension.groupRatings.length !== 0
+                    ) {
+                        dimension.groupRatings.forEach((groupRating) => {
                             if (groupRating.ratingValue) {
                                 ratings.push(parseInt(groupRating.ratingValue));
                             }
@@ -116,31 +199,39 @@ const getDimensionRating = (student, dimensionName, classID) => {
             }
         });
     }
-    return ratings.length !== 0 ? calculateAverage(ratings) : 'No Rating';
+    return ratings.length !== 0
+        ? calculateAverage(ratings)
+        : 'No Rating';
 };
 
-// Function to calculate the number of unique peers who have responded
 const getPeersWhoResponded = (student, classID) => {
     let uniqueRaters = 0;
-    // Ensure student.Ratings exists
     if (student.Ratings.length !== 0) {
-        student.Ratings.forEach(rating => {
-            // Check if the rater is in the same class as the student
+        student.Ratings.forEach((rating) => {
             if (classID == rating.classID) {
                 uniqueRaters = uniqueRaters + 1;
             }
         });
     }
-
     return uniqueRaters;
 };
 
-const calculateStudentAverage = (cooperation, conceptualContribution, practicalContribution, workEthic) => {
-    const ratings = [cooperation, conceptualContribution, practicalContribution, workEthic].filter(
-        rating => !isNaN(rating)
-    );
+const calculateStudentAverage = (
+    cooperation,
+    conceptualContribution,
+    practicalContribution,
+    workEthic
+) => {
+    const ratings = [
+        cooperation,
+        conceptualContribution,
+        practicalContribution,
+        workEthic,
+    ].filter((rating) => !isNaN(rating));
     const sum = ratings.reduce((acc, rating) => acc + parseFloat(rating), 0);
-    return ratings.length ? (sum / ratings.length).toFixed(1) : 'N/A';
+    return ratings.length
+        ? (sum / ratings.length).toFixed(1)
+        : 'N/A';
 };
 
 const calculateAverage = (arr) => {

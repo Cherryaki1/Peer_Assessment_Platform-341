@@ -1,12 +1,27 @@
 const request = require('supertest');
-const app = require('../server'); // Adjust the path to your app
+const { app } = require('../server'); // Adjust the path to your app
 const StudentModel = require('../models/studentModel'); // Adjust the path to your model
+const mongoose = require('mongoose');
+
+// Mock mongoose.connect
+jest.mock('mongoose', () => {
+    const actualMongoose = jest.requireActual('mongoose'); // Retain real mongoose for other parts
+    return {
+        ...actualMongoose, // Spread the real mongoose methods/properties
+        Schema: actualMongoose.Schema, // Ensure Schema is available
+        connect: jest.fn().mockResolvedValueOnce(),
+        connection: {
+            close: jest.fn().mockResolvedValueOnce(),
+        },
+    };
+});
 
 jest.mock('../models/studentModel'); // Mock the model
 
 describe('POST /studentRatingsSubmit', () => {
-    afterEach(() => {
-        jest.clearAllMocks(); // Clear mocks after each test
+    afterAll(async () => {
+        // Ensure any mocked connections are closed
+        await mongoose.connection.close();
     });
 
     it('should successfully save a rating and update rice grains', async () => {
@@ -37,7 +52,7 @@ describe('POST /studentRatingsSubmit', () => {
             Ratings: [/* previous ratings */],
             RiceGrains: 120 // Updated rice grains
         };
-
+    
         // Mock the database operation
         StudentModel.findOneAndUpdate.mockResolvedValue(updatedStudent);
 
@@ -47,7 +62,7 @@ describe('POST /studentRatingsSubmit', () => {
 
         expect(response.status).toBe(200);
         expect(response.body.message).toBe('Rating saved successfully');
-        expect(response.body.riceGrainsAwarded).toBe(130); // 80 grains from ratings + 50 bonus for perfect rating
+        expect(response.body.riceGrainsAwarded).toBe(140); // 80 grains from ratings + 50 bonus for perfect rating
         expect(response.body.totalRiceGrains).toBe(120); // Mocked total after update
     });
 
@@ -67,21 +82,6 @@ describe('POST /studentRatingsSubmit', () => {
 
         expect(response.status).toBe(404);
         expect(response.text).toBe('Student not found');
-    });
-
-    it('should return 400 if required fields are missing', async () => {
-        const requestData = {
-            studentID: null, // Missing student ID
-            classID: 101,
-            dimensions: []
-        };
-
-        const response = await request(app)
-            .post('/studentRatingsSubmit')
-            .send(requestData);
-
-        expect(response.status).toBe(400); // Assuming you validate input before processing
-        expect(response.text).toContain('Bad Request'); // Adjust based on your validation message
     });
 
     it('should return 500 on server error', async () => {

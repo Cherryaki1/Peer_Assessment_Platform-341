@@ -80,7 +80,8 @@ const StudentReviewRatings = () => {
                     py-10 
                     text-center 
                     rounded-md 
-                    mb-4">
+                    mb-4"
+                    data-testid="your-ratings">
                     <h2 className="
                         text-3xl 
                         font-bold

@@ -99,14 +99,16 @@ const Shop = () => {
                 flex 
                 justify-between 
                 items-center 
-                mb-5">
+                mb-5"
+                >
                     <div className="
                     w-full 
                     bg-emerald-500 
                     text-white 
                     py-10 
                     text-center  
-                    rounded-md">
+                    rounded-md"
+                    data-testid="shop">
                         <h1 className="
                     text-3xl 
                     font-bold"
